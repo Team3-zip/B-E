@@ -2,8 +2,8 @@
 const request = require("request");
 const express = require("express");
 // const scheduler = require('node-schedule')
-const  PubNotice  = require('../models/pubNotice')
-const PubImg = require('../models/publicImg')
+const  PubNotice  = require('../models/PubNotice')
+const PubImg = require('../models/PublicImg')
 const { nextTick } = require("process");
 const router = express.Router()
 
