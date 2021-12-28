@@ -1,9 +1,9 @@
 const express= require('express');
 const request = require('request');
 const convert = require('xml-js');
-const PrivateAptDetail1 = require('../models/privateAptDetail1');
+const PrivateAptDetail1 = require('../models/PrivateAptDetail1');
 const PrivateAptDetail2 = require('../models/PrivateAptDetail2');
-const PrivateApt = require('../models/privateApt');
+const PrivateApt = require('../models/PrivateApt');
 const router = express.Router();
 
 //목록 받기
@@ -148,6 +148,7 @@ router.get('/detail1', async(req, res, next) =>{
             }
         })
     }
+    res.send({success : 'ok'})
     }catch(err){
         console.log(err);
     }
@@ -204,6 +205,7 @@ router.get('/detail2', async(req, res)=>{
             })
         }        
         console.log('ok')
+        res.send({success : 'ok'})
     }catch(error){
         res.send({error})
     }

@@ -3,7 +3,7 @@ const express = require('express');
 
 const router = express.Router();
 
-const mainCntrol = require('../controllers/main');
+const mainCntrol = require('../controller/main');
 
 getYouTube = mainCntrol.getYouTube;
 

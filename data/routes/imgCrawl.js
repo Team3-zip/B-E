@@ -1,8 +1,8 @@
 const express= require('express');
 const request = require('request');
 const convert = require('xml-js');
-const PrivateApt = require('../models/privateApt');
-const PrivateImg = require('../models/privateImg')
+const PrivateApt = require('../models/PrivateApt');
+const PrivateImg = require('../models/PrivateImg')
 const router = express.Router();
 const http = require('http');
 const urlType = require('url');
@@ -47,11 +47,13 @@ router.get('/', async (req, res) => {
       }
       
      await browser.close();
+     res.send({success : 'ok'});
      return;
     } catch (e) {
       console.error(e);
     }
   });
+
   router.get('/capture', async (req, res, next) => {
       try{
         let urlArr = [];
