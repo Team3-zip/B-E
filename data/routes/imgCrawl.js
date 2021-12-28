@@ -47,7 +47,7 @@ router.get('/', async (req, res) => {
       }
       
      await browser.close();
-     res.send({success : 'ok'});
+     res.send({success : 'ookkk'});
      return;
     } catch (e) {
       console.error(e);
