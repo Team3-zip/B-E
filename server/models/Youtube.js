@@ -1,10 +1,13 @@
 const { Sequelize } = require('sequelize');
 const db = require('.');
 
-module.exports = class PublicImg extends Sequelize.Model {
+module.exports = class Youtube extends Sequelize.Model {
     static init(sequelize) {
         return super.init(
             {
+                title: {
+                    type: Sequelize.STRING(300),
+                },
                 link: {
                     type: Sequelize.STRING(300),
                 },
@@ -19,8 +22,8 @@ module.exports = class PublicImg extends Sequelize.Model {
                 modelName: 'Youtube', //js에서사용
                 tableName: 'youtube', //db에서 사용
                 paranoid: false,
-                charset: 'utf8',
-                collate: 'utf8_general_ci',
+                charset: 'utf8mb4',
+                collate: 'utf8mb4_general_ci',
             }
         );
     }

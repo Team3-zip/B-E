@@ -6,6 +6,7 @@ dotenv.config()
 const port =process.env.PORT;
 const app = express();
 const {sequelize} = require('./models')
+
 //db 연결
 sequelize
     .sync({force:false})
