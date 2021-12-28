@@ -3,7 +3,9 @@ const dotenv = require('dotenv');
 dotenv.config() 
 const port =process.env.PORT;
 const app = express();
-const {sequelize} = require('./models')
+const {sequelize} = require('./models');
+const privateApt = require('./router/privateApt');
+const imgCrawl = require('./router/imgCrawl');
 //db 연결
 sequelize
     .sync({force:false})
@@ -15,6 +17,9 @@ sequelize
     });
 
 app.use(express.json());
+//router
+app.use('/privateApt', privateApt);
+app.use('/imgCrawl', imgCrawl);
 //error
 app.use((req, res, next) => {
     res.sendStatus(404);
