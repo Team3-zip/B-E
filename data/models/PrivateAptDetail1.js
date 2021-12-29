@@ -35,6 +35,7 @@ module.exports = class PrivateAptDetail1 extends Sequelize.Model {
                 houseManageNo: {      //주택관리 번호
                     type:Sequelize.INTEGER,
                     allowNull:false,
+                    primaryKey:true,
                 },
                 applyAddress: {          //공급위치
                     type: Sequelize.STRING(70),

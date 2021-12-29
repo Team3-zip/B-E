@@ -6,10 +6,11 @@ const app = express();
 const { sequelize } = require('./models')
 const youtubeapi = require('./routes/youtubeAPI')
 const publicApt = require('./routes/pubOpenAPI')
+const privateApt = require('./routes/privateApt')
 
 //db 연결
 sequelize
-    .sync({ force: false })
+    .sync({ force: false})
     .then(() => {
         console.log('db Connected')
     })
@@ -20,6 +21,7 @@ sequelize
 app.use(express.json());
 app.use('/youtube', youtubeapi)
 app.use('/publicApt', publicApt)
+app.use('/privateApt', privateApt)
 
 //error
 app.use((req, res, next) => {
