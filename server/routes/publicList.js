@@ -1,5 +1,5 @@
 const express = require('express')
-const publicControll = require('../controller/publicNotice')
+const publicControll = require('../controller/publicList')
 const router = express.Router()
 
 router.get('/public', publicControll.getPublicNotice)
