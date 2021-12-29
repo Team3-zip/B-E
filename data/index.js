@@ -3,10 +3,12 @@ const dotenv = require('dotenv');
 dotenv.config()
 const port = process.env.PORT;
 const app = express();
-const { sequelize } = require('./models')
+const { sequelize} = require('./models')
 const youtubeapi = require('./routes/youtubeAPI')
 const publicApt = require('./routes/pubOpenAPI')
-const privateApt = require('./routes/privateApt')
+const privateApt = require('./routes/privateApt');
+const imgCrawl = require('./routes/imgCrawl');
+
 
 //db 연결
 sequelize
@@ -21,7 +23,9 @@ sequelize
 app.use(express.json());
 app.use('/youtube', youtubeapi)
 app.use('/publicApt', publicApt)
-app.use('/privateApt', privateApt)
+app.use('/privateApt', privateApt);
+app.use('/imgCrawl', imgCrawl);
+
 
 //error
 app.use((req, res, next) => {

@@ -11,7 +11,7 @@ const PrivateImg = require('./PrivateImg');
 const PublicImg = require('./PublicImg');
 const Youtube = require('./Youtube');
 
-const env = process.env.NODE_ENV || 'production';
+const env = process.env.NODE_ENV || 'development';
 const config = require('../config/config')[env];
 const db = {};
 

@@ -148,6 +148,7 @@ router.get('/detail1', async(req, res, next) =>{
             }
         })
     }
+    res.send({success : 'ok'})
     }catch(err){
         console.log(err);
     }
@@ -204,6 +205,7 @@ router.get('/detail2', async(req, res)=>{
             })
         }        
         console.log('ok')
+        res.send({success : 'ok'})
     }catch(error){
         res.send({error})
     }

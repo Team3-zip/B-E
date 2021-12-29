@@ -18,7 +18,7 @@ module.exports = class PrivateAptDetail2 extends Sequelize.Model {
                 supplyAreaSize: {       //전용면적
                     type: Sequelize.STRING(20),
                 },
-                supplyAmount: {         //공급금액(분양최고금액)
+                supplyAmount: {         //공급금액(분양최고금액,만원단위)
                     type: Sequelize.STRING(20),  
                 },
 
