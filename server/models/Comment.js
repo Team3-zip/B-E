@@ -34,5 +34,11 @@ module.exports = class Comment extends Sequelize.Model {
             targetKey: 'userKey',
             onDelete: 'cascade'
         });
+        db.Comment.belongsTo(db.PrivateApt, {
+            foreignKey: 'fk_pblancNo',
+            targetKey: 'pblancNo',
+            onDelete: 'cascade'
+        });
+        
     }
 };
