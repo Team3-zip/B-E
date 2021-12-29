@@ -35,9 +35,9 @@ const getComment = async (req, res, next) => {
 }
 
 const postComment = async(req, res, next)=>{
-    //const {userKey} = req.locals.user;
+    const {userKey} = req.locals.user;
     const {aptNo}= req.params;
-    const {content, userKey} = req.body;
+    const {content} = req.body;
     try{
         if(!userKey){
             res.status(401);

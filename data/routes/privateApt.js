@@ -197,6 +197,8 @@ router.get('/detail2', async(req, res)=>{
                             houseManageNo: Number(info2[i]['housemanageno']['_text']),
                             modelNo : info2[i]['modelno']['_text'],
                             type : info2[i]['housety']['_text'],
+                            geSupplySize : info2[i]['suplyhshldco']['_text'],
+                            spSupplySize : info2[i]['spsplyhshldco']['_text'],
                             supplyAreaSize : info2[i]['suplyar']['_text'],
                             supplyAmount : info2[i]['lttottopamount']['_text']
                         })
