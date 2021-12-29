@@ -50,7 +50,7 @@ module.exports= class PrivateApt extends Sequelize.Model {
                 },
                 sido:{             //시도
                     type:Sequelize.STRING(15),
-                    allowNull:false,
+                    allowNull:true,
                 },
             },
             {

@@ -5,6 +5,11 @@ module.exports = class PrivateImg extends Sequelize.Model {
     static init(sequelize) {
         return super.init(
             {
+                houseManageNo:{ //주택관리번호
+                    type:Sequelize.INTEGER,
+                    allowNull:true,
+                    primaryKey:true,
+                },
                 url1: {
                     type: Sequelize.STRING(300),
                 },
@@ -34,10 +39,9 @@ module.exports = class PrivateImg extends Sequelize.Model {
         );
     }
     static associate(db) {
-        db.PrivateImg.belongsTo(db.PrivateApt, { 
-            foreignKey: 'fk_pblancNo', 
-            targetKey: 'pblancNo',
-            onDelete: 'cascade'
-        });
+        db.PrivateImg.belongsTo(db.PrivateApt, {
+            foreignKey : 'fk_pblancNo',
+            sourceKey:'pblancNo'
+        })  
     }
 };
