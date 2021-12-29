@@ -1,9 +1,9 @@
 const express = require('express');
 const dotenv = require('dotenv');
 dotenv.config()
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 const app = express();
-const { sequelize} = require('./models')
+const { sequelize } = require('./models')
 const youtubeapi = require('./routes/youtubeAPI')
 const publicApt = require('./routes/pubOpenAPI')
 const privateApt = require('./routes/privateApt');
