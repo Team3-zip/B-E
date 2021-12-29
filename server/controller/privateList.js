@@ -1,4 +1,6 @@
 const Private = require('../models/PrivateApt')
+const {Sequelize} = require('sequelize');
+const {like} = Sequelize.Op;
 
 const getPrivateNotice = async (req, res) => {
     try {
@@ -15,6 +17,7 @@ const getPrivateNotice2 = async (req, res) => {
         order: [["recruitDate", "ASC"]],
         where: sido ? { sido } : undefined
     })
+
 
     res.send({ priNotice2 })
 }
