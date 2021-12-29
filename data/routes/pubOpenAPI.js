@@ -21,16 +21,14 @@ router.get('/pubget1', async (req, res, next) => {
         //UPP AIS_TP_CD 05분양주택 06임대주택 39신혼희망타운
         headers: {},
     };
-    
-    console.log(options.url)
+
     request(options, async function (err, response, body) {
-        console.log(body)
         if (err) {
             console.log("위에서 에러")
             throw new Error("위에서 에러");
         }
         let info = JSON.parse(body)[1]["dsList"];
-        // console.log(info);
+        console.log(info);
         let noticeList = { ...info }
 
         for (let i in noticeList) {
@@ -70,30 +68,44 @@ router.get('/pubget1', async (req, res, next) => {
                 ALL_CNT,
                 DTL_URL,
                 CCR_CNNT_SYS_DS_CD)
-            
-    
+            console.log("=================================request2===================================")
+
+            // await PubNotice.create({
+            //     panState:PAN_SS,
+            //     panUploadDate:PAN_NT_ST_DT,
+            //     aisTypeCode:AIS_TP_CD,
+            //     suplyTypeCode:SPL_INF_TP_CD,
+            //     sidoName:CNP_CD_NM,
+            //     panId:PAN_ID,
+            //     uppAisTypeName:UPP_AIS_TP_NM,
+            //     aisTypeName:AIS_TP_CD_NM,
+            //     closeDate:CLSG_DT,
+            //     panDate:PAN_DT,
+            //     uppAisTypeCode:UPP_AIS_TP_CD,
+            //     panName:PAN_NM,
+            //     allCount:ALL_CNT,
+            //     detailUrl:DTL_URL,
+            //     csCode:CCR_CNNT_SYS_DS_CD
+            // })
             const options2 = {
                 method: "GET",
                 url: `http://apis.data.go.kr/B552555/lhLeaseNoticeDtlInfo1/getLeaseNoticeDtlInfo1?serviceKey=${PUB_API_SECRET_KEY}&SPL_INF_TP_CD=${SPL_INF_TP_CD}&CCR_CNNT_SYS_DS_CD=${CCR_CNNT_SYS_DS_CD}&PAN_ID=${PAN_ID}&UPP_AIS_TP_CD=${UPP_AIS_TP_CD}`,
                 // headers: {'Accept': 'application/json'},
-                headers: {'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'},
+                headers: {},
             };
-            console.log(options2.url)
-            setInterval(() => 
             request(options2, async function (err, response, body) {
-                console.log("=================================request2===================================")
-                // try {
-                    
-                // } 
-                // catch (e) {
-                //     console.log(e)
-                // }
-                if (err) {
-                    console.log(err)
-                    console.log("에러가 나타낫다")
-                    throw new Error("에러가 나타낫다")
-                }
+                console.log(options2.url)
                 console.log(body)
+                try {
+                    if (err) {
+                        console.log(err)
+                        console.log("에러가 나타낫다")
+                        throw new Error("에러가 나타낫다")
+                    }
+                } catch (e) {
+                    console.log(e)
+                }
+                try{
                 let info_detail = JSON.parse(body)[1]
                 const noticeDetail = { ...info_detail }
                 console.log("노티스디텡르")
@@ -177,8 +189,8 @@ router.get('/pubget1', async (req, res, next) => {
                     })
                     await PubImg.create({
                         panId: PAN_ID,
-                        url1: Img_URL2,
-                        url2: Img_URL1,
+                        url1: Img_URL1,
+                        url2: Img_URL2,
                         url3: Img_URL3
                     })
 
@@ -249,14 +261,16 @@ router.get('/pubget1', async (req, res, next) => {
                     })
                     await PubImg.create({
                         panId: PAN_ID,
-                        url1: Img_URL2,
-                        url2: Img_URL1,
+                        url1: Img_URL1,
+                        url2: Img_URL2,
                         url3: Img_URL3
                     })
                 }
+            }catch{
+                {}
+            }
                 // console.log(...info_detail)
             })
-            ,5000)
             
         }
 
@@ -265,7 +279,6 @@ router.get('/pubget1', async (req, res, next) => {
     );
     res.send('ok')
 })
-
 router.get('/pubget2', async (req, res, next) => {
     
     const options = {
