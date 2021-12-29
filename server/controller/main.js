@@ -46,6 +46,7 @@ const getMyPublicSido = async (req,res,next) =>{
     console.log(test[0])
     const pubSido = await PubNotice.findAll({
         where: { sidoName : mysido }
+        
     })
     
     res.send(pubSido)
