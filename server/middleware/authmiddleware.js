@@ -13,7 +13,7 @@ module.exports = (req, res, next) => {
     }
 
     try {
-        const { userKey }
+        //const { userKey }
         User.findByPk(userKey).then((user) => {
             res.locals.user = user
             next()

@@ -1,6 +1,6 @@
 const Users = require('../models/User')
 const jwt = require('jsonwebtoken')
-const { where } = require('sequelize/dist')
+//const { where } = require('sequelize/dist')
 
 const getUsers = async (req, res) => {
     const { userKey, nickname } = req.body
