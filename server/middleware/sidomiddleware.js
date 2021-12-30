@@ -6,14 +6,15 @@ module.exports = (req, res, next) => {
     const [tokenType, tokenValue] = authorization.split(' ')
 
     if (tokenType !== 'Bearer') {
-        res.status(401).send({
-            next()
+        next()
+        res.status(401).send({ 
         })
+        
         return
     }
 
     try {
-        const { userKey }
+        // const { userKey }=  
         User.findByPk(userKey).then((user) => {
             res.locals.user = user
             next()
