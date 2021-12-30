@@ -13,7 +13,7 @@ module.exports= class PrivateApt extends Sequelize.Model {
                     autoIncrement:false,
                 },
                 executor:{ //시행사
-                    type:Sequelize.STRING(20),
+                    type:Sequelize.STRING(40),
                     allowNull:true,
                 },
                 operation:{ //민영 or 공영
@@ -25,7 +25,7 @@ module.exports= class PrivateApt extends Sequelize.Model {
                     allowNull:true,
                 },
                 houseName:{ //아파트이름 
-                    type:Sequelize.STRING(20),
+                    type:Sequelize.STRING(40),
                     allowNull:true
                 },
                 winDate:{    //당첨자 발표일

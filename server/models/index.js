@@ -27,7 +27,7 @@ db.Sequelize = Sequelize;
 
 db.PrivateApt = PrivateApt;
 db.PrivateAptDetail1 = PrivateAptDetail1;
-db.PrivateAptDetail2=PrivateAptDetail2;
+db.PrivateAptDetail2 = PrivateAptDetail2;
 db.PubNotice = PubNotice;
 db.PubDetail = PubDetail;
 db.PrivateImg = PrivateImg;
