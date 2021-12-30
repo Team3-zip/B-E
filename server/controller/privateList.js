@@ -18,7 +18,8 @@ const getPrivateNotice = async (req, res) => {
                         {sido : '경남'},
                         {sido : '경북'}
                     ]
-                }
+                },
+                raw:true
              })
         }else{
             priNotice = await Private.findAll({
@@ -35,8 +36,10 @@ const getPrivateNotice = async (req, res) => {
                         }
                     ]
                 },
+                raw:true
             })
         }
+        //console.log(priNotice)
         res.send({ result: priNotice })
     } catch (error) {
         res.send({ error })
