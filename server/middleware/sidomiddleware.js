@@ -6,8 +6,9 @@ module.exports = (req, res, next) => {
     const [tokenType, tokenValue] = authorization.split(' ')
 
     if (tokenType !== 'Bearer') {
+        next()
         res.status(401).send({
-            next()
+            
         })
         return
     }
