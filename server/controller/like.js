@@ -1,5 +1,6 @@
 const Likes = require('../models/Like')
 const { Op } = require('sequelize')
+const { Like } = require('../models')
 
 const createLike = async (req, res, next) => {
     const { fk_userKey } = res.locals.user
@@ -15,9 +16,15 @@ const createLike = async (req, res, next) => {
             })
             res.send((result = { data: false }))
         } else {
-            // if
-            await Likes.create({ fk_userKey })
-            res.send((result = { data: true }))
+            if (fk_pblancNo) {
+                await Likes.create({ fk_userKey, fk_pblancNo })
+                res.send((result = { data: true }))
+            } if (panId) {
+                await Likes.create({ fk_userKey, panId })
+                res.send((result = { data: false }))
+            }
+            // await Likes.create({ fk_userKey })
+            // res.send((result = { data: true }))
         }
         res.status(200).sned({ message: 'success' })
     } catch (error) {
