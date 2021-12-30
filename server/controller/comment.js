@@ -1,6 +1,7 @@
 const { Comment, User } = require('../models');
 const { date_formmatter } = require('../utils/dateFormat');
-
+const {Op} = require('sequelize');
+const {like, or} = Op
 
 const getComment = async (req, res, next) => {
     let comments = [];
@@ -8,20 +9,26 @@ const getComment = async (req, res, next) => {
     try {
         const { aptNo } = req.params;
         const comment_list = await Comment.findAll({
-            include: [
-                {
-                    User,
-                    attributes: ['nickname']
-                }
-            ],
             order: [['commentId', 'DESC']], //내림차순
-            where: { fk_pblacNo: aptNo }
+            where :{
+                [or]:[
+                    {fk_pblancNo : aptNo},
+                    {panId : aptNo}
+                ]
+            },
+            raw:true
         });
         for (i in comment_list) {
-            const { commentId, content, fk_userKey, createdAt, User } = comment_list[i];
+            const { commentId, content, fk_userKey, createdAt } = comment_list[i];
+            const user = await User.findOne({
+                attributes:['nickname'],
+                where :{userKey : fk_userKey},
+                raw:true
+            })
             let createTime = date_formmatter(new Date(createdAt));
+            console.log(user);
             commentInfo['commentId'] = commentId;
-            commentInfo['nickname'] = User['nickname'];
+            commentInfo['nickname'] = user.nickname;
             commentInfo['content'] = content;
             commentInfo['fk_userKey'] = fk_userKey;
             commentInfo['createdAt'] = createTime;
@@ -37,7 +44,7 @@ const getComment = async (req, res, next) => {
 }
 
 const postComment = async(req, res, next)=>{
-    const {userKey} = req.locals.user;
+    const {userKey} = res.locals.user;
     const {aptNo}= req.params;
     const {content} = req.body;
     try{
@@ -60,13 +67,13 @@ const postComment = async(req, res, next)=>{
 }
 const patchComment = async (req, res, next) => {
     const { content } = req.body;
-    const { userKey } = res.locals.user;
+    //const { userKey } = res.locals.user;
     const { aptNo, commentId } = req.params;
     try {
-        await Comment.update({
-            content: content,
-            where: { commentId: commentId }
-        })
+        await Comment.update(
+            { content: content},
+            {where: { commentId: commentId }} 
+        )
         res.status(204).send({});
     } catch (error) {
         next(error);
@@ -76,11 +83,12 @@ const patchComment = async (req, res, next) => {
 
 const deleteComment = async (req, res, next) => {
     const { commentId } = req.params;
-    const { userKey } = req.locals.user;
     try {
         const comment = await Comment.findOne({
-            where: { commentId: commentId, fk_userKey: userKey }
+            attributes :['commentId'],
+            where: { commentId :commentId}
         });
+        console.log(comment)
         if (comment) {
             await comment.destroy();
         }

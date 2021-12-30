@@ -248,5 +248,9 @@ module.exports = class PubNotice extends Sequelize.Model {
             foreignKey:'panId', 
             sourceKey:'panId'
         });
+        db.PubNotice.hasMany(db.Comment, {
+            foreignKey:'panId', 
+            sourceKey:'panId'
+        });
     }
 };
