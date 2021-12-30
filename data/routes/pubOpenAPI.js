@@ -230,8 +230,8 @@ router.get('/pubget1', async (req, res, next) => {
                     }
                     console.log("444444444444444444444444444444444444444444444444444")
 
-                    const { PPR_SBM_OPE_ANC_DT,PPR_ACP_ST_DT,PPR_ACP_CLSG_DT,CTRT_ST_DT,CTRT_ED_DT} = {...dsSplScdl[0]}
-                    console.log(PPR_SBM_OPE_ANC_DT,PPR_ACP_ST_DT,PPR_ACP_CLSG_DT,CTRT_ST_DT,CTRT_ED_DT)
+                    const { PZWR_ANC_DT,PPR_ACP_ST_DT,PPR_ACP_CLSG_DT,CTRT_ST_DT,CTRT_ED_DT} = {...dsSplScdl[0]}
+                    console.log(PZWR_ANC_DT,PPR_ACP_ST_DT,PPR_ACP_CLSG_DT,CTRT_ST_DT,CTRT_ED_DT)
                     console.log(Img_URL1,Img_URL2,Img_URL3)
                     console.log('============case2============')
                     console.log(SBSC_ACP_ST_DT, SBSC_ACP_CLSG_DT)
@@ -259,7 +259,7 @@ router.get('/pubget1', async (req, res, next) => {
                         aisTypeName:AIS_TP_CD_NM,
                         startDate: SBSC_ACP_ST_DT,
                         closeDate:CLSG_DT,
-                        announceDate:PPR_SBM_OPE_ANC_DT,
+                        announceDate:PZWR_ANC_DT,
                         submitStartDate:PPR_ACP_ST_DT,
                         submitEndDate:PPR_ACP_CLSG_DT,
                         contractStartDate:CTRT_ST_DT,
@@ -510,8 +510,8 @@ router.get('/pubget2', async (req, res, next) => {
                         var AHFL_URL = ""
                     }
                     console.log("44444444444444444444444444444444")
-                    const { PPR_SBM_OPE_ANC_DT,PPR_ACP_ST_DT,PPR_ACP_CLSG_DT,CTRT_ST_DT,CTRT_ED_DT} = {...dsSplScdl[0]}
-                    console.log(PPR_SBM_OPE_ANC_DT,PPR_ACP_ST_DT,PPR_ACP_CLSG_DT,CTRT_ST_DT,CTRT_ED_DT)
+                    const { PZWR_ANC_DT,PPR_ACP_ST_DT,PPR_ACP_CLSG_DT,CTRT_ST_DT,CTRT_ED_DT} = {...dsSplScdl[0]}
+                    console.log(PZWR_ANC_DT,PPR_ACP_ST_DT,PPR_ACP_CLSG_DT,CTRT_ST_DT,CTRT_ED_DT)
                     console.log(Img_URL1,Img_URL2,Img_URL3)
                     console.log('============case2============')
                     console.log(SBSC_ACP_ST_DT, SBSC_ACP_CLSG_DT)
@@ -539,7 +539,7 @@ router.get('/pubget2', async (req, res, next) => {
                         aisTypeName:AIS_TP_CD_NM,
                         startDate: SBSC_ACP_ST_DT,
                         closeDate:CLSG_DT,
-                        announceDate:PPR_SBM_OPE_ANC_DT,
+                        announceDate:PZWR_ANC_DT,
                         submitStartDate:PPR_ACP_ST_DT,
                         submitEndDate:PPR_ACP_CLSG_DT,
                         contractStartDate:CTRT_ST_DT,
