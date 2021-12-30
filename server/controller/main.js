@@ -2,6 +2,7 @@ const { Sequelize, sequelize, PublicImg } = require('../models')
 const Youtube = require('../models/Youtube');
 const PubNotice = require('../models/PubNotice')
 const PrivateApt = require('../models/PrivateApt')
+const User = require('../models/User')
 
 const getYouTube = async (req, res, next) => {
     const youtubeList = await Youtube.findAll({})
@@ -27,7 +28,7 @@ const getpublicHot = async (req, res, next) => {
 }
 const getprivateHot = async (req, res, next) => {
     let privateHotarr = []
-    const privateHotIds = await sequelize.query('SELECT pblancNo,count(*) from likes group by pblancNo order by count(*) desc')
+    const privateHotIds = await sequelize.query('SELECT fk_pblancNo,count(*) from likes group by fk_pblancNo order by count(*) desc')
     for (let item of privateHotIds[0]) {
         privateHotarr.push(item['pblancNo'])
     }
@@ -38,12 +39,16 @@ const getprivateHot = async (req, res, next) => {
 }
 const getMyPublicSido = async (req,res,next) =>{
     try{
-        var mysido = res.locals.user.sido
+        const { userKey } = res.locals.user
+        var mysido = await User.findOne({
+            attributes: ['sido'],
+            where : {userKey : userKey}
+        });
     }catch{
         mysido = "경기도"
     }
-    const test = await sequelize.query(`SELECT * FROM Pubnotices WHERE sidoName="인천광역시"`)
-    console.log(test[0])
+    // const test = await sequelize.query(`SELECT * FROM Pubnotices WHERE sidoName="인천광역시"`)
+    // console.log(test[0])
     const pubSido = await PubNotice.findAll({
         where: { sidoName : mysido }
         
@@ -54,7 +59,11 @@ const getMyPublicSido = async (req,res,next) =>{
 
 const getMyPrivateSido = async (req,res,next) =>{
     try{
-        var mysido = res.locals.user.sido
+        const { userKey } = res.locals.user
+        var mysido = await User.findOne({
+            attributes: ['sido'],
+            where : {userKey : userKey}
+        });
     }catch{
         mysido = "경기"
     }
