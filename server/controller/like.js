@@ -3,7 +3,7 @@ const { Op } = require('sequelize')
 
 const createLike = async (req, res, next) => {
     const { fk_userKey } = res.locals.user
-    const { likeId } = req.params
+    const { aptNo } = req.params
 
     try {
         const existLike = await Likes.findOne({
@@ -15,7 +15,8 @@ const createLike = async (req, res, next) => {
             })
             res.send((result = { data: false }))
         } else {
-            await Likes.create({})
+            // if
+            await Likes.create({ fk_userKey })
             res.send((result = { data: true }))
         }
         res.status(200).sned({ message: 'success' })
