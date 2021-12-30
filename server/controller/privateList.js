@@ -1,28 +1,60 @@
 const Private = require('../models/PrivateApt')
-const {Sequelize} = require('sequelize');
-const {like} = Sequelize.Op;
+const {Op} = require('sequelize');
+const {like, or} = Op
+
 
 const getPrivateNotice = async (req, res) => {
+    const sido = req.query.sido;
+    const spell1 = sido.substring(0,1);
+    const spell2=sido.substring(1,2);
+    console.log(spell1);
+    let priNotice='';
     try {
-        const priNotice = await Private.findAll({ order: [["recruitDate", "ASC"]] })
+        if(spell2 ==='상'){
+             priNotice = await Private.findAll({
+                order: [["recruitDate", "ASC"]],
+                where :{
+                    [or]:[
+                        {sido : '경남'},
+                        {sido : '경북'}
+                    ]
+                }
+             })
+        }else{
+            priNotice = await Private.findAll({
+                order: [["recruitDate", "ASC"]],
+                where: {
+                    [or]: [
+                        {
+                            sido: {
+                                [like]: `%${spell1}%`
+                            },
+                            // sido:{
+                            //     [like]:`%${spell2}%`
+                            // }
+                        }
+                    ]
+                },
+            })
+        }
         res.send({ result: priNotice })
     } catch (error) {
         res.send({ error })
     }
 }
 
-const getPrivateNotice2 = async (req, res) => {
-    const { sido } = req.query
-    const priNotice2 = await Private.findAll({
-        order: [["recruitDate", "ASC"]],
-        where: sido ? { sido } : undefined
-    })
+// const getPrivateNotice2 = async (req, res) => {
+//     const { sido } = req.query
+//     const priNotice2 = await Private.findAll({
+//         order: [["recruitDate", "ASC"]],
+//         where: sido ? { sido } : undefined
+//     })
 
 
-    res.send({ priNotice2 })
-}
+//     res.send({ priNotice2 })
+// }
 
 module.exports = {
     getPrivateNotice,
-    getPrivateNotice2
+   // getPrivateNotice2
 }

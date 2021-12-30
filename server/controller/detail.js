@@ -75,15 +75,21 @@ const getPublicDetail = async(req, res, next)=>{
     try{
         const {aptNo} = req.params;
         const detail_list1 = await PubNotice.findOne({
-            attributes :['panState','sidoName','aisTypeName','startDate','closeDate','houseCnt','size','moveYM','heatMethod','fileLink','address','detailUrl','panDate'],
+            attributes :['panState','panUploadDate','sidoName','aisTypeName','startDate','closeDate','announceDate','submitStartDate','submitEndDate','contractStartDate','contractEndDate','houseCnt','size','moveYM','heatMethod','fileLink','address','detailUrl','panDate'],
             where :{panId: aptNo}
         });
-        const {panState,sidoName,aisTypeName,startDate,closeDate,houseCnt,size,moveYM,heatMethod,fileLink,address,detailUrl,panDate}= detail_list1;
+        const {panState,panUploadDate,sidoName,aisTypeName,startDate,closeDate,announceDate,submitStartDate,submitEndDate,contractStartDate,contractEndDate,houseCnt,size,moveYM,heatMethod,fileLink,address,detailUrl,panDate}= detail_list1;
         detail['panState']=panState;
+        detail['panUploadDate']=panUploadDate;
         detail['sidoName']=sidoName;
         detail['aisTypeName']=aisTypeName;
         detail['startDate']=startDate;
         detail['closeDate']=closeDate;
+        detail['announceDate']=announceDate;
+        detail['submitStartDate']=submitStartDate;
+        detail['submitEndDate']=submitEndDate;
+        detail['contractStartDate']=contractStartDate;
+        detail['contractEndDate']=contractEndDate;
         detail['houseCnt']=houseCnt;
         detail['size']=size;
         detail['panDate']=panDate;

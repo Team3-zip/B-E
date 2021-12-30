@@ -4,7 +4,7 @@ const convert = require('xml-js');
 const PrivateApt = require('../models/PrivateApt');
 const PrivateImg = require('../models/PrivateImg')
 const router = express.Router();
-const http = require('http');
+const {sequelize} = require('../models/PubNotice')
 const urlType = require('url');
 const fs = require('fs');
 const client = require('cheerio-httpcli');
@@ -16,10 +16,24 @@ router.get('/', async (req, res) => {
     try {
       const browser = await puppeteer.launch({ headless: false });
       const keyword = await PrivateApt.findAll({
-          attributes:['houseName', 'pblancNo', 'houseManageNo'], 
-          raw:true,
-          //order: [['houseManageNo', 'DESC']], // 내림차순으로 정렬
-        })
+        attributes: ['houseManageNo', 'pblancNo','houseName'],
+        include: [{
+            model: PrivateImg,
+            required: false,
+            attributes: [],
+            
+        }],
+        where: sequelize.where(
+            sequelize.col('PrivateImg.fk_pblancNo'),
+            'IS',
+            null
+        )
+    });
+      // const keyword = await PrivateApt.findAll({
+      //     attributes:['houseName', 'pblancNo', 'houseManageNo'], 
+      //     raw:true,
+      //     //order: [['houseManageNo', 'DESC']], // 내림차순으로 정렬
+      //   })
       const houseName= keyword;
       console.log(keyword.length);
       for(i in keyword){

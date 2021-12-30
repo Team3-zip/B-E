@@ -11,8 +11,8 @@ const router = express.Router();
 router.get('/', async (req, res, next) => {
     try {
         const SERVICE_KEY = 'Pifa2dNF%2F%2BDOgnjpswa7G%2B8t%2B1B28ekfKa%2FmZtTwwmLTZtbw05Xn8DeUw0BHRG2mEg4M1BCH1WfcQJdblk3TmQ%3D%3D';
-        for (let num = 1; num <= 5; num++) {
-            const requestUrl = `https://openapi.reb.or.kr/OpenAPI_ToolInstallPackage/service/rest/ApplyhomeInfoSvc/getLttotPblancList?serviceKey=${SERVICE_KEY}&startmonth=202112&endmonth=20211228&houseSecd=01&pageNo=${num}`;
+        for (let num = 1; num <= 10; num++) {
+            const requestUrl = `https://openapi.reb.or.kr/OpenAPI_ToolInstallPackage/service/rest/ApplyhomeInfoSvc/getLttotPblancList?serviceKey=${SERVICE_KEY}&startmonth=202112&endmonth=202203&houseSecd=01&pageNo=${num}`;
             request(requestUrl, async (err, re, body) => {
                 if (err) {
                     console.log(err);
@@ -50,7 +50,20 @@ router.get('/detail1', async (req, res, next) => {
     try {
         const SERVICE_KEY_DETAIL1 = 'Pifa2dNF%2F%2BDOgnjpswa7G%2B8t%2B1B28ekfKa%2FmZtTwwmLTZtbw05Xn8DeUw0BHRG2mEg4M1BCH1WfcQJdblk3TmQ%3D%3D';
         let arr = [];
-        const keyword = await PrivateApt.findAll({ attributes: ['houseManageNo', 'pblancNo'], raw: true });
+        const keyword = await PrivateApt.findAll({
+            attributes: ['houseManageNo', 'pblancNo'],
+            include: [{
+                model: PrivateAptDetail1,
+                required: false,
+                attributes: [],
+                
+            }],
+            where: sequelize.where(
+                sequelize.col('PrivateAptDetail1.fk_pblancNo'),
+                'IS',
+                null
+            )
+        });
         for (i in keyword) {
             let houseManageNo = keyword[i].houseManageNo;
             let pblancNo = keyword[i].pblancNo;
@@ -167,7 +180,7 @@ router.get('/detail2', async (req, res) => {
                 'IS',
                 null
             )
-        })
+        });
         console.log('here')
         console.log(keyword);
         for (i in keyword) {
