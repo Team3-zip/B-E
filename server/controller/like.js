@@ -15,9 +15,7 @@ const createLike = async (req, res, next) => {
             })
             res.send((result = { data: false }))
         } else {
-            await Likes.create({
-                where: { fk_userKey, likeId }
-            })
+            await Likes.create({})
             res.send((result = { data: true }))
         }
         res.status(200).sned({ message: 'success' })
