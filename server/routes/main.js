@@ -2,8 +2,9 @@ const express = require('express');
 
 
 const router = express.Router();
-
+const authMiddleware = require("../middleware/authmiddleware")
 const mainCntrol = require('../controller/main');
+const sidomiddleware = require('../middleware/sidomiddleware');
 
 getYouTube = mainCntrol.getYouTube;
 getpublicHot = mainCntrol.getpublicHot
@@ -14,7 +15,7 @@ getMyPrivateSido = mainCntrol.getMyPrivateSido
 router.get('/youtube', getYouTube)
 router.get('/publicHot', getpublicHot)
 router.get('/privateHot', getprivateHot)
-router.get('/publicSido', getMyPublicSido)
-router.get('/privateSido', getMyPrivateSido)
+router.get('/publicSido', sidomiddleware, getMyPublicSido)
+router.get('/privateSido', sidomiddleware, getMyPrivateSido)
 
 module.exports = router
