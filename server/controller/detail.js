@@ -8,14 +8,15 @@ const getPrivateDetail = async (req, res, next) => {
     try{
         const {aptNo} = req.params;
         const list_data = await PrivateApt.findOne({
-            attributes: ['executor','operation','houseName','winDate','receptStartDate','receptEndDate','rentSection','sido'],
+            attributes: ['executor','operation','houseName','winDate','receptStartDate','receptEndDate','rentSection','sido','recruitDate'],
             where : {pblancNo : aptNo}
         });
         const detail1_data = await PrivateAptDetail1.findOne({
             attributes :['contractStartDate','contractEndDate','relevantArea1Date','etcArea1Date','gyeonggi1Date','relevantArea2Date','etcArea2Date','gyeonggi2Date','homePage','applyAddress','plusSupplyStartDate','plusSupplyEndDate','supplySize'],
             where : {fk_pblancNo:aptNo}
         })
-        const {executor,operation,houseName,winDate,receptStartDate,receptEndDate,rentSection,sido} = list_data;
+        
+        const {executor,operation,houseName,winDate,receptStartDate,receptEndDate,rentSection,sido,recruitDate} = list_data;
         const {contractStartDate,contractEndDate,relevantArea1Date,etcArea1Date,gyeonggi1Date,relevantArea2Date,etcArea2Date,gyeonggi2Date,homePage,applyAddress,plusSupplyStartDate,plusSupplyEndDate,supplySize} = detail1_data;
         detail1['executor'] = executor;
         detail1['operation']=operation;
@@ -25,6 +26,7 @@ const getPrivateDetail = async (req, res, next) => {
         detail1['receptEndDate']=receptEndDate;
         detail1['rentSection']=rentSection;
         detail1['sido']=sido;
+        detail1['recruitDate'] = recruitDate;
         detail1['contractStartDate']=contractStartDate;
         detail1['contractEndDate']=contractEndDate;
         detail1['relevantArea1Date'] = relevantArea1Date;
@@ -45,13 +47,15 @@ const getPrivateDetail = async (req, res, next) => {
         });
         for(let i=0; i<detail2Count.length; i++){
             const detail2_data = await PrivateAptDetail2.findAll({
-                attributes : ['modelNo','type','supplyAreaSize','supplyAmount'],
+                attributes : ['modelNo','type','geSupplySize','spSupplySize','supplyAreaSize','supplyAmount'],
                 where : {fk_pblancNo:aptNo}
             });
             
-            const {modelNo, type, supplyAreaSize, supplyAmount} = detail2_data[i];
+            const {modelNo, type, geSupplySize,spSupplySize,supplyAreaSize, supplyAmount} = detail2_data[i];
             detail2Info['modelNo']= modelNo;
             detail2Info['type']=type;
+            detail2Info['geSupplySize']=geSupplySize;
+            detail2Info['spSupplySize']=spSupplySize;
             detail2Info['supplyAreaSize']=supplyAreaSize;
             detail2Info['supplyAmount']=supplyAmount;
             detail2.push(detail2Info);
@@ -71,10 +75,10 @@ const getPublicDetail = async(req, res, next)=>{
     try{
         const {aptNo} = req.params;
         const detail_list1 = await PubNotice.findOne({
-            attributes :['panState','sidoName','aisTypeName','startDate','closeDate','houseCnt','size','moveYM','heatMethod','fileLink','address','detailUrl'],
+            attributes :['panState','sidoName','aisTypeName','startDate','closeDate','houseCnt','size','moveYM','heatMethod','fileLink','address','detailUrl','panDate'],
             where :{panId: aptNo}
         });
-        const {panState,sidoName,aisTypeName,startDate,closeDate,houseCnt,size,moveYM,heatMethod,fileLink,address,detailUrl}= detail_list1;
+        const {panState,sidoName,aisTypeName,startDate,closeDate,houseCnt,size,moveYM,heatMethod,fileLink,address,detailUrl,panDate}= detail_list1;
         detail['panState']=panState;
         detail['sidoName']=sidoName;
         detail['aisTypeName']=aisTypeName;
@@ -82,6 +86,7 @@ const getPublicDetail = async(req, res, next)=>{
         detail['closeDate']=closeDate;
         detail['houseCnt']=houseCnt;
         detail['size']=size;
+        detail['panDate']=panDate;
         detail['moveYM']=moveYM;
         detail['heatMethod']=heatMethod;
         detail['fileLink']=fileLink;
@@ -128,7 +133,7 @@ const getPublicImgUrl = async(req, res, next)=>{
         const {aptNo}= req.params;
         const imgs = await PublicImg.findOne({
             attributes :['url1', 'url2', 'url3'],
-            where : {panId : panId}
+            where : {panId : aptNo}
         });
         const {url1, url2, url3}= imgs;
         publicImg['url1']= url1;

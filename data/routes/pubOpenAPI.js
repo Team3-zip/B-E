@@ -141,7 +141,11 @@ router.get('/pubget1', async (req, res, next) => {
                     console.log(...noticeDetail['dsSplScdl'])
 
                     console.log(dsSplScdl[0]['ACP_DTTM'])
-                    const ACP_DTTM = dsSplScdl[0]['ACP_DTTM']
+                    // const ACP_DTTM = dsSplScdl[0]['ACP_DTTM']
+                    // const ANNOUNCEDATE = dsSplScdl[0]['PZWR_ANC_DT']
+                    console.log("444444444444444444444444444444444444444444444444444")
+                    const { ACP_DTTM,PZWR_ANC_DT,PZWR_PPR_SBM_ST_DT,PZWR_PPR_SBM_ED_DT,CTRT_ST_DT,CTRT_ED_DT } = { ...dsSplScdl[0] }
+                    console.log(ACP_DTTM,PZWR_ANC_DT,PZWR_PPR_SBM_ST_DT,PZWR_PPR_SBM_ED_DT,CTRT_ST_DT,CTRT_ED_DT)
                     console.log(ACP_DTTM)
                     const { LCT_ARA_ADR, LCT_ARA_DTL_ADR, MIN_MAX_RSDN_DDO_AR, HTN_FMLA_DS_CD_NM, SUM_TOT_HSH_CNT, MVIN_XPC_YM } = { ...dsSbd[0] }
                     console.log(LCT_ARA_ADR)
@@ -174,6 +178,11 @@ router.get('/pubget1', async (req, res, next) => {
                         aisTypeName:AIS_TP_CD_NM,
                         startDate:ACP_DTTM.slice(0, 10),
                         closeDate:CLSG_DT,
+                        announceDate:PZWR_ANC_DT,
+                        submitStartDate:PZWR_PPR_SBM_ST_DT,
+                        submitEndDate:PZWR_PPR_SBM_ED_DT,
+                        contractStartDate:CTRT_ST_DT,
+                        contractEndDate:CTRT_ED_DT,
                         houseCnt: SUM_TOT_HSH_CNT,
                         moveYM: MVIN_XPC_YM,
                         address: `${LCT_ARA_ADR} ${LCT_ARA_DTL_ADR}`,
@@ -219,6 +228,10 @@ router.get('/pubget1', async (req, res, next) => {
                     } catch {
                         var AHFL_URL = ""
                     }
+                    console.log("444444444444444444444444444444444444444444444444444")
+
+                    const { PPR_SBM_OPE_ANC_DT,PPR_ACP_ST_DT,PPR_ACP_CLSG_DT,CTRT_ST_DT,CTRT_ED_DT} = {...dsSplScdl[0]}
+                    console.log(PPR_SBM_OPE_ANC_DT,PPR_ACP_ST_DT,PPR_ACP_CLSG_DT,CTRT_ST_DT,CTRT_ED_DT)
                     console.log(Img_URL1,Img_URL2,Img_URL3)
                     console.log('============case2============')
                     console.log(SBSC_ACP_ST_DT, SBSC_ACP_CLSG_DT)
@@ -246,6 +259,11 @@ router.get('/pubget1', async (req, res, next) => {
                         aisTypeName:AIS_TP_CD_NM,
                         startDate: SBSC_ACP_ST_DT,
                         closeDate:CLSG_DT,
+                        announceDate:PPR_SBM_OPE_ANC_DT,
+                        submitStartDate:PPR_ACP_ST_DT,
+                        submitEndDate:PPR_ACP_CLSG_DT,
+                        contractStartDate:CTRT_ST_DT,
+                        contractEndDate:CTRT_ED_DT,
                         houseCnt: HSH_CNT,
                         moveYM: MVIN_XPC_YM,
                         address: `${LGDN_ADR} ${LGDN_DTL_ADR}`,
@@ -403,8 +421,12 @@ router.get('/pubget2', async (req, res, next) => {
                     // console.log(dsAhflInfo)
                     console.log(...noticeDetail['dsSplScdl'])
 
-                    console.log(dsSplScdl[0]['ACP_DTTM'])
-                    const ACP_DTTM = dsSplScdl[0]['ACP_DTTM']
+                    // console.log(dsSplScdl[0]['ACP_DTTM'])
+                    // const ACP_DTTM = dsSplScdl[0]['ACP_DTTM']
+                    console.log("444444444444444444444444444444444444444444444444444")
+                    const { ACP_DTTM,PZWR_ANC_DT,PZWR_PPR_SBM_ST_DT,PZWR_PPR_SBM_ED_DT,CTRT_ST_DT,CTRT_ED_DT } = { ...dsSplScdl[0] }
+                    console.log(ACP_DTTM,PZWR_ANC_DT,PZWR_PPR_SBM_ST_DT,PZWR_PPR_SBM_ED_DT,CTRT_ST_DT,CTRT_ED_DT)
+
                     console.log(ACP_DTTM)
                     const { LCT_ARA_ADR, LCT_ARA_DTL_ADR, MIN_MAX_RSDN_DDO_AR, HTN_FMLA_DS_CD_NM, SUM_TOT_HSH_CNT, MVIN_XPC_YM } = { ...dsSbd[0] }
                     console.log(LCT_ARA_ADR)
@@ -437,6 +459,11 @@ router.get('/pubget2', async (req, res, next) => {
                         aisTypeName:AIS_TP_CD_NM,
                         startDate:ACP_DTTM.slice(0, 10),
                         closeDate:CLSG_DT,
+                        announceDate:PZWR_ANC_DT,
+                        submitStartDate:PZWR_PPR_SBM_ST_DT,
+                        submitEndDate:PZWR_PPR_SBM_ED_DT,
+                        contractStartDate:CTRT_ST_DT,
+                        contractEndDate:CTRT_ED_DT,
                         houseCnt: SUM_TOT_HSH_CNT,
                         moveYM: MVIN_XPC_YM,
                         address: `${LCT_ARA_ADR} ${LCT_ARA_DTL_ADR}`,
@@ -482,6 +509,9 @@ router.get('/pubget2', async (req, res, next) => {
                     } catch {
                         var AHFL_URL = ""
                     }
+                    console.log("44444444444444444444444444444444")
+                    const { PPR_SBM_OPE_ANC_DT,PPR_ACP_ST_DT,PPR_ACP_CLSG_DT,CTRT_ST_DT,CTRT_ED_DT} = {...dsSplScdl[0]}
+                    console.log(PPR_SBM_OPE_ANC_DT,PPR_ACP_ST_DT,PPR_ACP_CLSG_DT,CTRT_ST_DT,CTRT_ED_DT)
                     console.log(Img_URL1,Img_URL2,Img_URL3)
                     console.log('============case2============')
                     console.log(SBSC_ACP_ST_DT, SBSC_ACP_CLSG_DT)
@@ -509,6 +539,11 @@ router.get('/pubget2', async (req, res, next) => {
                         aisTypeName:AIS_TP_CD_NM,
                         startDate: SBSC_ACP_ST_DT,
                         closeDate:CLSG_DT,
+                        announceDate:PPR_SBM_OPE_ANC_DT,
+                        submitStartDate:PPR_ACP_ST_DT,
+                        submitEndDate:PPR_ACP_CLSG_DT,
+                        contractStartDate:CTRT_ST_DT,
+                        contractEndDate:CTRT_ED_DT,
                         houseCnt: HSH_CNT,
                         moveYM: MVIN_XPC_YM,
                         address: `${LGDN_ADR} ${LGDN_DTL_ADR}`,
