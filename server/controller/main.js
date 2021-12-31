@@ -3,6 +3,8 @@ const Youtube = require('../models/Youtube');
 const PubNotice = require('../models/PubNotice')
 const PrivateApt = require('../models/PrivateApt')
 const User = require('../models/User')
+const {Op} = require('sequelize');
+const {like, or} = Op
 
 const getYouTube = async (req, res, next) => {
     const youtubeList = await Youtube.findAll({})
@@ -42,15 +44,28 @@ const getMyPublicSido = async (req,res,next) =>{
         const { userKey } = res.locals.user
         var mysido = await User.findOne({
             attributes: ['sido'],
-            where : {userKey : userKey}
+            where : {userKey : userKey},
+            raw:true
+            
         });
+        mysido = mysido['sido']
     }catch{
         mysido = "경기도"
     }
     // const test = await sequelize.query(`SELECT * FROM Pubnotices WHERE sidoName="인천광역시"`)
     // console.log(test[0])
+    console.log(mysido)
     const pubSido = await PubNotice.findAll({
-        where: { sidoName : mysido }
+        where: {
+            [or]: [
+                {
+                    sidoName: {
+                        [like]: `%${mysido}%`
+                    }
+                }
+            ]
+        },
+        raw:true
         
     })
     
@@ -62,13 +77,23 @@ const getMyPrivateSido = async (req,res,next) =>{
         const { userKey } = res.locals.user
         var mysido = await User.findOne({
             attributes: ['sido'],
-            where : {userKey : userKey}
+            where : {userKey : userKey},
+            raw:true
         });
     }catch{
         mysido = "경기"
     }
     const privateSido = await PrivateApt.findAll({
-        where: { sido : mysido }
+        where: {
+            [or]: [
+                {
+                    sido: {
+                        [like]: `%${mysido}%`
+                    }
+                }
+            ]
+        },
+        raw:true
     })
     res.send(privateSido)
 }

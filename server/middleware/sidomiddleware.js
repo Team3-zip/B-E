@@ -5,13 +5,11 @@ module.exports = (req, res, next) => {
     const { authorization } = req.headers
     const {userKey} = req.body;
     JSON.stringify(authorization);
-    const [tokenType, tokenValue] = authorization.split(' ')
+    const [tokenType, tokenValue] = (authorization||'').split(' ')
 
     if (tokenType !== 'Bearer') {
         next()
-        res.status(401).send({
-            
-        })
+        
         return
     }
 

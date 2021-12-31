@@ -16,7 +16,7 @@ module.exports = class User extends Sequelize.Model {
                   },
                   sido: {
                       type:Sequelize.STRING(15),
-                      defaultValue:'서울'
+                      defaultValue:'경기'
                   },
             },
             {
