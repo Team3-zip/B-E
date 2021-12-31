@@ -1,35 +1,34 @@
 const Likes = require('../models/Like')
 const { Op } = require('sequelize')
-const { Like } = require('../models')
 
-const createLike = async (req, res, next) => {
-    const { userKey } = res.locals.user
+const createLike = async (req, res) => {
     const { aptNo } = req.params
+    const { userKey } = req.body
+    // const { userKey } = res.locals.user
 
     try {
         const existLike = await Likes.findOne({
-            where: { [Op.and]: { fk_userKey: userKey, likeId } }
+            where: { fk_userKey: userKey }
         })
-        if (existLike) {
-            await Likes.destroy({
-                where: { [Op.and]: { fk_userKey: userKey, likeId } }
-            })
-            res.send((result = { data: false }))
-        } else {
+        if (!existLike) {
             if (fk_pblancNo) {
                 await Likes.create({ fk_userKey: userKey, fk_pblancNo: aptNo })
                 res.send((result = { data: true }))
             } if (panId) {
                 await Likes.create({ fk_userKey: userKey, panId: aptNo })
-                res.send((result = { data: false }))
+                res.send((result = { data: true }))
             }
-            // await Likes.create({ fk_userKey })
-            // res.send((result = { data: true }))
+        } else {
+            await Likes.destroy({
+                where: { fk_userKey: userKey, [Op.or]: [{ fk_pblancNo: aptNo }, { panId: aptNo }] }
+            })
+            res.send((result = { data: false }))
         }
         res.status(200).sned({ message: 'success' })
     } catch (error) {
         console.log('-------------------------------')
-        res.status(400).send({ errorMessage: '에러 발생' + error })
+        console.log('에러발생' + error)
+        res.status(400).send({ errorMessage: 'fail' })
     }
 }
 
