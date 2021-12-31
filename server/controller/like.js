@@ -9,14 +9,18 @@ const createLike = async (req, res) => {
     // const { userKey } = res.locals.user
     try {
         const existLike = await Likes.findOne({ where: { fk_userKey: userKey } })
-        const existPrivatAptNo = await Private.findOne({ where: { pblancNo: aptNo } })
-        const existPublicAptNo = await Public.findOne({ where: { panId: aptNo } })
+        const existPrivatAptNo = await Private.findOne({ 
+            attributes :['pblancNo'],
+            where : {pblancNo : aptNo},
+            raw : true
+         })
+        
 
         if (!existLike) {
             if (existPrivatAptNo) {
                 await Likes.create({ fk_userKey: userKey, fk_pblancNo: aptNo })
                 res.send((result = { data: true }))
-            } else if (existPublicAptNo) { // 공영일거다
+            } else { // 공영일거다
                 await Likes.create({ fk_userKey: userKey, panId: aptNo })
                 res.send((result = { data: true }))
             }
@@ -24,7 +28,7 @@ const createLike = async (req, res) => {
             if (existPrivatAptNo) {
                 await Likes.destroy({ where: { fk_userKey: userKey } }, { fk_pblancNo: aptNo })
                 res.send((result = { data: false }))
-            } else if (existPublicAptNo) {
+            } else  {
                 await Likes.destroy({ where: { fk_userKey: userKey } }, { panId: aptNo })
                 res.send((result = { data: false }))
             }
