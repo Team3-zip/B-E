@@ -1,20 +1,20 @@
 const Likes = require('../models/Like')
+const Private = require('../models/PrivateApt')
 const { Op } = require('sequelize')
 
 const createLike = async (req, res) => {
     const { aptNo } = req.params
     const { userKey } = req.body
     // const { userKey } = res.locals.user
-
     try {
-        const existLike = await Likes.findOne({
-            where: { fk_userKey: userKey }
-        })
+        const existLike = await Likes.findOne({ where: { fk_userKey: userKey } })
+        const existAptNo = await Private.findOne({ where: { pblancNo: aptNo } })
+
         if (!existLike) {
-            if (fk_pblancNo) {
+            if (existAptNo) {
                 await Likes.create({ fk_userKey: userKey, fk_pblancNo: aptNo })
                 res.send((result = { data: true }))
-            } if (panId) {
+            } else { // 공영일거다
                 await Likes.create({ fk_userKey: userKey, panId: aptNo })
                 res.send((result = { data: true }))
             }
@@ -24,7 +24,6 @@ const createLike = async (req, res) => {
             })
             res.send((result = { data: false }))
         }
-        res.status(200).sned({ message: 'success' })
     } catch (error) {
         console.log('-------------------------------')
         console.log('에러발생' + error)

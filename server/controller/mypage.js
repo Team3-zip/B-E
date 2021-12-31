@@ -1,16 +1,18 @@
 const Users = require('../models/User')
 const Likes = require('../models/Like')
-const { User } = require('../models')
 
 const getMypage = async (req, res, next) => {
     try {
-        const { userKey } = res.locals.user
+        // const { userKey } = res.locals.user
+        const { userKey } = req.body
         const { likeId } = req.body
         const existuser = await Users.findOne({ where: { userKey } })
         const existlike = await Likes.findOne({ where: { likeId } })
 
         res.status(200).send({ existuser, existlike })
     } catch (error) {
+        console.log('-----------------------------')
+        console.log('에러발생' + error)
         res.status(400).send({ error })
     }
 }
