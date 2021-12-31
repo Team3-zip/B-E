@@ -57,13 +57,9 @@ const getMyPublicSido = async (req,res,next) =>{
     console.log(mysido)
     const pubSido = await PubNotice.findAll({
         where: {
-            [or]: [
-                {
                     sidoName: {
                         [like]: `%${mysido}%`
-                    }
-                }
-            ]
+                    }    
         },
         raw:true
         
@@ -80,18 +76,15 @@ const getMyPrivateSido = async (req,res,next) =>{
             where : {userKey : userKey},
             raw:true
         });
+        mysido = mysido['sido']
     }catch{
         mysido = "경기"
     }
     const privateSido = await PrivateApt.findAll({
         where: {
-            [or]: [
-                {
                     sido: {
                         [like]: `%${mysido}%`
                     }
-                }
-            ]
         },
         raw:true
     })
