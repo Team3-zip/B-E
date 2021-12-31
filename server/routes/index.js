@@ -13,7 +13,7 @@ router.use('/', detailRouter);
 router.use('/users', userRouter);
 router.use('/comments', commentRouter);
 router.use('/', listRouter);
-router.use('/:likeId', likeRouter);
+router.use('/likes', likeRouter);
 router.use('/users', mypageRouter);
 
 module.exports = router;
