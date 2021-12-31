@@ -18,21 +18,22 @@ const getMypage = async (req, res, next) => {
 }
 
 const putMypage = async (req, res, next) => {
-    // const { userKey } = res.locals.user
-    const { userKey } = req.body
-    const { sido } = req.params
+    try {
+        // const { userKey } = res.locals.user
+        const { userKey, sido } = req.body
+        const { nickname } = req.params
 
-    const existSido = await Users.findOne({ where: { userKey, sido } })
-    console.log(existSido)
-    if (existSido) {
-        await Users.update({ where: { sido: sido } })
-        res.status(200).send({
-            message: '관심지역 수정이 완료 되었습니다.'
-        })
-    } else {
-        res.status(400).send({
-            errorMessage: '다시 시도해 주세요.'
-        })
+        const existSido = await Users.findOne({ where: { userKey, nickname: nickname } })
+        if (existSido) {
+            await Users.update({ where: { sido } })
+            res.status(200).send({
+                message: '관심지역 수정이 완료 되었습니다.'
+            })
+        }
+    } catch (error) {
+        console.log('-----------------------------')
+        console.log('에러발생' + error)
+        res.status(400).send({ errorMessge: '다시 시도해 주세요.' })
     }
 }
 
