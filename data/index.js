@@ -8,7 +8,7 @@ const youtubeapi = require('./routes/youtubeAPI')
 const publicApt = require('./routes/pubOpenAPI')
 const privateApt = require('./routes/privateApt');
 const imgCrawl = require('./routes/imgCrawl');
-
+const privateAptDetail = require('./routes/privateAptDetail');
 
 //db 연결
 sequelize
@@ -25,7 +25,7 @@ app.use('/youtube', youtubeapi)
 app.use('/publicApt', publicApt)
 app.use('/privateApt', privateApt);
 app.use('/imgCrawl', imgCrawl);
-
+app.use('/privateAptDetail', privateAptDetail);
 
 //error
 app.use((req, res, next) => {
