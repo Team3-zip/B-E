@@ -1,6 +1,5 @@
 const Likes = require('../models/Like')
 const Private = require('../models/PrivateApt')
-const Public = require('../models/PubNotice')
 const { Op } = require('sequelize')
 
 const createLike = async (req, res) => {
