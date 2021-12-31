@@ -5,6 +5,9 @@ const getPrivateDetail = async (req, res, next) => {
     let detail1 ={};
     let detail2=[];
     let detail2Info={};
+    let myLike = false;
+    // const {userKey} = req.body;
+    // const {userKey} = req.locals.user;
     try{
         const {aptNo} = req.params;
         const list_data = await PrivateApt.findOne({
@@ -15,9 +18,13 @@ const getPrivateDetail = async (req, res, next) => {
             attributes :['contractStartDate','contractEndDate','relevantArea1Date','etcArea1Date','gyeonggi1Date','relevantArea2Date','etcArea2Date','gyeonggi2Date','homePage','applyAddress','plusSupplyStartDate','plusSupplyEndDate','supplySize'],
             where : {fk_pblancNo:aptNo}
         })
-        
+       
         const {executor,operation,houseName,winDate,receptStartDate,receptEndDate,rentSection,sido,recruitDate} = list_data;
         const {contractStartDate,contractEndDate,relevantArea1Date,etcArea1Date,gyeonggi1Date,relevantArea2Date,etcArea2Date,gyeonggi2Date,homePage,applyAddress,plusSupplyStartDate,plusSupplyEndDate,supplySize} = detail1_data;
+        const like = await Like.findOne({where : {fk_pblancNo : aptNo, fk_userKey:userKey}});
+        if(like){
+            myLike = true;
+        }
         detail1['executor'] = executor;
         detail1['operation']=operation;
         detail1['houseName'] = houseName;
@@ -40,6 +47,7 @@ const getPrivateDetail = async (req, res, next) => {
         detail1['plusSupplyStartDate']=plusSupplyStartDate;
         detail1['plusSupplyEndDate']=plusSupplyEndDate;
         detail1['supplySize']=supplySize;
+        detail1['myLike'] = myLike;
         
         const detail2Count = await PrivateAptDetail2.findAll({
             order:[['houseManageNo','DESC' ]],
@@ -52,6 +60,7 @@ const getPrivateDetail = async (req, res, next) => {
             });
             
             const {modelNo, type, geSupplySize,spSupplySize,supplyAreaSize, supplyAmount} = detail2_data[i];
+
             detail2Info['modelNo']= modelNo;
             detail2Info['type']=type;
             detail2Info['geSupplySize']=geSupplySize;
@@ -72,6 +81,9 @@ const getPrivateDetail = async (req, res, next) => {
 }
 const getPublicDetail = async(req, res, next)=>{
     let detail ={};
+    let myLike = false;
+    const {userKey} = req.body; //테스트 한다고 body에 넣었는데 미들웨어 작동안하는거 같음 
+    // const {userKey} = req.locals.user;
     try{
         const {aptNo} = req.params;
         const detail_list1 = await PubNotice.findOne({
@@ -79,6 +91,10 @@ const getPublicDetail = async(req, res, next)=>{
             where :{panId: aptNo}
         });
         const {panState,panUploadDate,sidoName,aisTypeName,startDate,closeDate,announceDate,submitStartDate,submitEndDate,contractStartDate,contractEndDate,houseCnt,size,moveYM,heatMethod,fileLink,address,detailUrl,panDate}= detail_list1;
+        const like = await Like.findOne({where : {panId : aptNo, fk_userKey:userKey}});
+        if(like) {
+            myLike = true;
+        }
         detail['panState']=panState;
         detail['panUploadDate']=panUploadDate;
         detail['sidoName']=sidoName;
@@ -98,7 +114,7 @@ const getPublicDetail = async(req, res, next)=>{
         detail['fileLink']=fileLink;
         detail['address']=address;
         detail['detailUrl']=detailUrl;
-        
+        detail['myLike'] = myLike;
         res.status(200).send({
             detail
         });

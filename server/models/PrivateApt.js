@@ -83,5 +83,9 @@ module.exports= class PrivateApt extends Sequelize.Model {
             foreignKey : 'fk_pblancNo',
             sourceKey:'pblancNo'
         });
+        db.PrivateApt.hasMany(db.Comment, {
+            foreignKey : 'fk_pblancNo',
+            sourceKey:'pblancNo'
+        });
     }
 }

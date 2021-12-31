@@ -39,6 +39,10 @@ module.exports = class Comment extends Sequelize.Model {
             targetKey: 'pblancNo',
             onDelete: 'cascade'
         });
-        
+        db.Like.belongsTo(db.PubNotice,{
+            foreignKey:'panId', 
+            targetKey:'panId',
+            onDelete: 'cascade'
+        });
     }
 };
