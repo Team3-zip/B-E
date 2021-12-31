@@ -1,4 +1,4 @@
-const { Sequelize, sequelize, PublicImg } = require('../models')
+const { Sequelize, sequelize, PublicImg, PrivateImg } = require('../models')
 const Youtube = require('../models/Youtube');
 const PubNotice = require('../models/PubNotice')
 const PrivateApt = require('../models/PrivateApt')
@@ -61,6 +61,10 @@ const getMyPublicSido = async (req,res,next) =>{
                         [like]: `%${mysido}%`
                     }    
         },
+        include:[ {
+            model: PublicImg,
+            attributes: ['url1']
+        }],
         raw:true
         
     })
@@ -86,6 +90,10 @@ const getMyPrivateSido = async (req,res,next) =>{
                         [like]: `%${mysido}%`
                     }
         },
+        include:[ {
+            model: PrivateImg,
+            attributes: ['url1']
+        }],
         raw:true
     })
     res.send(privateSido)
