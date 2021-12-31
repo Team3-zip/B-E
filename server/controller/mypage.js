@@ -18,13 +18,14 @@ const getMypage = async (req, res, next) => {
 }
 
 const putMypage = async (req, res, next) => {
-    const { userKey } = res.locals.user
+    // const { userKey } = res.locals.user
+    const { userKey } = req.body
     const { sido } = req.params
 
     const existSido = await Users.findOne({ where: { userKey, sido } })
-
+    console.log(existSido)
     if (existSido) {
-        await Users.update({ sido })
+        await Users.update({ where: { sido: sido } })
         res.status(200).send({
             message: '관심지역 수정이 완료 되었습니다.'
         })
