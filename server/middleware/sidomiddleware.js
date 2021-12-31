@@ -3,6 +3,8 @@ const  User = require("../models/User")
 
 module.exports = (req, res, next) => {
     const { authorization } = req.headers
+    const {userKey} = req.body;
+    JSON.stringify(authorization);
     const [tokenType, tokenValue] = authorization.split(' ')
 
     if (tokenType !== 'Bearer') {
@@ -14,7 +16,6 @@ module.exports = (req, res, next) => {
     }
 
     try {
-        const { userKey }
         User.findByPk(userKey).then((user) => {
             res.locals.user = user
             next()
