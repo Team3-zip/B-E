@@ -25,9 +25,9 @@ const putMypage = async (req, res, next) => {
 
         const existSido = await Users.findOne({ where: { userKey, nickname: nickname } })
         if (existSido) {
-            await Users.update({ where: { sido } })
+            await Users.update({ sido }, { where: { userKey } }) // 특정 정보를 정해줘서 그 안에 있는 "sido"를 업데이트해줘라.
             res.status(200).send({
-                message: '관심지역 수정이 완료 되었습니다.'
+                message: '관심지역 수정이 완료되었습니다.'
             })
         }
     } catch (error) {
