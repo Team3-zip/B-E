@@ -13,7 +13,7 @@ const fs = require('fs');
 const client = require('cheerio-httpcli');
 const puppeteer = require('puppeteer');
 
-
+// 살행하지 마세요!!!!!!!!!!
 //목록 받기
 const dailyPrivateData = () => {
     cron.scheduleJob('*/10 * * * * *', async function(){

@@ -12,6 +12,7 @@ const privateAptDetail = require('./routes/privateAptDetail');
 
 const privateCron = require('./crons/privateCron')
 const publicCron = require('./crons/publicCron')
+const youtubeCron = require('./crons/youtubeCron')
 //db 연결
 sequelize
     .sync({ force: false })
@@ -40,6 +41,7 @@ app.use((error, req, res, next) => {
 
 // privateCron.dailyPrivateData();
 publicCron.dailyPublicData();
+youtubeCron.monthlyYoutubeData();
 app.listen(port, () => {
     console.log(`listening at http://localhost:${port}`);
 })
