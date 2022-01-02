@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/jest --verbose ./tests",
+    "lint": "./node_modules/.bin/eslint ."
   },
   "author": "",
   "license": "ISC",
@@ -19,6 +20,7 @@
     "swagger-autogen": "^2.18.0"
   },
   "devDependencies": {
+    "eslint-plugin": "^1.0.1",
     "nodemon": "^2.0.15",
     "swagger-ui-express": "^4.3.0"
   }
