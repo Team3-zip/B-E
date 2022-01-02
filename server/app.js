@@ -14,7 +14,7 @@ const indexRouter = require('./routes/index');
 sequelize
     .sync({ force: false })
     .then(() => {
-        console.log('db Connected')
+        console.log('db Connected!!!!!!')
     })
     .catch((err) => {
         console.log(err);
