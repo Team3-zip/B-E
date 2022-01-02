@@ -1,8 +1,9 @@
 #!/bin/bash
-REPOSITORY=/home/ubuntu/zip
-
-cd $REPOSITORY
-cd server
+cd /home/ubuntu/zip/server
 npm install
-pm2 start app.js
-
+npm install pm2@latest -g
+sudo apt-get update
+sudo apt-get install authbind
+sudo touch /etc/authbind/byport/80
+sudo chown ubuntu /etc/authbind/byport/80
+sudo chmod 755 /etc/authbind/byport/80
