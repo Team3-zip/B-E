@@ -13,8 +13,10 @@ const getYouTube = async (req, res, next) => {
 const getpublicHot = async (req, res, next) => {
     let pubHotarr = []
     const pubHotIds = await sequelize.query('SELECT panId,count(*) from likes group by panId order by count(*) desc')
+    console.log(pubHotIds)
     for (let item of pubHotIds[0]) {
-        pubHotarr.push(item['pubId'])
+        console.log(item)
+        pubHotarr.push(item['panId'])
     }
     const pubHotList = await PubNotice.findAll({
         where: { panId : pubHotarr }
@@ -31,8 +33,11 @@ const getpublicHot = async (req, res, next) => {
 const getprivateHot = async (req, res, next) => {
     let privateHotarr = []
     const privateHotIds = await sequelize.query('SELECT fk_pblancNo,count(*) from likes group by fk_pblancNo order by count(*) desc')
+    console.log(privateHotIds)
     for (let item of privateHotIds[0]) {
-        privateHotarr.push(item['pblancNo'])
+        console.log(item)
+        privateHotarr.push(item['fk_pblancNo'])
+
     }
     const provateHotList = await PrivateApt.findAll({
         where: { pblancNo : privateHotarr }

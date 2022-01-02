@@ -10,6 +10,8 @@ const privateApt = require('./routes/privateApt');
 const imgCrawl = require('./routes/imgCrawl');
 const privateAptDetail = require('./routes/privateAptDetail');
 
+const privateCron = require('./crons/privateCron')
+const publicCron = require('./crons/publicCron')
 //db 연결
 sequelize
     .sync({ force: false })
@@ -36,7 +38,8 @@ app.use((error, req, res, next) => {
     res.sendStatus(500);
 });
 
-
+// privateCron.dailyPrivateData();
+publicCron.dailyPublicData();
 app.listen(port, () => {
     console.log(`listening at http://localhost:${port}`);
 })
