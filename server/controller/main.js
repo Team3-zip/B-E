@@ -3,6 +3,8 @@ const Youtube = require('../models/Youtube');
 const PubNotice = require('../models/PubNotice')
 const PrivateApt = require('../models/PrivateApt')
 const User = require('../models/User')
+const Like = require('../models/Like')
+
 const {Op} = require('sequelize');
 const {like, or} = Op
 
@@ -19,7 +21,11 @@ const getpublicHot = async (req, res, next) => {
         pubHotarr.push(item['panId'])
     }
     const pubHotList = await PubNotice.findAll({
-        where: { panId : pubHotarr }
+        where: { panId : pubHotarr },
+        // include: {
+        //     model: Like,
+        //     where: {panId, userKey:res.locals.userKey},
+        //     attributes: ['url1']}
     });
     res.send(pubHotList)
 

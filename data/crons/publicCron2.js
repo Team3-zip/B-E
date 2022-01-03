@@ -21,14 +21,14 @@ Date.prototype.yyyymmdd = function()
         }
 
 //목록 받기
-const dailyPublicData = () => {
-    cron.scheduleJob('0 1 0 * * *', async function(){
+const dailyPublicData2 = () => {
+    cron.scheduleJob('0 2 0 * * *', async function(){
         // 메일 자정에 작동
         
         const today = new Date().yyyymmdd()
         const options = {
             method: "GET",
-            url: `http://apis.data.go.kr/B552555/lhLeaseNoticeInfo1/lhLeaseNoticeInfo1?serviceKey=${PUB_API_SECRET_KEY}&PG_SZ=300&PAGE=1&PAN_ST_DT=${20211228}&UPP_AIS_TP_CD=06`,
+            url: `http://apis.data.go.kr/B552555/lhLeaseNoticeInfo1/lhLeaseNoticeInfo1?serviceKey=${PUB_API_SECRET_KEY}&PG_SZ=300&PAGE=1&PAN_ST_DT=${20211228}&UPP_AIS_TP_CD=39`,
             //UPP AIS_TP_CD 05분양주택 06임대주택 39신혼희망타운
             headers: {},
         };
@@ -315,5 +315,5 @@ const dailyPublicData = () => {
     
 }
 module.exports = {
-    dailyPublicData
+    dailyPublicData2
 };

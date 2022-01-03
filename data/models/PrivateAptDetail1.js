@@ -31,20 +31,24 @@ module.exports = class PrivateAptDetail1 extends Sequelize.Model {
                 },
                 homePage: {        //홈페이지 주소
                     type: Sequelize.STRING(70),
+                    allowNull:true,
                 },
                 houseManageNo: {      //주택관리 번호
                     type:Sequelize.INTEGER,
                     allowNull:false,
                     primaryKey:true,
+
                 },
                 applyAddress: {          //공급위치
                     type: Sequelize.STRING(70),
                 },
                 plusSupplyStartDate: {        //특별공극접수 시작일
                     type: Sequelize.STRING(30),
+                    allowNull:true,
                 },
                 plusSupplyEndDate: {       //특별공급 접수 종료일
                     type: Sequelize.STRING(30),
+                    allowNull:true,
                 },
                 supplySize: {         //공급규모
                     type: Sequelize.STRING(15),  
