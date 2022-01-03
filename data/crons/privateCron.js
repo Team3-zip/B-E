@@ -35,7 +35,7 @@ const dailyPrivateData = () => {
         try {
             const SERVICE_KEY = 'Pifa2dNF%2F%2BDOgnjpswa7G%2B8t%2B1B28ekfKa%2FmZtTwwmLTZtbw05Xn8DeUw0BHRG2mEg4M1BCH1WfcQJdblk3TmQ%3D%3D';
             for (let num = 1; num <= 10; num++) {
-                const requestUrl = `https://openapi.reb.or.kr/OpenAPI_ToolInstallPackage/service/rest/ApplyhomeInfoSvc/getLttotPblancList?serviceKey=${SERVICE_KEY}&startmonth=${202112}&endmonth=${20211230}&houseSecd=01&pageNo=${num}`;
+                const requestUrl = `https://openapi.reb.or.kr/OpenAPI_ToolInstallPackage/service/rest/ApplyhomeInfoSvc/getLttotPblancList?serviceKey=${SERVICE_KEY}&startmonth=${new Date().yyyymm()}&endmonth=${new Date().yyyymmdd()}&houseSecd=01&pageNo=${num}`;
                 request(requestUrl, async (err, re, body) => {
                     if (err) {
                         console.log(err);
