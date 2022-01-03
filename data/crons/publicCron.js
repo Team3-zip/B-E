@@ -28,7 +28,7 @@ const dailyPublicData = () => {
         const today = new Date().yyyymmdd()
         const options = {
             method: "GET",
-            url: `http://apis.data.go.kr/B552555/lhLeaseNoticeInfo1/lhLeaseNoticeInfo1?serviceKey=${PUB_API_SECRET_KEY}&PG_SZ=300&PAGE=1&PAN_ST_DT=${20211228}&UPP_AIS_TP_CD=06`,
+            url: `http://apis.data.go.kr/B552555/lhLeaseNoticeInfo1/lhLeaseNoticeInfo1?serviceKey=${PUB_API_SECRET_KEY}&PG_SZ=300&PAGE=1&PAN_ST_DT=${today}&UPP_AIS_TP_CD=06`,
             //UPP AIS_TP_CD 05분양주택 06임대주택 39신혼희망타운
             headers: {},
         };
