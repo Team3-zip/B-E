@@ -8,6 +8,7 @@ module.exports = (req, res, next) => {
     const [tokenType, tokenValue] = (authorization||'').split(' ')
 
     if (tokenType !== 'Bearer') {
+        
         next()
         
         return
