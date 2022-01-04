@@ -56,6 +56,6 @@ jobs:
       - name: deploy with AWS codeDeploy
         run: aws deploy create-deployment
           --application-name zip-codedeploy
-          --deployment-config-name CodeDeployDefault.OneAtOnce
+          --deployment-config-name CodeDeployDefault.OneAtATime
           --deployment-group-name zip-codedeploy
           --s3-location bucket=together-zip,bundleType=zip,key=public/together-zip.zip
