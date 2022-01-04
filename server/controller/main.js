@@ -13,6 +13,11 @@ const getYouTube = async (req, res, next) => {
     res.send(youtubeList)
 }
 const getpublicHot = async (req, res, next) => {
+    try{
+        var { userKey } = res.locals.user
+    }catch{
+        userKey = ''
+    }
     let pubHotarr = []
     const pubHotIds = await sequelize.query('SELECT panId,count(*) from likes group by panId order by count(*) desc')
     console.log(pubHotIds)
@@ -40,6 +45,11 @@ const getpublicHot = async (req, res, next) => {
 
 }
 const getprivateHot = async (req, res, next) => {
+    try{
+        var { userKey } = res.locals.user
+    }catch{
+        userKey = ''
+    }
     let privateHotarr = []
     const privateHotIds = await sequelize.query('SELECT fk_pblancNo,count(*) from likes group by fk_pblancNo order by count(*) desc')
     console.log(privateHotIds)
