@@ -1,9 +1,6 @@
 #!/bin/bash
-REPOSITORY=/home/ubuntu/B-E
+REPOSITORY=/home/ubuntu/build
 
-cd $REPOSITORY
-sudo cp -r dist/* /var/www/html/
-sudo service nginx restart
 
 cd $REPOSITORY
 cd server
