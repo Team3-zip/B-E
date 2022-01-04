@@ -41,7 +41,7 @@ jobs:
 #           yarn build
 
       - name: zip distributions
-        run: zip -r zip.zip ./client/dist ./server ./appspec.yml ./scripts
+        run: zip -r together-zip.zip ./client/dist ./server ./appspec.yml ./scripts
 
       - name: AWS configure credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -51,7 +51,7 @@ jobs:
           aws-region: ap-northeast-2
 
       - name: upload to S3
-        run: aws s3 cp --region ap-northeast-2 ./zip.zip s3://zip/public/
+        run: aws s3 cp --region ap-northeast-2 ./together-zip.zip s3://together-zip/public/
 
       - name: deploy with AWS codeDeploy
         run: aws deploy create-deployment
