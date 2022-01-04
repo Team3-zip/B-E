@@ -15,10 +15,12 @@ const config = require('../config/config')[env];
 const db = {};
 
 const sequelize = new Sequelize(
-    config.database,
-    config.username,
-    config.password,
-    config
+    secrets.DATABASE_NAME,
+    secrets.DATABASE_USER_NAME,
+    secrets.DATABASE_PASSWORD,
+    secrets.DATABASE_HOST,
+    secrets.DATABASE_DIALECT,
+    secrets.DATABASE_TIMEZONE
 );
 
 db.sequelize = sequelize;
