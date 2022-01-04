@@ -10,15 +10,17 @@ const PrivateImg = require('./PrivateImg');
 const PublicImg = require('./PublicImg');
 const Youtube = require('./Youtube');
 
-const env = process.env.NODE_ENV || 'production';
-const config = require('../config/config')[env];
+// const env = process.env.NODE_ENV || 'production';
+// const config = require('../config/config')[env];
 const db = {};
 
 const sequelize = new Sequelize(
-    config.database,
-    config.username,
-    config.password,
-    config
+    secrets.DATABASE_NAME,
+    secrets.DATABASE_USER_NAME,
+    secrets.DATABASE_PASSWORD,
+    secrets.DATABASE_HOST,
+    secrets.DATABASE_DIALECT,
+    secrets.DATABASE_TIMEZONE
 );
 
 db.sequelize = sequelize;
