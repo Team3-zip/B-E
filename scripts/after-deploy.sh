@@ -1,5 +1,5 @@
 #!/bin/bash
-REPOSITORY=/home/ubuntu/zip
+REPOSITORY=/home/ubuntu/B-E
 
 cd $REPOSITORY
 sudo cp -r dist/* /var/www/html/
