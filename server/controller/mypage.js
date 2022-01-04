@@ -22,7 +22,7 @@ const putMypage = async (req, res, next) => {
         // const { userKey } = res.locals.user
         const { userKey, sido } = req.body
         const { nickname } = req.params
-        console.log("test")
+        console.log("test1")
         const existSido = await Users.findOne({ where: { userKey, nickname: nickname } })
         if (existSido) {
             await Users.update({ sido }, { where: { userKey } }) // 특정 정보를 정해줘서 그 안에 있는 "sido"를 업데이트해줘라.
