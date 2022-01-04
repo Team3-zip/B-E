@@ -9,3 +9,4 @@ cd $REPOSITORY
 cd server
 npm install
 pm2 kill
+npm prod
