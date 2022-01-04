@@ -34,11 +34,11 @@ jobs:
           cat << EOF >> .env
           ${{ secrets.ENV }}
 
-      - name: build client files
-        working-directory: ./client
-        run: |
-          yarn install --frozen-lockfile
-          yarn build
+#       - name: build client files
+#         working-directory: ./client
+#         run: |
+#           yarn install --frozen-lockfile
+#           yarn build
 
       - name: zip distributions
         run: zip -r zip.zip ./client/dist ./server ./appspec.yml ./scripts
