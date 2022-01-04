@@ -1,11 +1,11 @@
 #!/bin/bash
-REPOSITORY=/home/ubuntu/B-E
+REPOSITORY=/home/ubuntu/build
 
 
 cd $REPOSITORY
 cd server
-npm install
-pm2 kill
-pm2 start app.js
+sudo npm install
+sudo pm2 kill
+sudo pm2 start app.js
 
 
