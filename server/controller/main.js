@@ -13,6 +13,11 @@ const getYouTube = async (req, res, next) => {
     res.send(youtubeList)
 }
 const getpublicHot = async (req, res, next) => {
+    try{
+        var { userKey } = res.locals.user
+    }catch{
+        userKey = ''
+    }
     let pubHotarr = []
     const pubHotIds = await sequelize.query('SELECT panId,count(*) from likes group by panId order by count(*) desc')
     console.log(pubHotIds)
@@ -21,7 +26,7 @@ const getpublicHot = async (req, res, next) => {
         pubHotarr.push(item['panId'])
     }
     const pubHotList = await sequelize.query(
-        'SELECT Pubnotices.*,(SELECT PublicImg.url1 FROM PublicImg WHERE Pubnotices.panId = PublicImg.panId) AS ImgUrl, CASE WHEN likes.panId IS NULL THEN "false" ELSE "true" END AS islike FROM Pubnotices LEFT JOIN likes ON Pubnotices.panId = likes.panId AND likes.fk_userKey="12345" WHERE Pubnotices.panId IN (SELECT Pubnotices.panId FROM likes group by panId ORDER BY COUNT(*) DESC)'
+        `SELECT Pubnotices.*,(SELECT PublicImg.url1 FROM PublicImg WHERE Pubnotices.panId = PublicImg.panId) AS ImgUrl, CASE WHEN likes.panId IS NULL THEN "false" ELSE "true" END AS islike FROM Pubnotices LEFT JOIN likes ON Pubnotices.panId = likes.panId AND likes.fk_userKey="${userKey}" WHERE Pubnotices.panId IN (SELECT Pubnotices.panId FROM likes group by panId ORDER BY COUNT(*) DESC)`
         )
     // const pubHotList = await PubNotice.findAll({
     //     where: { panId : pubHotarr },
@@ -40,6 +45,11 @@ const getpublicHot = async (req, res, next) => {
 
 }
 const getprivateHot = async (req, res, next) => {
+    try{
+        var { userKey } = res.locals.user
+    }catch{
+        userKey = ''
+    }
     let privateHotarr = []
     const privateHotIds = await sequelize.query('SELECT fk_pblancNo,count(*) from likes group by fk_pblancNo order by count(*) desc')
     console.log(privateHotIds)
@@ -48,13 +58,13 @@ const getprivateHot = async (req, res, next) => {
         privateHotarr.push(item['fk_pblancNo'])
 
     }
-    const provateHotList = await sequelize.query(
-        'SELECT privateapts.*,(SELECT privateimgs.url1 FROM privateimgs WHERE privateapts.pblancNo = privateimgs.fk_pblancNo) AS ImgUrl, CASE WHEN likes.fk_pblancNo IS NULL THEN "false" ELSE "true" END AS islike FROM privateapts LEFT JOIN likes ON privateapts.pblancNo = likes.fk_pblancNo AND likes.fk_userKey="12345" WHERE privateapts.pblancNo IN (SELECT privateapts.pblancNo FROM likes group by fk_pblancNo ORDER BY COUNT(*) DESC)'
+    const privateHotList = await sequelize.query(
+        `SELECT privateapts.*,(SELECT privateimgs.url1 FROM privateimgs WHERE privateapts.pblancNo = privateimgs.fk_pblancNo) AS ImgUrl, CASE WHEN likes.fk_pblancNo IS NULL THEN "false" ELSE "true" END AS islike FROM privateapts LEFT JOIN likes ON privateapts.pblancNo = likes.fk_pblancNo AND likes.fk_userKey="${userKey}" WHERE privateapts.pblancNo IN (SELECT privateapts.pblancNo FROM likes group by fk_pblancNo ORDER BY COUNT(*) DESC)`
     )
     // const provateHotList = await PrivateApt.findAll({
     //     where: { pblancNo : privateHotarr }
     // });
-    res.send(provateHotList[0])
+    res.send(privateHotList[0])
 }
 const getMyPublicSido = async (req,res,next) =>{
     try{
