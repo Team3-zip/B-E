@@ -1,15 +1,11 @@
 #!/bin/bash
-REPOSITORY=/home/ubuntu/build
+REPOSITORY=/home/ubuntu/B-E
 
 
 cd $REPOSITORY
 cd server
 npm install
 pm2 kill
-npm prod
+pm2 start app.js
 
-cd $REPOSITORY
-cd data
-npm install
-pm2 kill
-npm prod
+
