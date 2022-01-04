@@ -117,7 +117,7 @@ const getMyPublicSido = async (req,res,next) =>{
     //     }],
     //     raw:true
         
-    // })
+    // }) ds
     
     res.send(pubSido[0])
 }
