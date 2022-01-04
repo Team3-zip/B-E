@@ -82,8 +82,7 @@ const getPrivateDetail = async (req, res, next) => {
 const getPublicDetail = async(req, res, next)=>{
     let detail ={};
     let myLike = false;
-    const {userKey} = req.body; //테스트 한다고 body에 넣었는데 미들웨어 작동안하는거 같음 
-    // const {userKey} = req.locals.user;
+    const {userKey} = req.locals.user; 
     try{
         const {aptNo} = req.params;
         const detail_list1 = await PubNotice.findOne({
