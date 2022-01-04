@@ -51,7 +51,7 @@ jobs:
           aws-region: ap-northeast-2
 
       - name: upload to S3
-        run: aws s3 cp --region ap-northeast-2 ./together-zip.zip s3://together-zip/public/
+        run: aws s3 cp --region ap-northeast-2 ./zip.zip s3://zip/public/
 
       - name: deploy with AWS codeDeploy
         run: aws deploy create-deployment
