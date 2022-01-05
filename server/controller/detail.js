@@ -7,7 +7,7 @@ const getPrivateDetail = async (req, res, next) => {
     let detail2Info={};
     let myLike = false;
     // const {userKey} = req.body;
-    // const {userKey} = req.locals.user;
+    const {userKey} = req.locals.user;
     try{
         const {aptNo} = req.params;
         const list_data = await PrivateApt.findOne({
@@ -21,10 +21,13 @@ const getPrivateDetail = async (req, res, next) => {
        
         const {executor,operation,houseName,winDate,receptStartDate,receptEndDate,rentSection,sido,recruitDate} = list_data;
         const {contractStartDate,contractEndDate,relevantArea1Date,etcArea1Date,gyeonggi1Date,relevantArea2Date,etcArea2Date,gyeonggi2Date,homePage,applyAddress,plusSupplyStartDate,plusSupplyEndDate,supplySize} = detail1_data;
-        const like = await Like.findOne({where : {fk_pblancNo : aptNo, fk_userKey:userKey}});
-        if(like){
-            myLike = true;
+        if(userKey.length){
+            const like = await Like.findOne({where : {fk_pblancNo : aptNo, fk_userKey:userKey}});
+            if(like){
+                myLike = true;
+            }
         }
+        
         detail1['executor'] = executor;
         detail1['operation']=operation;
         detail1['houseName'] = houseName;
@@ -90,10 +93,13 @@ const getPublicDetail = async(req, res, next)=>{
             where :{panId: aptNo}
         });
         const {panState,panUploadDate,sidoName,aisTypeName,startDate,closeDate,announceDate,submitStartDate,submitEndDate,contractStartDate,contractEndDate,houseCnt,size,moveYM,heatMethod,fileLink,address,detailUrl,panDate}= detail_list1;
-        const like = await Like.findOne({where : {panId : aptNo, fk_userKey:userKey}});
-        if(like) {
-            myLike = true;
+        if(userKey.length){
+            const like = await Like.findOne({where : {panId : aptNo, fk_userKey:userKey}});
+            if(like) {
+                myLike = true;
+            }
         }
+        
         detail['panState']=panState;
         detail['panUploadDate']=panUploadDate;
         detail['sidoName']=sidoName;

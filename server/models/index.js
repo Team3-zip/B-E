@@ -11,14 +11,13 @@ const PublicImg = require('./PublicImg');
 const Youtube = require('./Youtube');
 
 const env = process.env.NODE_ENV || 'production';
-const config = require('../config/config')[env];
+//const config = require('../config/config')[env];
 const db = {};
 
 const sequelize = new Sequelize(
-    config.database,
-    config.username,
-    config.password,
-    config
+    DATABASE_NAME,
+    DATABASE_USER_NAME,
+    DATABASE_PASSWORD
 );
 
 db.sequelize = sequelize;
