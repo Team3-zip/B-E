@@ -67,7 +67,6 @@ const postComment = async(req, res, next)=>{
 }
 const patchComment = async (req, res, next) => {
     const { content } = req.body;
-    //const { userKey } = res.locals.user;
     const { aptNo, commentId } = req.params;
     try {
         await Comment.update(
