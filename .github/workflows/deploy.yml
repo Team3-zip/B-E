@@ -19,21 +19,37 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-      - name: Checkout source code.
-        uses: actions/checkout@v2
-
+      - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
+    
+    	# 윈도우 환경과 리눅스 환경에서 충돌 회피를 위한 package-lock.json 삭제
+      - name: delete package-lock.json
+        run: rm package-lock.json
 
-      - name: create env file
-        working-directory: ./server
-        run: 
-          touch .env
-          cat << EOF >> .env
+      - name: Install dependencies
+        run: npm install
+
+      - name: bulid file
+        run: npm run build
+
+	# secret 폴더 생성후 .env파일 생성
+        # 폴더를 생성하지 않으면 .env 파일이 .gitignore에 의해 무시당해서 안생긴다.
+      - name: Create env file
+        run: |
+          mkdir secret
+          cd secret
+          touch .env.development
+          cat << EOF >> .env.development
           ${{ secrets.ENV }}
+          EOF
+          cd ../
           
+	# tar파일 생성
+      - name: Make tar file
+        run: tar -cpvzf ./$GITHUB_SHA.tgz *
+        shell: bash
+
       - name: zip distributions
         run: zip -r together-zip.zip ./client/dist ./server ./appspec.yml ./scripts
 

@@ -12,14 +12,11 @@ permissions:
     group: ubuntu
 
 hooks:
+  BeforeInstall:
+    - location: scripts/before_deploy.sh
+      runas: ubuntu
   AfterInstall:
     - location: scripts/after-deploy.sh
       timeout: 180
       runas: ubuntu
-      env:
-        DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-        DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
-        DATABASE_PASSWORD:  ${{ secrets.DATABASE_PASSWORD }}
-        DATABASE_TIMEZONE:  ${{ secrets.DATABASE_TIMEZONE }}
-        DATABASE_USER_NAME: ${{ secrets.DATABASE_USER_NAME }}
-        DATABASE_DIALECT: ${{ secrets.DATABASE_DIALECT }}
+      
