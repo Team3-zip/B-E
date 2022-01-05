@@ -15,9 +15,9 @@ const Youtube = require('./Youtube');
 const db = {};
 
 const sequelize = new Sequelize(
-    env.DATABASE_NAME,
-    env.DATABASE_USER_NAME,
-    env.DATABASE_PASSWORD
+    DATABASE_NAME,
+    DATABASE_USER_NAME,
+    DATABASE_PASSWORD
 );
 
 db.sequelize = sequelize;

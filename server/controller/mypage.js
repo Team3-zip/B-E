@@ -4,8 +4,8 @@ const Likes = require('../models/Like')
 const getMypage = async (req, res, next) => {
     try {
         // const { userKey } = res.locals.user
-        const { userKey } = req.body
-        const { likeId } = req.body
+        const { userKey } = req.params;
+        const { likeId } = req.body;
         const existuser = await Users.findOne({ where: { userKey } })
         const existlike = await Likes.findOne({ where: { likeId } })
 
@@ -21,9 +21,9 @@ const putMypage = async (req, res, next) => {
     try {
         // const { userKey } = res.locals.user
         const { userKey, sido } = req.body
-        const { nickname } = req.params
+        const { userName } = req.params
         console.log("test1")
-        const existSido = await Users.findOne({ where: { userKey, nickname: nickname } })
+        const existSido = await Users.findOne({ where: { userKey, nickname: userName } })
         if (existSido) {
             await Users.update({ sido }, { where: { userKey } }) // 특정 정보를 정해줘서 그 안에 있는 "sido"를 업데이트해줘라.
             res.status(200).send({
