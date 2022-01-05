@@ -27,8 +27,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: delete package-lock.json
-        run: rm package-lock.json
+      # - name: delete package-lock.json
+      #   run: rm package-lock.json
 
       - name: Install dependencies
         run: npm install
