@@ -1,5 +1,5 @@
 #!/bin/bash
-REPOSITORY=/home/ubuntu/server
+REPOSITORY=/home/ubuntu/build
 cd $REPOSITORY
 
 sudo pm2 kill
