@@ -26,6 +26,13 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
+
+      - name: create env file
+        working-directory: ./server
+        run: 
+          touch .env
+          zip << EOF >> .env
+          ${{ secrets.ENV }}
         env:
           DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
           DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
@@ -33,13 +40,6 @@ jobs:
           DATABASE_TIMEZONE:  ${{ secrets.DATABASE_TIMEZONE }}
           DATABASE_USER_NAME: ${{ secrets.DATABASE_USER_NAME }}
           DATABASE_DIALECT: ${{ secrets.DATABASE_DIALECT }}
-
-      - name: create env file
-        working-directory: ./server
-        run: 
-          touch .env
-          cat << EOF >> .env
-          ${{ secrets.ENV }}
 
       - name: zip distributions
         run: zip -r together-zip.zip ./client/dist ./server ./appspec.yml ./scripts
