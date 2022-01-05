@@ -9,6 +9,6 @@ cd $REPOSITORY
 
 cd server
 sudo npm install
-npm start app.js
+sudo pm2 start app.js
 
 
