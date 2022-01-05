@@ -8,6 +8,12 @@ const Like = require('../models/Like')
 const {Op} = require('sequelize');
 const {like, or} = Op
 
+const getTotal = async(req,res,next)=>{
+    const privateTotal = await sequelize.query('SELECT count(*) AS cnt FROM privateapts')
+    const publicTotal = await sequelize.query('SELECT count(*) AS cnt FROM Pubnotices')
+    const total = privateTotal[0][0]['cnt'] + publicTotal[0][0]['cnt']
+    res.send({total : total})
+}
 const getYouTube = async (req, res, next) => {
     const youtubeList = await Youtube.findAll({})
     res.send(youtubeList)
@@ -178,5 +184,5 @@ const getMyPrivateSido = async (req,res,next) =>{
 
 
 module.exports = {
-    getYouTube,getpublicHot,getprivateHot,getMyPublicSido,getMyPrivateSido
+    getYouTube,getpublicHot,getprivateHot,getMyPublicSido,getMyPrivateSido,getTotal
 }

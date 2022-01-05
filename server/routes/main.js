@@ -11,11 +11,11 @@ getpublicHot = mainCntrol.getpublicHot
 getprivateHot = mainCntrol.getprivateHot
 getMyPublicSido = mainCntrol.getMyPublicSido
 getMyPrivateSido = mainCntrol.getMyPrivateSido
-
+getTotal = mainCntrol.getTotal
 router.get('/youtube', getYouTube)
 router.get('/publicHot', sidomiddleware, getpublicHot)
 router.get('/privateHot', sidomiddleware, getprivateHot)
 router.get('/publicSido', sidomiddleware, getMyPublicSido)
 router.get('/privateSido', sidomiddleware, getMyPrivateSido)
-
+router.get('/total',getTotal)
 module.exports = router
