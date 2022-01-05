@@ -31,7 +31,7 @@ jobs:
         working-directory: ./server
         run: 
           touch .env
-          zip << EOF >> .env
+          cat << EOF >> .env
           ${{ secrets.ENV }}
         env:
           DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
