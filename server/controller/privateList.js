@@ -1,7 +1,7 @@
 const Private = require('../models/PrivateApt')
 const { Op } = require('sequelize');
 const { like, or } = Op
-
+const { Sequelize, sequelize, PublicImg, PrivateImg } = require('../models')
 
 const getPrivateNotice = async (req, res) => {
     const sido = req.query.sido;
@@ -10,8 +10,13 @@ const getPrivateNotice = async (req, res) => {
     console.log(spell1);
     let priNotice = '';
     try {
+        var { userKey } = res.locals.user
+    } catch (error) {
+        userKey = ''
+    }
+    try {
         if (spell2 === '상') {
-            priNotice = await Private.query('SELECT sido, COUNT(*) FROM privateapt WHERE sido = sido OR sido = 경북 OR sido = 경남 ORDER BY recruitDate (ASC)')
+            priNotice = await sequelize.query(`SELECT privateapts.*, (SELECT privateimgs.url1 FROM privateimgs WHERE privateapts.pblancNo = privateimgs.fk_pblancNo) AS ImgUrl , CASE WHEN likes.fk_pblancNo IS NULL THEN 'false' ELSE 'true' END AS islike FROM privateapts LEFT JOIN likes ON privateapts.pblancNo = likes.fk_pblancNo AND likes.fk_pblancNo='${userKey}' WHERE privateapts.sido LIKE '%경북%' OR privateapts.sido Like '%경남%' ORDER BY privateapts.recruitDate DESC`)
             //  priNotice = await Private.findAll({
             //     order: [["recruitDate", "ASC"]],
             //     where :{
@@ -23,7 +28,7 @@ const getPrivateNotice = async (req, res) => {
             //     raw:true
             //  })
         } else {
-            priNotice = await Private.query('SELECT sido, COUNT(*) FROM privateapt WHERE sido = sido OR sido LIKE `${spel1}` OR sido Like `${spel2}` ORDER BY recruitDate (ASC)')
+            priNotice = await sequelize.query(`SELECT privateapts.*, (SELECT privateimgs.url1 FROM privateimgs WHERE privateapts.pblancNo = privateimgs.fk_pblancNo) AS ImgUrl , CASE WHEN likes.fk_pblancNo IS NULL THEN 'false' ELSE 'true' END AS islike FROM privateapts LEFT JOIN likes ON privateapts.pblancNo = likes.fk_pblancNo AND likes.fk_pblancNo='${userKey}' WHERE privateapts.sido LIKE '%${sido}%' ORDER BY privateapts.recruitDate DESC`)
             // priNotice = await Private.findAll({
             //     order: [["recruitDate", "ASC"]],
             //     where: {
@@ -41,7 +46,7 @@ const getPrivateNotice = async (req, res) => {
             //     raw:true
             // })
         }
-        // console.log(priNotice)
+        console.log(priNotice)
         res.send({ result: priNotice })
     } catch (error) {
         res.send({ error })

@@ -1,6 +1,7 @@
 const Public = require('../models/PubNotice');
 const { Op } = require('sequelize');
 const { like, or } = Op
+const { Sequelize, sequelize, PublicImg, PrivateImg } = require('../models')
 
 //쿼리파라미터 없으면 전체리스트 
 const getPublicNotice = async (req, res) => {
@@ -10,7 +11,12 @@ const getPublicNotice = async (req, res) => {
     const spell2 = sidoName.substring(1, 2);
     console.log(spell1, spell2);
     try {
-        const pubNotice = await Public.query('SELECT sidoName COUNT(*) FROM pubnotice WHERE sidoName = sidoName OR sidoName LIKE `${spel1}` OR sidoName LIKE `${spel2}` ORDER BY recruitDate (ASC)')
+        var { userKey } = res.locals.user
+    } catch {
+        userKey = ''
+    }
+    try {
+        pubNotice = await sequelize.query(`SELECT Pubnotices.*,(SELECT PublicImg.url1 FROM PublicImg WHERE Pubnotices.panId = PublicImg.panId) AS ImgUrl, CASE WHEN likes.panId IS NULL THEN "false" ELSE "true" END AS islike FROM Pubnotices LEFT JOIN likes ON Pubnotices.panId = likes.panId AND likes.fk_userKey="${userKey}" WHERE Pubnotices.sidoName LIKE '%${sidoName}%' ORDER BY Pubnotices.panUploadDate DESC`)
         // const pubNotice = await Public.findAll({
         //     order: [["panUploadDate", "ASC"]],
         //     where: {
@@ -27,7 +33,7 @@ const getPublicNotice = async (req, res) => {
         //     },
         //     raw:true
         // });
-        //console.log(pubNotice);
+        console.log(pubNotice);
         res.send({ result: pubNotice })
     } catch (error) {
         res.send({ result: error })
