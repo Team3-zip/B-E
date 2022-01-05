@@ -19,9 +19,13 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout source code.
+        uses: actions/checkout@v2
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
     
     	# 윈도우 환경과 리눅스 환경에서 충돌 회피를 위한 package-lock.json 삭제
       - name: delete package-lock.json
