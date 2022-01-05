@@ -9,15 +9,15 @@ const PrivateAptDetail2 = require('./PrivateAptDetail2');
 const PrivateImg = require('./PrivateImg');
 const PublicImg = require('./PublicImg');
 const Youtube = require('./Youtube');
-const config = require('../../ecosystem.config')
-//const env = process.env.NODE_ENV || 'production';
-//const config = require('../config/config')[env];
+
+const env = process.env.NODE_ENV || 'production';
+const config = require('../config/config')[env];
 const db = {};
 
 const sequelize = new Sequelize(
-    config.DATABASE_NAME,
-    config.DATABASE_USER_NAME,
-    config.DATABASE_PASSWORD,
+    config.database,
+    config.username,
+    config.password,
     config
 );
 
@@ -26,7 +26,7 @@ db.Sequelize = Sequelize;
 
 db.PrivateApt = PrivateApt;
 db.PrivateAptDetail1 = PrivateAptDetail1;
-db.PrivateAptDetail2 = PrivateAptDetail2;
+db.PrivateAptDetail2=PrivateAptDetail2;
 db.PubNotice = PubNotice;
 db.PrivateImg = PrivateImg;
 db.PublicImg = PublicImg;
