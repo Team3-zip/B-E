@@ -37,12 +37,12 @@ jobs:
       - name: create env file2
         run: npm run start
         env:
-          DATABASE_NAME: ${{ secrests.DATABASE_NAME }}
-          DATABASE_HOST: ${{ secrests.DATABASE_HOST }}
-          DATABASE_PASSWORD:  ${{ secrests.DATABASE_PASSWORD }}
-          DATABASE_TIMEZONE:  ${{ secrests.DATABASE_TIMEZONE }}
-          DATABASE_USER_NAME: ${{ secrests.DATABASE_USER_NAME }}
-          DATABASE_DIALECT: ${{ secrests.DATABASE_DIALECT }}
+          DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+          DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+          DATABASE_PASSWORD:  ${{ secrets.DATABASE_PASSWORD }}
+          DATABASE_TIMEZONE:  ${{ secrets.DATABASE_TIMEZONE }}
+          DATABASE_USER_NAME: ${{ secrets.DATABASE_USER_NAME }}
+          DATABASE_DIALECT: ${{ secrets.DATABASE_DIALECT }}
 
       - name: zip distributions
         run: zip -r together-zip.zip ./client/dist ./server ./appspec.yml ./scripts
