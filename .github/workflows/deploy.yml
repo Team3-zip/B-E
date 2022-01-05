@@ -26,20 +26,17 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-    
-    	# 윈도우 환경과 리눅스 환경에서 충돌 회피를 위한 package-lock.json 삭제
+
       - name: delete package-lock.json
         run: rm package-lock.json
 
       - name: Install dependencies
         run: npm install
 
-      - name: bulid file
+      - name: build file
         run: npm run build
 
-	# secret 폴더 생성후 .env파일 생성
-        # 폴더를 생성하지 않으면 .env 파일이 .gitignore에 의해 무시당해서 안생긴다.
-      - name: Create env file
+      - name: create env file
         run: |
           mkdir secret
           cd secret
@@ -48,8 +45,7 @@ jobs:
           ${{ secrets.ENV }}
           EOF
           cd ../
-          
-	# tar파일 생성
+
       - name: Make tar file
         run: tar -cpvzf ./$GITHUB_SHA.tgz *
         shell: bash
