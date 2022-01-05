@@ -11,7 +11,7 @@ const PublicImg = require('./PublicImg');
 const Youtube = require('./Youtube');
 
 const env = process.env.NODE_ENV || 'production';
-const config = require('../config/config')[env];
+const config= require(__dirname + '/../config/config.js')[env]
 const db = {};
 
 const sequelize = new Sequelize(
