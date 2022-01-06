@@ -72,7 +72,7 @@ router.get('/', async (req, res) => {
       try{
         let urlArr = [];
         const url = await PrivateImg.findAll({
-            attributes : ['id','url1', 'url2','url3', 'url4','url5','fk_pblancNo']
+            attributes : ['url1', 'url2','url3', 'url4','url5','fk_pblancNo']
         });
         for(i in url){
            

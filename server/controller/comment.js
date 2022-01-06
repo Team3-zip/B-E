@@ -1,4 +1,4 @@
-const { Comment, User } = require('../models');
+const { Comment, User, PrivateApt } = require('../models');
 const { date_formmatter } = require('../utils/dateFormat');
 const {Op} = require('sequelize');
 const {like, or} = Op
@@ -47,17 +47,29 @@ const postComment = async(req, res, next)=>{
     const {userKey} = res.locals.user;
     const {aptNo}= req.params;
     const {content} = req.body;
+    
     try{
+        const privateAptNo = await PrivateApt.findOne({
+            attributes: ['pblancNo'],   
+            where: { pblancNo: aptNo }, 
+            raw: true  
+        });
         if(!userKey){
             res.status(401);
             return;
-        } else {
-
+        } 
+        if(privateAptNo){
             await Comment.create({
                 fk_userKey: userKey,
                 fk_pblancNo: aptNo,
                 content: content
             });
+        }else {
+            await Comment.create({
+                fk_userKey: userKey,
+                panId: aptNo,
+                content: content
+            })
         }
         res.status(201).send({});
     } catch (error) {
@@ -65,6 +77,7 @@ const postComment = async(req, res, next)=>{
         res.status(400);
     }
 }
+
 const patchComment = async (req, res, next) => {
     const { content } = req.body;
     const { aptNo, commentId } = req.params;
