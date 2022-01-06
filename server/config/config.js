@@ -1,11 +1,11 @@
-require('dotenv').config();
+require('dotenv').config({path:'/home/ubuntu'});
 const env = process.env;
 
 const development = {
   username: env.USER_NAME,
   password: env.USER_PASSWORD,
-  database: env.DATABASE,
-  host: env.HOST,
+  database: env.MYSQL_DATABASE,
+  host: env.MYSQL_HOST,
   dialect: "mysql",
   timezone:"+09:00"
   //port: env.MYSQL_PORT
