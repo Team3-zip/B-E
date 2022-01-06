@@ -42,7 +42,7 @@ const putMypage = async (req, res, next) => {
     } catch (error) {
         console.log('-----------------------------')
         console.log('에러발생' + error)
-        res.status(400).send({ errorMessge: '다시 시도해 주세요.' })
+        res.status(400).send({ errorMessge: '다시 시도해  주세요.' })
     }
 }
 
