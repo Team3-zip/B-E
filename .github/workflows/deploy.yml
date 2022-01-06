@@ -42,7 +42,8 @@ jobs:
           touch .env
           cat << EOF >> .env
           ${{ secrets.ENV }}
-
+          EOF
+          
       - name: zip distributions
         run: zip -r together-zip.zip ./client/dist ./server ./appspec.yml ./scripts
 
