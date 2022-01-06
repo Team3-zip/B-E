@@ -2,29 +2,29 @@ const Users = require('../models/User')
 const Likes = require('../models/Like')
 const Private = require('../models/PrivateApt')
 const Public = require('../models/PubNotice')
-const {sequelize} = require('../models')
+const { sequelize } = require('../models')
 
 const getMypage = async (req, res, next) => {
     try {
-        const { userKey }  = res.locals.user
+        const { userKey } = res.locals.user
         // const { userKey } = req.params;
-//        // const { userKey, likeId, aptNo } = req.params;
+        //        // const { userKey, likeId, aptNo } = req.params;
         var publicList = []
         var privateList = []
         const existuser = await Users.findOne({ where: { userKey } })
-        const existlike = await Likes.findAll({ where: { fk_userKey : userKey },raw:true })
+        const existlike = await Likes.findAll({ where: { fk_userKey: userKey }, raw: true })
         console.log(existlike)
         console.log("for 시작")
         for (let i = 0; i < existlike.length; i++) {
             console.log(existlike.length)
             if (existlike[i]['fk_pblancNo'] !== null) {
                 console.log(existlike[i]['fk_pblancNo'])
-                const privateOne = await Private.findOne({ where: { pblancNo: existlike[i]['fk_pblancNo'] } ,raw:true})
+                const privateOne = await Private.findOne({ where: { pblancNo: existlike[i]['fk_pblancNo'] }, raw: true })
                 privateList.push(privateOne)
                 // res.status(200).send({ existuser, existlike })
             } else if (existlike[i]['panId'] !== null) {
                 console.log(existlike[i]['panId'])
-                const publicOne = await Public.findOne({ where: { panId: existlike[i]['panId'] },raw:true })
+                const publicOne = await Public.findOne({ where: { panId: existlike[i]['panId'] }, raw: true })
                 publicList.push(publicOne)
                 // res.status(200).send({ existuser, existlike })
             }
@@ -42,7 +42,7 @@ const getMypage = async (req, res, next) => {
         console.log(pubList[0])
         console.log(priList[0])
         // res.send({existuser,privateList,publicList})
-        res.send({existuser,public:pubList[0],private:priList[0]})
+        res.send({ existuser, public: pubList[0], private: priList[0] })
 
 
     } catch (error) {
