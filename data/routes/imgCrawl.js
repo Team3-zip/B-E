@@ -42,13 +42,14 @@ router.get('/', async (req, res) => {
             const no = houseName[i].pblancNo;
             const houseManageNo = houseName[i].houseManageNo;
             const page = await browser.newPage();
-            await page.goto(`https://search.zum.com/search.zum?method=image&option=accu&query=${name}&rd=1&cm=tab&co=9`);
+            await page.goto(`https://cse.google.com/cse?cx=70f88e8bc0bbd1036#gsc.tab=0&gsc.q=${name}`);
            // await page.click('')
             const issueSrcs = await page.evaluate(()=>{
             const srcs = Array.from(
-              document.querySelectorAll('div.gs-result.gs-imageResult.gs-imageResult-popup > div.gs-image-thumbnail-box > div > a > img')
+              
+              document.querySelectorAll('div.gsc-resultsbox-visible > div.gsc-resultsRoot.gsc-tabData.gsc-tabdActive > div > div.gsc-expansionArea > div:nth-child(2) > div.gs-result.gs-imageResult.gs-imageResult-popup > div.gs-image-thumbnail-box > div > a > img')
           ).map((image)=> image.getAttribute('src'));
-          //console.log(srcs);
+          console.log(srcs);
           return srcs;
       });
       

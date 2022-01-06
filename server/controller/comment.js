@@ -30,7 +30,7 @@ const getComment = async (req, res, next) => {
             commentInfo['commentId'] = commentId;
             commentInfo['nickname'] = user.nickname;
             commentInfo['content'] = content;
-            commentInfo['fk_userKey'] = fk_userKey;
+            commentInfo['userKey'] = fk_userKey;
             commentInfo['createdAt'] = createTime;
 
             comments.push(commentInfo);
