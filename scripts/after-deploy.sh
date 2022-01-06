@@ -8,6 +8,7 @@ cd $REPOSITORY
 # [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 cd server
+sudo rm -rf node_modules
 sudo npm install
 sudo pm2 start app.js
 
