@@ -17,7 +17,8 @@ const getUsers = async (req, res) => {
         })
         return
     }
-    if (nickname === existUsers['nickname']) {
+    // 같은 유저인데 닉네임이 변경되어서 로그인 할 경우
+    if (nickname !== existUsers['nickname']) {
         await Users.update({ where: { nickname } })
         return
     }

@@ -6,8 +6,11 @@ const getPrivateDetail = async (req, res, next) => {
     let detail2=[];
     let detail2Info={};
     let myLike = false;
-    // const {userKey} = req.body;!!
-    const {userKey} = req.locals.user;
+    try{
+        var { userKey } = res.locals.user
+    }catch{
+        userKey = '';
+    }
     try{
         const {aptNo} = req.params;
         const list_data = await PrivateApt.findOne({
@@ -85,7 +88,11 @@ const getPrivateDetail = async (req, res, next) => {
 const getPublicDetail = async(req, res, next)=>{
     let detail ={};
     let myLike = false;
-    const {userKey} = req.locals.user; 
+    try{
+        var { userKey } = res.locals.user
+    }catch{
+        userKey = '';
+    }
     try{
         const {aptNo} = req.params;
         const detail_list1 = await PubNotice.findOne({

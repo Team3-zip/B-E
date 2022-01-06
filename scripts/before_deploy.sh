@@ -1,6 +1,6 @@
 #!/bin/bash
 REPOSITORY=/home/ubuntu/build
+sudo pm2 kill
 cd $REPOSITORY
 
-sudo pm2 kill
 sudo rm -rf server
