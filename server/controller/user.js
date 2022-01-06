@@ -7,7 +7,8 @@ const getUsers = async (req, res) => {
 
     const existUsers = await Users.findAll({
         attributes: ['nickname'],
-        where: { userKey }
+        where: { userKey },
+        raw:true
     })
 
     if (existUsers.length) {
@@ -16,7 +17,7 @@ const getUsers = async (req, res) => {
         })
         return
     }
-    if (nickname === ['nickname']) {
+    if (nickname === existUsers['nickname']) {
         await Users.update({ where: { nickname } })
         return
     }
