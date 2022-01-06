@@ -6,7 +6,7 @@ const { sequelize } = require('../models')
 
 const getMypage = async (req, res, next) => {
     try {
-        const { userKey } = res.locals.user
+        const { userKey } = req.params
         // const { userKey } = req.params;
         //        // const { userKey, likeId, aptNo } = req.params;
         var publicList = []
@@ -54,7 +54,7 @@ const getMypage = async (req, res, next) => {
 
 const putMypage = async (req, res, next) => {
     try {
-        const { sido } = req.body
+        const { userKey, sido } = req.body
         const { userName } = req.params
         console.log("test1")
         const existSido = await Users.findOne({ where: { userKey, nickname: userName } })
