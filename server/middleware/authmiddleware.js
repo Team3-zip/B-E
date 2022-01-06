@@ -2,7 +2,7 @@ const { User } = require("../models")
 
 module.exports = (req, res, next) => {
     const { authorization } = req.headers; // http 인증 시 header에 담아서 보냄
-    const {userKey} = req.body;
+    const { userKey } = req.body;
     JSON.stringify(authorization);
     const [tokenType, tokenValue] = authorization.split(' ');
 
