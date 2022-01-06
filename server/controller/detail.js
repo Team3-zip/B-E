@@ -6,7 +6,7 @@ const getPrivateDetail = async (req, res, next) => {
     let detail2=[];
     let detail2Info={};
     let myLike = false;
-    // const {userKey} = req.body;
+    // const {userKey} = req.body;!!
     const {userKey} = req.locals.user;
     try{
         const {aptNo} = req.params;
