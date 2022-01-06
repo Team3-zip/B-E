@@ -4,7 +4,10 @@ const { like, or } = Op
 const { Sequelize, sequelize, PublicImg, PrivateImg } = require('../models')
 
 const getPrivateNotice = async (req, res) => {
-    const sido = req.query.sido;
+    let sido = req.query.sido;
+    if(sido === undefined){
+        sido = ''
+    }
     const spell1 = sido.substring(0, 1);
     const spell2 = sido.substring(1, 2);
     console.log(spell1);
