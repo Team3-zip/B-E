@@ -5,8 +5,8 @@ const detailController = require('../controller/detail');
 
 
 
-router.get('/private/:aptNo',detailController.getPrivateDetail);
-router.get('/public/:aptNo', detailController.getPublicDetail);
-router.get('/private/:aptNo/img', detailController.getPrivateImgUrl);
-router.get('/public/:aptNo/img', detailController.getPublicImgUrl);
+router.get('/private/:aptNo',sidomiddleware,detailController.getPrivateDetail);
+router.get('/public/:aptNo', sidomiddleware,detailController.getPublicDetail);
+router.get('/private/:aptNo/img', sidomiddleware,detailController.getPrivateImgUrl);
+router.get('/public/:aptNo/img', sidomiddleware,detailController.getPublicImgUrl);
 module.exports = router
