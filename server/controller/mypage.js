@@ -1,15 +1,25 @@
 const Users = require('../models/User')
 const Likes = require('../models/Like')
+const Private = require('../models/PrivateApt')
+const Public = require('../models/PubNotice')
 
 const getMypage = async (req, res, next) => {
     try {
         // const { userKey } = res.locals.user
-        const { userKey } = req.params;
-        const { likeId } = req.body;
+        const { userKey, likeId, aptNo } = req.params;
         const existuser = await Users.findOne({ where: { userKey } })
         const existlike = await Likes.findOne({ where: { likeId } })
 
-        res.status(200).send({ existuser, existlike })
+        for (let i = 0; i < existlike.length; i++) {
+            if (existlike.fk_pblancNo[i]) {
+                await Private.findOne({ where: { pblabcNo: aptNo } })
+                res.status(200).send({ existuser, existlike })
+            } else if (existlike.panId[i]) {
+                await Public.findOne({ where: { panId: aptNo } })
+                res.status(200).send({ existuser, existlike })
+            }
+        }
+
     } catch (error) {
         console.log('-----------------------------')
         console.log('에러발생' + error)
@@ -19,8 +29,7 @@ const getMypage = async (req, res, next) => {
 
 const putMypage = async (req, res, next) => {
     try {
-        // const { userKey } = res.locals.user
-        const { userKey, sido } = req.body
+        const { sido } = req.body
         const { userName } = req.params
         console.log("test1")
         const existSido = await Users.findOne({ where: { userKey, nickname: userName } })
