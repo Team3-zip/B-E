@@ -4,6 +4,6 @@ const authmiddleware = require('../middleware/authmiddleware')
 const router = express.Router()
 
 router.get('/:userKey', authmiddleware, mypageControll.getMypage)
-router.put('/:userName', authmiddleware, mypageControll.putMypage)
+router.put('/:userName/:likeId/:aptNo', authmiddleware, mypageControll.putMypage)
 
 module.exports = router
