@@ -32,7 +32,7 @@ const getPublicNotice = async (req, res) => {
         //         ]
         //     },
         //     raw:true
-        // });
+        // });!!
         console.log(pubNotice);
         res.send({ result: pubNotice })
     } catch (error) {
