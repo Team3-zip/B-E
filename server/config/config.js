@@ -28,7 +28,7 @@ const test = {
   host: env.MYSQL_HOST,
   dialect: "mysql",
   timezone:"+09:00"
-  //port: env.MYSQL_PORT
+  //port: env.MYSQL_PORT!
 };
 
 module.exports = { development, production, test };
