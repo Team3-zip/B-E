@@ -28,7 +28,7 @@ const getPublicNotice = async (req, res) => {
         }else if(spell2 === '기'){
             pubNotice = await sequelize.query(`SELECT Pubnotices.*,(SELECT PublicImg.url1 FROM PublicImg WHERE Pubnotices.panId = PublicImg.panId) AS ImgUrl, CASE WHEN likes.panId IS NULL THEN "false" ELSE "true" END AS islike FROM Pubnotices LEFT JOIN likes ON Pubnotices.panId = likes.panId AND likes.fk_userKey="${userKey}" WHERE Pubnotices.sidoName LIKE '%경기%' ORDER BY Pubnotices.panUploadDate DESC`)
         }else{
-            pubNotice = await sequelize.query(`SELECT Pubnotices.*,(SELECT PublicImg.url1 FROM PublicImg WHERE Pubnotices.panId = PublicImg.panId) AS ImgUrl, CASE WHEN likes.panId IS NULL THEN "false" ELSE "true" END AS islike FROM Pubnotices LEFT JOIN likes ON Pubnotices.panId = likes.panId AND likes.fk_userKey="${userKey}" WHERE Pubnotices.sidoName LIKE '%${spell1}%' ORDER BY Pubnotices.panUploadDate DESC`)
+            pubNotice = await sequelize.query(`SELECT Pubnotices.*,(SELECT PublicImg.url1 FROM PublicImg WHERE Pubnotices.panId = PublicImg.panId) AS ImgUrl, CASE WHEN likes.panId IS NULL THEN "false" ELSE "true" END AS islike FROM Pubnotices LEFT JOIN likes ON Pubnotices.panId = likes.panId AND likes.fk_userKey="${userKey}" WHERE Pubnotices.sidoName LIKE '%${spell1}${spell2}%' ORDER BY Pubnotices.panUploadDate DESC`)
         }
         // const pubNotice = await Public.findAll({
         //     order: [["panUploadDate", "ASC"]],
