@@ -9,12 +9,16 @@ const urlType = require('url');
 const fs = require('fs');
 const client = require('cheerio-httpcli');
 const puppeteer = require('puppeteer');
+const { response } = require('express');
 
 
 
 router.get('/', async (req, res) => {
+    let imglinkArr =[];
+    let nameArr=[];
+    let pblancNoArr =[];
+    let houseMgNoArr=[];
     try {
-      const browser = await puppeteer.launch({ headless: false });
       const keyword = await PrivateApt.findAll({
         attributes: ['houseManageNo', 'pblancNo','houseName'],
         include: [{
@@ -29,41 +33,39 @@ router.get('/', async (req, res) => {
             null
         )
     });
-      // const keyword = await PrivateApt.findAll({
-      //     attributes:['houseName', 'pblancNo', 'houseManageNo'], 
-      //     raw:true,
-      //     //order: [['houseManageNo', 'DESC']], // 내림차순으로 정렬
-      //   })
       const houseName= keyword;
       console.log(keyword.length);
       for(i in keyword){
           //console.log(houseName[i].houseName);
-            const name = houseName[i].houseName;
-            const no = houseName[i].pblancNo;
-            const houseManageNo = houseName[i].houseManageNo;
-            const page = await browser.newPage();
-            await page.goto(`https://cse.google.com/cse?cx=70f88e8bc0bbd1036#gsc.tab=0&gsc.q=${name}`);
-           // await page.click('')
-            const issueSrcs = await page.evaluate(()=>{
-            const srcs = Array.from(
-              
-              document.querySelectorAll('div.gsc-resultsbox-visible > div.gsc-resultsRoot.gsc-tabData.gsc-tabdActive > div > div.gsc-expansionArea > div:nth-child(2) > div.gs-result.gs-imageResult.gs-imageResult-popup > div.gs-image-thumbnail-box > div > a > img')
-          ).map((image)=> image.getAttribute('src'));
-          console.log(srcs);
-          return srcs;
-      });
-      
-      if(!issueSrcs){
-        res.status(500).send();
-      }else{
-        await PrivateImg.create({houseManageNo : houseManageNo,fk_pblancNo : no, url1: issueSrcs[0], url2:issueSrcs[1], url3:issueSrcs[2], url4:issueSrcs[3], url5:issueSrcs[4]})
-        await page.waitFor(3000);
+          const name = houseName[i].houseName.replace(/(\s*)/g, "");
+          const no = houseName[i].pblancNo;
+          const houseManageNo = houseName[i].houseManageNo;
+          nameArr.push(name);
+          pblancNoArr.push(no);
+          houseMgNoArr.push(houseManageNo);
       }
-      }
-      
-     await browser.close();
-     res.send({success : 'ookkk'});
-     return;
+     // console.log(nameArr)
+     
+      for(let i =0 ;i<nameArr.length;i++){
+        let googleKey ='AIzaSyA1HlXx0GEPMbgDIwZUAWBADYYuiLAib6Y';
+        let reqUrl = 'https://www.googleapis.com/customsearch/v1?key=AIzaSyA1HlXx0GEPMbgDIwZUAWBADYYuiLAib6Y&q='+encodeURI(nameArr[i])+'&imgSize=xlarge&searchType=image&num=10'
+        console.log(reqUrl)
+        request(reqUrl, async (err, response, body)=>{
+          if(err){
+            console.log('에러 request :'+err)
+          }else{
+          let info = JSON.parse(body)['items'];
+          imglinkArr=[];
+          for(let i =0; i<info.length;i++){
+            imglinkArr.push(info[i].link);
+          }
+          await PrivateImg.create({houseManageNo : houseMgNoArr[i],fk_pblancNo : pblancNoArr[i], url1: imglinkArr[0], url2:imglinkArr[1], url3:imglinkArr[2], url4:imglinkArr[3], url5:imglinkArr[4]})
+          console.log(imglinkArr)
+        }
+      })
+    }
+     
+    res.send({success: "ooook"});
     } catch (e) {
       console.error(e);
     }
