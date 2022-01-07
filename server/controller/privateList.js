@@ -20,7 +20,7 @@ const getPrivateNotice = async (req, res) => {
         if (spell2 === '상') {
             priNotice = await sequelize.query(`SELECT privateapts.*,(SELECT concat(min(cast(privateAptDetail2.supplyAreaSize as decimal(10,4))),'~',max(cast(privateAptDetail2.supplyAreaSize as decimal(10,4)))) as size FROM zip_dev.privateAptDetail2 where privateapts.pblancNo = privateAptDetail2.fk_pblancNo group by fk_pblancNo) as size,
             (SELECT concat(format(min(cast(replace(privateAptDetail2.supplyAmount,",",'') as unsigned)),0),'~', format(max(cast(replace(privateAptDetail2.supplyAmount,",",'')as unsigned)),0)) as supplyAmount FROM zip_dev.privateAptDetail2 where privateapts.pblancNo = privateAptDetail2.fk_pblancNo group by fk_pblancNo) as supplyAmount,
-            (SELECT privateimgs.url1 FROM privateimgs WHERE privateapts.pblancNo = privateimgs.fk_pblancNo) AS ImgUrl , CASE WHEN likes.fk_pblancNo IS NULL THEN 'false' ELSE 'true' END AS islike FROM privateapts LEFT JOIN likes ON privateapts.pblancNo = likes.fk_pblancNo AND likes.fk_pblancNo='${userKey}' WHERE privateapts.sido LIKE '%경북%' OR privateapts.sido Like '%경남%' ORDER BY privateapts.recruitDate DESC`)
+            (SELECT privateimgs.url1 FROM privateimgs WHERE privateapts.pblancNo = privateimgs.fk_pblancNo) AS ImgUrl , CASE WHEN likes.fk_pblancNo IS NULL THEN 'false' ELSE 'true' END AS islike FROM privateapts LEFT JOIN likes ON privateapts.pblancNo = likes.fk_pblancNo AND likes.fk_userKey='${userKey}' WHERE privateapts.sido LIKE '%경북%' OR privateapts.sido Like '%경남%' ORDER BY privateapts.recruitDate DESC`)
             //  priNotice = await Private.findAll({
             //     order: [["recruitDate", "ASC"]],
             //     where :{
@@ -34,7 +34,7 @@ const getPrivateNotice = async (req, res) => {
         }else if(spell2 === '기'){
             priNotice = await sequelize.query(`SELECT privateapts.*,(SELECT concat(min(cast(privateAptDetail2.supplyAreaSize as decimal(10,4))),'~',max(cast(privateAptDetail2.supplyAreaSize as decimal(10,4)))) as size FROM zip_dev.privateAptDetail2 where privateapts.pblancNo = privateAptDetail2.fk_pblancNo group by fk_pblancNo) as size,
             (SELECT concat(format(min(cast(replace(privateAptDetail2.supplyAmount,",",'') as unsigned)),0),'~', format(max(cast(replace(privateAptDetail2.supplyAmount,",",'')as unsigned)),0)) as supplyAmount FROM zip_dev.privateAptDetail2 where privateapts.pblancNo = privateAptDetail2.fk_pblancNo group by fk_pblancNo) as supplyAmount,
-            (SELECT privateimgs.url1 FROM privateimgs WHERE privateapts.pblancNo = privateimgs.fk_pblancNo) AS ImgUrl , CASE WHEN likes.fk_pblancNo IS NULL THEN 'false' ELSE 'true' END AS islike FROM privateapts LEFT JOIN likes ON privateapts.pblancNo = likes.fk_pblancNo AND likes.fk_pblancNo='${userKey}' WHERE privateapts.sido LIKE '%경기%' ORDER BY privateapts.recruitDate DESC`)
+            (SELECT privateimgs.url1 FROM privateimgs WHERE privateapts.pblancNo = privateimgs.fk_pblancNo) AS ImgUrl , CASE WHEN likes.fk_pblancNo IS NULL THEN 'false' ELSE 'true' END AS islike FROM privateapts LEFT JOIN likes ON privateapts.pblancNo = likes.fk_pblancNo AND likes.fk_userKey='${userKey}' WHERE privateapts.sido LIKE '%경기%' ORDER BY privateapts.recruitDate DESC`)
 
         }else if(spell2 ==='구'){
             priNotice = await sequelize.query(`SELECT privateapts.*,(SELECT concat(min(cast(privateAptDetail2.supplyAreaSize as decimal(10,4))),'~',max(cast(privateAptDetail2.supplyAreaSize as decimal(10,4)))) as size FROM zip_dev.privateAptDetail2 where privateapts.pblancNo = privateAptDetail2.fk_pblancNo group by fk_pblancNo) as size,
@@ -49,7 +49,7 @@ const getPrivateNotice = async (req, res) => {
         else {
             priNotice = await sequelize.query(`SELECT privateapts.*,(SELECT concat(min(cast(privateAptDetail2.supplyAreaSize as decimal(10,4))),'~',max(cast(privateAptDetail2.supplyAreaSize as decimal(10,4)))) as size FROM zip_dev.privateAptDetail2 where privateapts.pblancNo = privateAptDetail2.fk_pblancNo group by fk_pblancNo) as size,
             (SELECT concat(format(min(cast(replace(privateAptDetail2.supplyAmount,",",'') as unsigned)),0),'~', format(max(cast(replace(privateAptDetail2.supplyAmount,",",'')as unsigned)),0)) as supplyAmount FROM zip_dev.privateAptDetail2 where privateapts.pblancNo = privateAptDetail2.fk_pblancNo group by fk_pblancNo) as supplyAmount,
-            (SELECT privateimgs.url1 FROM privateimgs WHERE privateapts.pblancNo = privateimgs.fk_pblancNo) AS ImgUrl , CASE WHEN likes.fk_pblancNo IS NULL THEN 'false' ELSE 'true' END AS islike FROM privateapts LEFT JOIN likes ON privateapts.pblancNo = likes.fk_pblancNo AND likes.fk_pblancNo='${userKey}' WHERE privateapts.sido LIKE '%${spell1}%' ORDER BY privateapts.recruitDate DESC`)
+            (SELECT privateimgs.url1 FROM privateimgs WHERE privateapts.pblancNo = privateimgs.fk_pblancNo) AS ImgUrl , CASE WHEN likes.fk_pblancNo IS NULL THEN 'false' ELSE 'true' END AS islike FROM privateapts LEFT JOIN likes ON privateapts.pblancNo = likes.fk_pblancNo AND likes.fk_userKey='${userKey}' WHERE privateapts.sido LIKE '%${spell1}%' ORDER BY privateapts.recruitDate DESC`)
             // priNotice = await Private.findAll({
             //     order: [["recruitDate", "ASC"]],
             //     where: {
