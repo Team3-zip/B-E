@@ -7,6 +7,7 @@ module.exports = (req, res, next) => {
     JSON.stringify(authorization);
     const [tokenType, tokenValue] = (authorization||'').split(' ')
     console.log(tokenType);
+    console.log("userKey :"+userKey);
     if (tokenType !== 'Bearer') {
         console.log(authorization)
         next()
