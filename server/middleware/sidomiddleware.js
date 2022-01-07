@@ -2,17 +2,15 @@ const jwt = require("jsonwebtoken")
 const  User = require("../models/User")
 
 module.exports = (req, res, next) => {
-    const { authorization } = req.headers
-    const { userKey } = req.body;
+    const { authorization ,userKey} = req.headers;
+    //const { userKey } = req.body;
     JSON.stringify(authorization);
     const [tokenType, tokenValue] = authorization.split(' ');
     console.log(tokenType);
     console.log(authorization)
     console.log("userKey :"+userKey);
-    if (tokenType !== 'Bearer') {
-        
+    if (tokenType !== 'Bearer') {  
         next()
-        
         return
     }
 

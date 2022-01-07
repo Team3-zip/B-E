@@ -39,8 +39,8 @@ const getMypage = async (req, res, next) => {
         (SELECT privateimgs.url1 FROM privateimgs WHERE privateapts.pblancNo = privateimgs.fk_pblancNo) AS ImgUrl, CASE WHEN likes.fk_pblancNo IS NULL THEN "false" ELSE "true" END AS islike FROM privateapts LEFT JOIN likes ON privateapts.pblancNo = likes.fk_pblancNo AND likes.fk_userKey="${userKey}" WHERE privateapts.pblancNo IN (SELECT likes.fk_pblancNo where likes.fk_userKey = ${userKey})`
         )
         console.log("testtest")
-        console.log(pubList[0])
-        console.log(priList[0])
+        //console.log(pubList[0])
+        //console.log(priList[0])
         // res.send({existuser,privateList,publicList})
         res.send({ existuser, public: pubList[0], private: priList[0] })
 
