@@ -5,11 +5,12 @@ module.exports = (req, res, next) => {
     const { authorization } = req.headers
     const { userKey } = req.body;
     JSON.stringify(authorization);
-    const [tokenType, tokenValue] = (authorization||'').split(' ')
+    const [tokenType, tokenValue] = authorization.split(' ');
     console.log(tokenType);
+    console.log(authorization)
     console.log("userKey :"+userKey);
     if (tokenType !== 'Bearer') {
-        console.log(authorization)
+        
         next()
         
         return
