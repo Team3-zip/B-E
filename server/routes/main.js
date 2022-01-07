@@ -13,7 +13,7 @@ getMyPublicSido = mainCntrol.getMyPublicSido
 getMyPrivateSido = mainCntrol.getMyPrivateSido
 getTotal = mainCntrol.getTotal
 router.get('/youtube', getYouTube)
-router.get('/publicHot',  getpublicHot)
+router.get('/publicHot',  authMiddleware, getpublicHot)
 router.get('/privateHot', sidomiddleware, getprivateHot)
 router.get('/publicSido', sidomiddleware, getMyPublicSido)
 router.get('/privateSido', sidomiddleware, getMyPrivateSido)
