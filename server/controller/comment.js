@@ -104,7 +104,7 @@ const deleteComment = async (req, res, next) => {
         if (comment) {
             await comment.destroy();
         }
-        res.status(204)
+        res.status(204).send({success :"delete"});
     } catch (error) {
         next(error);
         res.status(400);
