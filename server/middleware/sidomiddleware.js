@@ -5,7 +5,9 @@ module.exports = (req, res, next) => {
     const { authorization ,userKey} = req.headers;
     //const { userKey } = req.body;
     JSON.stringify(authorization);
+    JSON.stringify(userKey);
     const [tokenType, tokenValue] = authorization.split(' ');
+    console.log( JSON.stringify(userKey))
     console.log(tokenType);
     console.log(authorization)
     console.log("userKey :"+userKey);
