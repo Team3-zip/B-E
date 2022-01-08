@@ -20,7 +20,7 @@ const getYouTube = async (req, res, next) => {
 }
 const getpublicHot = async (req, res, next) => {
     try{
-        var { userKey } = req.body;
+        var { userKey } = res.locals.user;
     }catch{
         userKey = ''
     }
