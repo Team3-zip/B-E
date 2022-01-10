@@ -49,12 +49,37 @@ module.exports = class PubNotice extends Sequelize.Model {
                 startDate: {
                     // 청약 신청일
                     type: Sequelize.STRING(20),
-                    allowNull: false,
+                    allowNull: true,
                 },
                 closeDate: {
                     // 청약 마감일
                     type: Sequelize.STRING(20),
-                    allowNull: false,
+                    allowNull: true,
+                },
+                announceDate: {
+                    // 발표일
+                    type: Sequelize.STRING(20),
+                    allowNull: true,
+                },
+                submitStartDate: {
+                    // 서류제출일
+                    type: Sequelize.STRING(20),
+                    allowNull: true,
+                },
+                submitEndDate: {
+                    // 서류마감일
+                    type: Sequelize.STRING(20),
+                    allowNull: true,
+                },
+                contractStartDate: {
+                    // 계약시작일
+                    type: Sequelize.STRING(20),
+                    allowNull: true,
+                },
+                contractEndDate: {
+                    // 계약마감일
+                    type: Sequelize.STRING(20),
+                    allowNull: true,
                 },
                 houseCnt: {
                     // 총 세대수

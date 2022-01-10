@@ -5,6 +5,12 @@ const getPrivateDetail = async (req, res, next) => {
     let detail1 ={};
     let detail2=[];
     let detail2Info={};
+    let myLike = false;
+    try{
+        var { userKey } = res.locals.user
+    }catch{
+        userKey = '';
+    }
     try{
         const {aptNo} = req.params;
         const list_data = await PrivateApt.findOne({
@@ -15,9 +21,16 @@ const getPrivateDetail = async (req, res, next) => {
             attributes :['contractStartDate','contractEndDate','relevantArea1Date','etcArea1Date','gyeonggi1Date','relevantArea2Date','etcArea2Date','gyeonggi2Date','homePage','applyAddress','plusSupplyStartDate','plusSupplyEndDate','supplySize'],
             where : {fk_pblancNo:aptNo}
         })
-        
+       
         const {executor,operation,houseName,winDate,receptStartDate,receptEndDate,rentSection,sido,recruitDate} = list_data;
         const {contractStartDate,contractEndDate,relevantArea1Date,etcArea1Date,gyeonggi1Date,relevantArea2Date,etcArea2Date,gyeonggi2Date,homePage,applyAddress,plusSupplyStartDate,plusSupplyEndDate,supplySize} = detail1_data;
+        if(userKey.length){
+            const like = await Like.findOne({where : {fk_pblancNo : aptNo, fk_userKey:userKey}});
+            if(like){
+                myLike = true;
+            }
+        }
+        
         detail1['executor'] = executor;
         detail1['operation']=operation;
         detail1['houseName'] = houseName;
@@ -40,6 +53,7 @@ const getPrivateDetail = async (req, res, next) => {
         detail1['plusSupplyStartDate']=plusSupplyStartDate;
         detail1['plusSupplyEndDate']=plusSupplyEndDate;
         detail1['supplySize']=supplySize;
+        detail1['myLike'] = myLike;
         
         const detail2Count = await PrivateAptDetail2.findAll({
             order:[['houseManageNo','DESC' ]],
@@ -52,6 +66,7 @@ const getPrivateDetail = async (req, res, next) => {
             });
             
             const {modelNo, type, geSupplySize,spSupplySize,supplyAreaSize, supplyAmount} = detail2_data[i];
+
             detail2Info['modelNo']= modelNo;
             detail2Info['type']=type;
             detail2Info['geSupplySize']=geSupplySize;
@@ -72,18 +87,37 @@ const getPrivateDetail = async (req, res, next) => {
 }
 const getPublicDetail = async(req, res, next)=>{
     let detail ={};
+    let myLike = false;
+    try{
+        var { userKey } = res.locals.user
+    }catch{
+        userKey = '';
+    }
     try{
         const {aptNo} = req.params;
         const detail_list1 = await PubNotice.findOne({
-            attributes :['panState','sidoName','aisTypeName','startDate','closeDate','houseCnt','size','moveYM','heatMethod','fileLink','address','detailUrl','panDate'],
+            attributes :['panState','panUploadDate','sidoName','aisTypeName','startDate','closeDate','announceDate','submitStartDate','submitEndDate','contractStartDate','contractEndDate','houseCnt','size','moveYM','heatMethod','fileLink','address','detailUrl','panDate'],
             where :{panId: aptNo}
         });
-        const {panState,sidoName,aisTypeName,startDate,closeDate,houseCnt,size,moveYM,heatMethod,fileLink,address,detailUrl,panDate}= detail_list1;
+        const {panState,panUploadDate,sidoName,aisTypeName,startDate,closeDate,announceDate,submitStartDate,submitEndDate,contractStartDate,contractEndDate,houseCnt,size,moveYM,heatMethod,fileLink,address,detailUrl,panDate}= detail_list1;
+        if(userKey.length){
+            const like = await Like.findOne({where : {panId : aptNo, fk_userKey:userKey}});
+            if(like) {
+                myLike = true;
+            }
+        }
+        
         detail['panState']=panState;
+        detail['panUploadDate']=panUploadDate;
         detail['sidoName']=sidoName;
         detail['aisTypeName']=aisTypeName;
         detail['startDate']=startDate;
         detail['closeDate']=closeDate;
+        detail['announceDate']=announceDate;
+        detail['submitStartDate']=submitStartDate;
+        detail['submitEndDate']=submitEndDate;
+        detail['contractStartDate']=contractStartDate;
+        detail['contractEndDate']=contractEndDate;
         detail['houseCnt']=houseCnt;
         detail['size']=size;
         detail['panDate']=panDate;
@@ -92,7 +126,7 @@ const getPublicDetail = async(req, res, next)=>{
         detail['fileLink']=fileLink;
         detail['address']=address;
         detail['detailUrl']=detailUrl;
-        
+        detail['myLike'] = myLike;
         res.status(200).send({
             detail
         });

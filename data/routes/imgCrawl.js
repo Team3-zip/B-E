@@ -4,51 +4,69 @@ const convert = require('xml-js');
 const PrivateApt = require('../models/PrivateApt');
 const PrivateImg = require('../models/PrivateImg')
 const router = express.Router();
-const http = require('http');
+const {sequelize} = require('../models/PubNotice')
 const urlType = require('url');
 const fs = require('fs');
 const client = require('cheerio-httpcli');
 const puppeteer = require('puppeteer');
+const { response } = require('express');
 
 
 
 router.get('/', async (req, res) => {
+    let imglinkArr =[];
+    let nameArr=[];
+    let pblancNoArr =[];
+    let houseMgNoArr=[];
     try {
-      const browser = await puppeteer.launch({ headless: false });
       const keyword = await PrivateApt.findAll({
-          attributes:['houseName', 'pblancNo', 'houseManageNo'], 
-          raw:true,
-          //order: [['houseManageNo', 'DESC']], // 내림차순으로 정렬
-        })
+        attributes: ['houseManageNo', 'pblancNo','houseName'],
+        include: [{
+            model: PrivateImg,
+            required: false,
+            attributes: [],
+            
+        }],
+        where: sequelize.where(
+            sequelize.col('PrivateImg.fk_pblancNo'),
+            'IS',
+            null
+        )
+    });
       const houseName= keyword;
       console.log(keyword.length);
       for(i in keyword){
           //console.log(houseName[i].houseName);
-            const name = houseName[i].houseName;
-            const no = houseName[i].pblancNo;
-            const houseManageNo = houseName[i].houseManageNo;
-            const page = await browser.newPage();
-            await page.goto(`https://search.zum.com/search.zum?method=image&option=accu&query=${name}&rd=1&cm=tab&co=9`);
-           // await page.click('')
-            const issueSrcs = await page.evaluate(()=>{
-            const srcs = Array.from(
-              document.querySelectorAll('div.gs-result.gs-imageResult.gs-imageResult-popup > div.gs-image-thumbnail-box > div > a > img')
-          ).map((image)=> image.getAttribute('src'));
-          //console.log(srcs);
-          return srcs;
-      });
-      
-      if(!issueSrcs){
-        res.status(500).send();
-      }else{
-        await PrivateImg.create({houseManageNo : houseManageNo,fk_pblancNo : no, url1: issueSrcs[0], url2:issueSrcs[1], url3:issueSrcs[2], url4:issueSrcs[3], url5:issueSrcs[4]})
-        await page.waitFor(3000);
+          const name = houseName[i].houseName.replace(/(\s*)/g, "");
+          const no = houseName[i].pblancNo;
+          const houseManageNo = houseName[i].houseManageNo;
+          nameArr.push(name);
+          pblancNoArr.push(no);
+          houseMgNoArr.push(houseManageNo);
       }
-      }
-      
-     await browser.close();
-     res.send({success : 'ookkk'});
-     return;
+     // console.log(nameArr)
+    
+      for(let i =0 ;i<nameArr.length;i++){
+        let googleKey ='AIzaSyA1HlXx0GEPMbgDIwZUAWBADYYuiLAib6Y';
+        let reqUrl1 = `https://www.googleapis.com/customsearch/v1?key=AIzaSyD55QHJp9dOWHJ1j83H3mtn90KNtc41IXQ&cx=14a1ce6efcaf391ea&q=${encodeURI(nameArr[i])}&imgSize=XLARGE&searchType=image&num=10`
+        console.log(reqUrl)
+        request(reqUrl1, async (err, response, body)=>{
+          if(err){
+            console.log(nameArr[i])
+            console.log('에러 request :'+err)
+          }else{
+          let info = JSON.parse(body)['items'];
+          imglinkArr=[];
+          for(let i =0; i<info.length;i++){
+            imglinkArr.push(info[i].link);
+          }
+          await PrivateImg.create({houseManageNo : houseMgNoArr[i],fk_pblancNo : pblancNoArr[i], url1: imglinkArr[0], url2:imglinkArr[1], url3:imglinkArr[2], url4:imglinkArr[3], url5:imglinkArr[4]})
+          console.log(imglinkArr)
+        }
+      })
+    }
+    
+    res.send({success: "ooook"});
     } catch (e) {
       console.error(e);
     }
@@ -58,7 +76,7 @@ router.get('/', async (req, res) => {
       try{
         let urlArr = [];
         const url = await PrivateImg.findAll({
-            attributes : ['id','url1', 'url2','url3', 'url4','url5','fk_pblancNo']
+            attributes : ['url1', 'url2','url3', 'url4','url5','fk_pblancNo']
         });
         for(i in url){
            

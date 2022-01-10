@@ -12,9 +12,15 @@ module.exports = class PrivateApt extends Sequelize.Model {
                     allowNull: false,
                     autoIncrement: false,
                 },
+<<<<<<< HEAD
                 executor: { //시행사
                     type: Sequelize.STRING(30),
                     allowNull: true,
+=======
+                executor:{ //시행사
+                    type:Sequelize.STRING(40),
+                    allowNull:true,
+>>>>>>> main
                 },
                 operation: { //민영 or 공영
                     type: Sequelize.STRING(10),
@@ -24,9 +30,15 @@ module.exports = class PrivateApt extends Sequelize.Model {
                     type: Sequelize.INTEGER,
                     allowNull: true,
                 },
+<<<<<<< HEAD
                 houseName: { //아파트이름 
                     type: Sequelize.STRING(40),
                     allowNull: true
+=======
+                houseName:{ //아파트이름 
+                    type:Sequelize.STRING(40),
+                    allowNull:true
+>>>>>>> main
                 },
                 winDate: {    //당첨자 발표일
                     type: Sequelize.STRING(20),

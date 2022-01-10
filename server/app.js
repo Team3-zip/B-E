@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
 const swaggerFile = require('./swagger-output');
 const dotenv = require('dotenv');
@@ -10,11 +11,17 @@ const app = express();
 const { sequelize } = require('./models')
 const indexRouter = require('./routes/index');
 
+const corsOptions = {
+    origin: '*', // 나중에 여기에 url
+    credentials: true,
+};
+app.use(cors(corsOptions));
+
 //db 연결
 sequelize
     .sync({ force: false })
     .then(() => {
-        console.log('db Connected')
+        console.log('db Connected!!!!!!')
     })
     .catch((err) => {
         console.log(err);
