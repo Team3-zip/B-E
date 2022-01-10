@@ -6,12 +6,13 @@ const getUsers = async (req, res) => {
     const { userKey, nickname, profileImg } = req.body
 
     const existUsers = await Users.findAll({
-        attributes: ['nickname'],
+        attributes: ['nickname', 'profileImg'],
         where: { userKey },
         raw: true
     })
 
     if (existUsers.length) {
+        console.log(existUsers.length)
         res.status(400).send({
             errorMessage: '잘못된 경로입니다.'
         })

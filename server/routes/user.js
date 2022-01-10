@@ -1,9 +1,8 @@
 const express = require('express')
-const mypageControll = require('../controller/mypage')
-const authmiddleware = require('../middleware/authmiddleware')
+const userControll = require('../controller/user')
+const authMiddleware = require('../middleware/authmiddleware')
 const router = express.Router()
 
-router.get('/:userKey', authmiddleware, mypageControll.getMypage)
-router.put('/:userName', authmiddleware, mypageControll.putMypage)
+router.post('/login', userControll.getUsers)
 
 module.exports = router
