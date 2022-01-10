@@ -8,7 +8,7 @@ const getUsers = async (req, res) => {
     const existUsers = await Users.findAll({
         attributes: ['nickname'],
         where: { userKey },
-        raw:true
+        raw: true
     })
 
     if (existUsers.length) {

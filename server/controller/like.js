@@ -25,8 +25,13 @@ const createLike = async (req, res) => {
                 res.send((result = { data: true }))
             }
         } else {
-            await Likes.create({})
-            res.send((result = { data: true }))
+            if (existPrivatAptNo) {
+                await Likes.destroy({ where: { fk_userKey: userKey, fk_pblancNo: aptNo } })
+                res.send((result = { data: false }))
+            } else {
+                await Likes.destroy({ where: { fk_userKey: userKey, panId: aptNo } })
+                res.send((result = { data: false }))
+            }
         }
     } catch (error) {
         console.log('-------------------------------')
