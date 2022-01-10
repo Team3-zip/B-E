@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 //const { where } = require('sequelize/dist')
 
 const getUsers = async (req, res) => {
-    const { userKey, nickname } = req.body
+    const { userKey, nickname, profileImg } = req.body
 
     const existUsers = await Users.findAll({
         attributes: ['nickname'],
@@ -22,7 +22,7 @@ const getUsers = async (req, res) => {
     //     await Users.update({ where: { nickname :nickname} })
     //     return
     // }
-    await Users.create({ userKey, nickname })
+    await Users.create({ userKey, nickname, profileImg })
     res.status(200).send({})
 }
 
