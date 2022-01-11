@@ -12,7 +12,6 @@ const getUsers = async (req, res) => {
     })
 
     if (existUsers.length) {
-        console.log(existUsers.length)
         res.status(400).send({
             errorMessage: '잘못된 경로입니다.'
         })
@@ -23,8 +22,8 @@ const getUsers = async (req, res) => {
     //     await Users.update({ where: { nickname :nickname} })
     //     return
     // }
-    await Users.create({ userKey, nickname, profileImg })
-    res.status(200).send({})
+    await Users.create({ userKey: userKey, nickname: nickname, profileImg: profileImg })
+    res.status(200).send({ result: 'SUCCESS!' })
 }
 
 module.exports = {
