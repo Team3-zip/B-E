@@ -3,12 +3,12 @@ const jwt = require('jsonwebtoken')
 //const { where } = require('sequelize/dist')
 
 const getUsers = async (req, res) => {
-    const { userKey, nickname } = req.body
+    const { userKey, nickname, profileImg } = req.body
 
     const existUsers = await Users.findAll({
-        attributes: ['nickname'],
+        attributes: ['nickname', 'profileImg'],
         where: { userKey },
-        raw:true
+        raw: true
     })
 
     if (existUsers.length) {
@@ -17,13 +17,13 @@ const getUsers = async (req, res) => {
         })
         return
     }
-    // 같은 유저인데 닉네임이 변경되어서 로그인 할 경우
-    if (nickname !== existUsers['nickname']) {
-        await Users.update({ where: { nickname } })
-        return
-    }
-    await Users.create({ userKey, nickname })
-    res.status(200).send({})
+    // // 같은 유저인데 닉네임이 변경되어서 로그인 할 경우
+    // if (nickname !== existUsers['nickname']) {
+    //     await Users.update({ where: { nickname :nickname} })
+    //     return
+    // }
+    await Users.create({ userKey: userKey, nickname: nickname, profileImg: profileImg })
+    res.status(200).send({ result: 'SUCCESS!' })
 }
 
 module.exports = {

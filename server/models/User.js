@@ -5,19 +5,22 @@ module.exports = class User extends Sequelize.Model {
     static init(sequelize) {
         return super.init(
             {
-                  nickname: {
+                nickname: {
                     type: Sequelize.STRING(15),
                     allowNull: true,
-                  },
-                  userKey: {
+                },
+                userKey: {
                     type: Sequelize.STRING(30),
                     allowNull: true,
-                    primaryKey:true
-                  },
-                  sido: {
-                      type:Sequelize.STRING(15),
-                      defaultValue:'경기'
-                  },
+                    primaryKey: true
+                },
+                sido: {
+                    type: Sequelize.STRING(15),
+                    defaultValue: '경기'
+                },
+                profileImg: {
+                    type: Sequelize.STRING(300),
+                }
             },
             {
                 sequelize,
@@ -32,13 +35,13 @@ module.exports = class User extends Sequelize.Model {
         );
     }
     static associate(db) {
-        db.User.hasMany(db.Comment, { 
-            foreignKey: 'fk_userKey', 
-            sourceKey: 'userKey' 
+        db.User.hasMany(db.Comment, {
+            foreignKey: 'fk_userKey',
+            sourceKey: 'userKey'
         });
-        db.User.hasMany(db.Like, { 
-            foreignKey: 'fk_userKey', 
-            sourceKey: 'userKey' 
+        db.User.hasMany(db.Like, {
+            foreignKey: 'fk_userKey',
+            sourceKey: 'userKey'
         });
     }
 };
