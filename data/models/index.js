@@ -10,8 +10,13 @@ const PrivateImg = require('./PrivateImg');
 const PublicImg = require('./PublicImg');
 const Youtube = require('./Youtube');
 
+<<<<<<< HEAD
+const env = process.env.NODE_ENV || 'development';
+const config = require('../config/config')[env];
+=======
 const env = process.env.NODE_ENV || 'production';
 const config= require(__dirname + '/../config/config.js')[env]
+>>>>>>> main
 const db = {};
 
 const sequelize = new Sequelize(
@@ -26,7 +31,7 @@ db.Sequelize = Sequelize;
 
 db.PrivateApt = PrivateApt;
 db.PrivateAptDetail1 = PrivateAptDetail1;
-db.PrivateAptDetail2=PrivateAptDetail2;
+db.PrivateAptDetail2 = PrivateAptDetail2;
 db.PubNotice = PubNotice;
 db.PrivateImg = PrivateImg;
 db.PublicImg = PublicImg;

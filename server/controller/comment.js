@@ -1,7 +1,7 @@
 const { Comment, User, PrivateApt } = require('../models');
 const { date_formmatter } = require('../utils/dateFormat');
-const {Op} = require('sequelize');
-const {like, or} = Op
+const { Op } = require('sequelize');
+const { like, or } = Op
 
 const getComment = async (req, res, next) => {
     let comments = [];
@@ -10,20 +10,20 @@ const getComment = async (req, res, next) => {
         const { aptNo } = req.params;
         const comment_list = await Comment.findAll({
             order: [['commentId', 'DESC']], //내림차순
-            where :{
-                [or]:[
-                    {fk_pblancNo : aptNo},
-                    {panId : aptNo}
+            where: {
+                [or]: [
+                    { fk_pblancNo: aptNo },
+                    { panId: aptNo }
                 ]
             },
-            raw:true
+            raw: true
         });
         for (i in comment_list) {
             const { commentId, content, fk_userKey, createdAt } = comment_list[i];
             const user = await User.findOne({
-                attributes:['nickname'],
-                where :{userKey : fk_userKey},
-                raw:true
+                attributes: ['nickname'],
+                where: { userKey: fk_userKey },
+                raw: true
             })
             let createTime = date_formmatter(new Date(createdAt));
             console.log(user);
@@ -43,28 +43,28 @@ const getComment = async (req, res, next) => {
     }
 }
 
-const postComment = async(req, res, next)=>{
-    const {userKey} = res.locals.user;
-    const {aptNo}= req.params;
-    const {content} = req.body;
-    
-    try{
+const postComment = async (req, res, next) => {
+    const { userKey } = res.locals.user;
+    const { aptNo } = req.params;
+    const { content } = req.body;
+
+    try {
         const privateAptNo = await PrivateApt.findOne({
-            attributes: ['pblancNo'],   
-            where: { pblancNo: aptNo }, 
-            raw: true  
+            attributes: ['pblancNo'],
+            where: { pblancNo: aptNo },
+            raw: true
         });
-        if(!userKey){
+        if (!userKey) {
             res.status(401);
             return;
-        } 
-        if(privateAptNo){
+        }
+        if (privateAptNo) {
             await Comment.create({
                 fk_userKey: userKey,
                 fk_pblancNo: aptNo,
                 content: content
             });
-        }else {
+        } else {
             await Comment.create({
                 fk_userKey: userKey,
                 panId: aptNo,
@@ -83,8 +83,8 @@ const patchComment = async (req, res, next) => {
     const { aptNo, commentId } = req.params;
     try {
         await Comment.update(
-            { content: content},
-            {where: { commentId: commentId }} 
+            { content: content },
+            { where: { commentId: commentId } }
         )
         res.status(204).send({});
     } catch (error) {
@@ -97,14 +97,14 @@ const deleteComment = async (req, res, next) => {
     const { commentId } = req.params;
     try {
         const comment = await Comment.findOne({
-            attributes :['commentId'],
-            where: { commentId :commentId}
+            attributes: ['commentId'],
+            where: { commentId: commentId }
         });
         console.log(comment)
         if (comment) {
             await comment.destroy();
         }
-        res.status(204).send({success :"delete"});
+        res.status(204).send({ success: "delete" });
     } catch (error) {
         next(error);
         res.status(400);

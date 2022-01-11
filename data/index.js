@@ -1,7 +1,11 @@
 const express = require('express');
 const dotenv = require('dotenv');
 dotenv.config()
+<<<<<<< HEAD
+const port = process.env.PORT || 3000;
+=======
 const port = 3001;
+>>>>>>> main
 const app = express();
 const { sequelize } = require('./models')
 const youtubeapi = require('./routes/youtubeAPI')
