@@ -21,7 +21,7 @@ const getComment = async (req, res, next) => {
         for (i in comment_list) {
             const { commentId, content, fk_userKey, createdAt } = comment_list[i];
             const user = await User.findOne({
-                attributes:['nickname'],
+                attributes:['nickname', 'profileImg' ],
                 where :{userKey : fk_userKey},
                 raw:true
             })
@@ -29,6 +29,7 @@ const getComment = async (req, res, next) => {
             console.log(user);
             commentInfo['commentId'] = commentId;
             commentInfo['nickname'] = user.nickname;
+            commentInfo['profileImg'] = user.profileImg;
             commentInfo['content'] = content;
             commentInfo['userKey'] = fk_userKey;
             commentInfo['createdAt'] = createTime;

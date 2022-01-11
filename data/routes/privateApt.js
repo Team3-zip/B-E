@@ -48,4 +48,41 @@ router.get('/', async (req, res, next) => {
         console.log(error)
     }
 });
+
+//접수마감 +14일에 삭제되는 로직
+router.get('/status', async(req, res,next)=>{
+    // let newDate = new Date();
+    // let year = newDate.getFullYear();
+    // let month = newDate.getMonth()+1;
+    // let date = newDate.getDate();
+    // const sDate = year+''+month+''+date;
+    // let status ='';
+    // console.log(sDate);
+    // console.log(typeof sDate)
+
+    // try{
+    //     const Date = await PrivateApt.findAll({
+    //         attributes :['recruitDate', 'receptStartDate','receptEndDate'],
+    //         raw:true
+    //     });
+       
+
+    //     for(i in Date){
+    //         console.log(Date[i]['recruitDate'])
+    //         if(Date[i]['recruitDate']===sDate){
+    //             status = '공고중'
+    //         }else if(Number(Date[i]['recruitDate'])< Number(Date[i]['receptStartDate'])){
+    //             status ='공고중'
+    //         }else if(Date[i]['receptStartDate'] ===sDate && Number(Date[i]['receptEndDate'])<=Number(sDate)){
+    //             status ='접수중'
+    //         }else{
+    //             status ='접수마감'
+    //         }
+    //     }
+    //     res.send({status: status});
+    // }catch(err){
+    //     console.log(err);
+    // }
+   
+});
 module.exports = router;

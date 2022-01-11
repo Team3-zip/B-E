@@ -34,46 +34,72 @@ const getpublicHot = async (req, res, next) => {
     const pubHotList = await sequelize.query(
         `SELECT Pubnotices.*,(SELECT PublicImg.url1 FROM PublicImg WHERE Pubnotices.panId = PublicImg.panId) AS ImgUrl, CASE WHEN likes.panId IS NULL THEN "false" ELSE "true" END AS islike FROM Pubnotices LEFT JOIN likes ON Pubnotices.panId = likes.panId AND likes.fk_userKey="${userKey}" WHERE Pubnotices.panId IN (SELECT likes.panId FROM likes group by panId ORDER BY COUNT(*) DESC)`
         )
-    // const pubHotList = await PubNotice.findAll({
-    //     where: { panId : pubHotarr },
-    //     // include: {
-    //     //     model: Like,
-    //     //     where: {panId, userKey:res.locals.userKey},
-    //     //     attributes: ['url1']}
-    // });
+    
     res.send(pubHotList[0])
 
-    // for (let id of pubHotarr) {
-    //     PubNotice.findAll({
-    //         where: { "panId": pubHotarr }
-    //     });
-    // }
-
 }
+//민영찜순
 const getprivateHot = async (req, res, next) => {
     try{
         var { userKey } = res.locals.user
     }catch{
         userKey = ''
     }
+    let newDate = new Date();
+    let year = newDate.getFullYear();
+    let month =('0'+(newDate.getMonth()+1)).slice(-2);
+    let date = newDate.getDate();
+    const sDate = year+''+month+''+date;
+    let sta='';
+    let statusDate='';
+    let statusArr =[];
+    console.log(sDate);
+    
     let privateHotarr = []
     const privateHotIds = await sequelize.query('SELECT fk_pblancNo,count(*) from likes group by fk_pblancNo order by count(*) desc')
-    console.log(privateHotIds)
+    //console.log(privateHotIds)
+   
     for (let item of privateHotIds[0]) {
-        console.log(item)
+        //console.log(item)
         privateHotarr.push(item['fk_pblancNo'])
 
+        
     }
+    statusDate = await PrivateApt.findAll({
+        attributes :['recruitDate', 'receptStartDate','receptEndDate'],
+        where :{pblancNo:privateHotarr},
+        raw:true
+    });
+    //dateArr.push(statusDate);
+
     const privateHotList = await sequelize.query(
         `SELECT privateapts.*,
         (SELECT concat(min(cast(privateAptDetail2.supplyAreaSize as decimal(10,4))),'~',max(cast(privateAptDetail2.supplyAreaSize as decimal(10,4)))) as size FROM zip_dev.privateAptDetail2 where privateapts.pblancNo = privateAptDetail2.fk_pblancNo group by fk_pblancNo) as size,
         (SELECT concat(format(min(cast(replace(privateAptDetail2.supplyAmount,",",'') as unsigned)),0),'~', format(max(cast(replace(privateAptDetail2.supplyAmount,",",'')as unsigned)),0)) as supplyAmount FROM zip_dev.privateAptDetail2 where privateapts.pblancNo = privateAptDetail2.fk_pblancNo group by fk_pblancNo) as supplyAmount,
         (SELECT privateimgs.url1 FROM privateimgs WHERE privateapts.pblancNo = privateimgs.fk_pblancNo) AS ImgUrl, CASE WHEN likes.fk_pblancNo IS NULL THEN "false" ELSE "true" END AS islike FROM privateapts LEFT JOIN likes ON privateapts.pblancNo = likes.fk_pblancNo AND likes.fk_userKey="${userKey}" WHERE privateapts.pblancNo IN (SELECT likes.fk_pblancNo FROM likes group by fk_pblancNo ORDER BY COUNT(*) DESC)`
     )
-    // const provateHotList = await PrivateApt.findAll({
-    //     where: { pblancNo : privateHotarr }
-    // });
-    res.send(privateHotList[0])
+    for(let i in statusDate){
+        console.log('오늘날짜' +sDate);
+        console.log(statusDate[i]['recruitDate'])
+        const stDate=(statusDate[i]['receptStartDate']).replace(/-/g, '');
+        const enDate=(statusDate[i]['receptEndDate']).replace(/-/g, '');
+        if(Number(statusDate[i]['recruitDate'])===Number(stDate)){
+            sta = '공고중'
+        }
+        // else if(Number(statusDate[i]['recruitDate'])< Number(stDate)){
+        //     sta ='공고중'
+        // }
+        else if(Number(stDate) === Number(sDate) || Number(enDate)<=Number(sDate)){
+            sta ='접수중'
+        }
+        else{
+            sta ='접수마감'
+        }
+        statusArr.push({'status':sta});
+    }
+    console.log(statusArr)
+    
+    res.status(200).send({privateHotList, statusArr})
 }
 const getMyPublicSido = async (req,res,next) =>{
     try{
@@ -132,6 +158,15 @@ const getMyPublicSido = async (req,res,next) =>{
 }
 
 const getMyPrivateSido = async (req,res,next) =>{
+    let newDate = new Date();
+    let year = newDate.getFullYear();
+    let month =('0'+(newDate.getMonth()+1)).slice(-2);
+    let date = newDate.getDate();
+    const sDate = year+''+month+''+date;
+    let sta='';
+    let statusDate='';
+    let statusArr =[];
+    
     try{
         var { userKey } = res.locals.user
         var mysido = await User.findOne({
@@ -144,62 +179,81 @@ const getMyPrivateSido = async (req,res,next) =>{
         userKey = ''
         mysido = "경기"
     }
+    statusDate = await PrivateApt.findAll({
+        order: [['recruitDate', 'DESC']], //
+        attributes :['recruitDate', 'receptStartDate','receptEndDate', 'pblancNo'],
+        where :{sido:mysido},
+        raw:true
+    });
     if (mysido == "충청도"){
         var privateSido = await sequelize.query(
             `SELECT privateapts.*,
             (SELECT concat(min(cast(privateAptDetail2.supplyAreaSize as decimal(10,4))),'~',max(cast(privateAptDetail2.supplyAreaSize as decimal(10,4)))) as size FROM zip_dev.privateAptDetail2 where privateapts.pblancNo = privateAptDetail2.fk_pblancNo group by fk_pblancNo) as size,
             (SELECT concat(format(min(cast(replace(privateAptDetail2.supplyAmount,",",'') as unsigned)),0),'~', format(max(cast(replace(privateAptDetail2.supplyAmount,",",'')as unsigned)),0)) as supplyAmount FROM zip_dev.privateAptDetail2 where privateapts.pblancNo = privateAptDetail2.fk_pblancNo group by fk_pblancNo) as supplyAmount,
-            (SELECT privateimgs.url1 FROM privateimgs WHERE privateapts.pblancNo = privateimgs.fk_pblancNo) AS ImgUrl, CASE WHEN likes.fk_pblancNo IS NULL THEN "false" ELSE "true" END AS islike FROM privateapts LEFT JOIN likes ON privateapts.pblancNo = likes.fk_pblancNo AND likes.fk_userKey="${userKey}" WHERE privateapts.sido LIKE '%충%'`
+            (SELECT privateimgs.url1 FROM privateimgs WHERE privateapts.pblancNo = privateimgs.fk_pblancNo) AS ImgUrl, CASE WHEN likes.fk_pblancNo IS NULL THEN "false" ELSE "true" END AS islike FROM privateapts LEFT JOIN likes ON privateapts.pblancNo = likes.fk_pblancNo AND likes.fk_userKey="${userKey}" WHERE privateapts.sido LIKE '%충%' order by privateapts.recruitDate desc`
         )
     }else if(mysido == "경상도"){
         privateSido = await sequelize.query(
             `SELECT privateapts.*,
             (SELECT concat(min(cast(privateAptDetail2.supplyAreaSize as decimal(10,4))),'~',max(cast(privateAptDetail2.supplyAreaSize as decimal(10,4)))) as size FROM zip_dev.privateAptDetail2 where privateapts.pblancNo = privateAptDetail2.fk_pblancNo group by fk_pblancNo) as size,
             (SELECT concat(format(min(cast(replace(privateAptDetail2.supplyAmount,",",'') as unsigned)),0),'~', format(max(cast(replace(privateAptDetail2.supplyAmount,",",'')as unsigned)),0)) as supplyAmount FROM zip_dev.privateAptDetail2 where privateapts.pblancNo = privateAptDetail2.fk_pblancNo group by fk_pblancNo) as supplyAmount,
-            (SELECT privateimgs.url1 FROM privateimgs WHERE privateapts.pblancNo = privateimgs.fk_pblancNo) AS ImgUrl, CASE WHEN likes.fk_pblancNo IS NULL THEN "false" ELSE "true" END AS islike FROM privateapts LEFT JOIN likes ON privateapts.pblancNo = likes.fk_pblancNo AND likes.fk_userKey="${userKey}" WHERE privateapts.sido LIKE '%경남%' or privateapts.sido LIKE '%경북%'`
+            (SELECT privateimgs.url1 FROM privateimgs WHERE privateapts.pblancNo = privateimgs.fk_pblancNo) AS ImgUrl, CASE WHEN likes.fk_pblancNo IS NULL THEN "false" ELSE "true" END AS islike FROM privateapts LEFT JOIN likes ON privateapts.pblancNo = likes.fk_pblancNo AND likes.fk_userKey="${userKey}" WHERE privateapts.sido LIKE '%경남%' or privateapts.sido LIKE '%경북%' order by privateapts.recruitDate desc`
         )
     }else if(mysido == "전라도"){
         privateSido = await sequelize.query(
             `SELECT privateapts.*,
             (SELECT concat(min(cast(privateAptDetail2.supplyAreaSize as decimal(10,4))),'~',max(cast(privateAptDetail2.supplyAreaSize as decimal(10,4)))) as size FROM zip_dev.privateAptDetail2 where privateapts.pblancNo = privateAptDetail2.fk_pblancNo group by fk_pblancNo) as size,
             (SELECT concat(format(min(cast(replace(privateAptDetail2.supplyAmount,",",'') as unsigned)),0),'~', format(max(cast(replace(privateAptDetail2.supplyAmount,",",'')as unsigned)),0)) as supplyAmount FROM zip_dev.privateAptDetail2 where privateapts.pblancNo = privateAptDetail2.fk_pblancNo group by fk_pblancNo) as supplyAmount,
-            (SELECT privateimgs.url1 FROM privateimgs WHERE privateapts.pblancNo = privateimgs.fk_pblancNo) AS ImgUrl, CASE WHEN likes.fk_pblancNo IS NULL THEN "false" ELSE "true" END AS islike FROM privateapts LEFT JOIN likes ON privateapts.pblancNo = likes.fk_pblancNo AND likes.fk_userKey="${userKey}" WHERE privateapts.sido LIKE '%전남%' or privateapts.sido LIKE '%전북%'`
+            (SELECT privateimgs.url1 FROM privateimgs WHERE privateapts.pblancNo = privateimgs.fk_pblancNo) AS ImgUrl, CASE WHEN likes.fk_pblancNo IS NULL THEN "false" ELSE "true" END AS islike FROM privateapts LEFT JOIN likes ON privateapts.pblancNo = likes.fk_pblancNo AND likes.fk_userKey="${userKey}" WHERE privateapts.sido LIKE '%전남%' or privateapts.sido LIKE '%전북%' order by privateapts.recruitDate desc`
         )
     }else if(mysido == "강원도"){
         privateSido = await sequelize.query(
             `SELECT privateapts.*,
             (SELECT concat(min(cast(privateAptDetail2.supplyAreaSize as decimal(10,4))),'~',max(cast(privateAptDetail2.supplyAreaSize as decimal(10,4)))) as size FROM zip_dev.privateAptDetail2 where privateapts.pblancNo = privateAptDetail2.fk_pblancNo group by fk_pblancNo) as size,
             (SELECT concat(format(min(cast(replace(privateAptDetail2.supplyAmount,",",'') as unsigned)),0),'~', format(max(cast(replace(privateAptDetail2.supplyAmount,",",'')as unsigned)),0)) as supplyAmount FROM zip_dev.privateAptDetail2 where privateapts.pblancNo = privateAptDetail2.fk_pblancNo group by fk_pblancNo) as supplyAmount,
-            (SELECT privateimgs.url1 FROM privateimgs WHERE privateapts.pblancNo = privateimgs.fk_pblancNo) AS ImgUrl, CASE WHEN likes.fk_pblancNo IS NULL THEN "false" ELSE "true" END AS islike FROM privateapts LEFT JOIN likes ON privateapts.pblancNo = likes.fk_pblancNo AND likes.fk_userKey="${userKey}" WHERE privateapts.sido LIKE '%강원%'`
+            (SELECT privateimgs.url1 FROM privateimgs WHERE privateapts.pblancNo = privateimgs.fk_pblancNo) AS ImgUrl, CASE WHEN likes.fk_pblancNo IS NULL THEN "false" ELSE "true" END AS islike FROM privateapts LEFT JOIN likes ON privateapts.pblancNo = likes.fk_pblancNo AND likes.fk_userKey="${userKey}" WHERE privateapts.sido LIKE '%강원%' order by privateapts.recruitDate desc`
         )
     }else if(mysido == "제주도"){
         privateSido = await sequelize.query(
             `SELECT privateapts.*,
             (SELECT concat(min(cast(privateAptDetail2.supplyAreaSize as decimal(10,4))),'~',max(cast(privateAptDetail2.supplyAreaSize as decimal(10,4)))) as size FROM zip_dev.privateAptDetail2 where privateapts.pblancNo = privateAptDetail2.fk_pblancNo group by fk_pblancNo) as size,
             (SELECT concat(format(min(cast(replace(privateAptDetail2.supplyAmount,",",'') as unsigned)),0),'~', format(max(cast(replace(privateAptDetail2.supplyAmount,",",'')as unsigned)),0)) as supplyAmount FROM zip_dev.privateAptDetail2 where privateapts.pblancNo = privateAptDetail2.fk_pblancNo group by fk_pblancNo) as supplyAmount,
-            (SELECT privateimgs.url1 FROM privateimgs WHERE privateapts.pblancNo = privateimgs.fk_pblancNo) AS ImgUrl, CASE WHEN likes.fk_pblancNo IS NULL THEN "false" ELSE "true" END AS islike FROM privateapts LEFT JOIN likes ON privateapts.pblancNo = likes.fk_pblancNo AND likes.fk_userKey="${userKey}" WHERE  privateapts.sido LIKE '%제주%'`
+            (SELECT privateimgs.url1 FROM privateimgs WHERE privateapts.pblancNo = privateimgs.fk_pblancNo) AS ImgUrl, CASE WHEN likes.fk_pblancNo IS NULL THEN "false" ELSE "true" END AS islike FROM privateapts LEFT JOIN likes ON privateapts.pblancNo = likes.fk_pblancNo AND likes.fk_userKey="${userKey}" WHERE  privateapts.sido LIKE '%제주%' order by privateapts.recruitDate desc`
         )
     }else{
         privateSido = await sequelize.query(
             `SELECT privateapts.*,(SELECT concat(min(cast(privateAptDetail2.supplyAreaSize as decimal(10,4))),'~',max(cast(privateAptDetail2.supplyAreaSize as decimal(10,4)))) as size FROM zip_dev.privateAptDetail2 where privateapts.pblancNo = privateAptDetail2.fk_pblancNo group by fk_pblancNo) as size,
             (SELECT concat(format(min(cast(replace(privateAptDetail2.supplyAmount,",",'') as unsigned)),0),'~', format(max(cast(replace(privateAptDetail2.supplyAmount,",",'')as unsigned)),0)) as supplyAmount FROM zip_dev.privateAptDetail2 where privateapts.pblancNo = privateAptDetail2.fk_pblancNo group by fk_pblancNo) as supplyAmount,
-            (SELECT privateimgs.url1 FROM privateimgs WHERE privateapts.pblancNo = privateimgs.fk_pblancNo) AS ImgUrl, CASE WHEN likes.fk_pblancNo IS NULL THEN "false" ELSE "true" END AS islike FROM privateapts LEFT JOIN likes ON privateapts.pblancNo = likes.fk_pblancNo AND likes.fk_userKey="${userKey}" WHERE privateapts.sido LIKE '%${mysido}%'`
+            (SELECT privateimgs.url1 FROM privateimgs WHERE privateapts.pblancNo = privateimgs.fk_pblancNo) AS ImgUrl, CASE WHEN likes.fk_pblancNo IS NULL THEN "false" ELSE "true" END AS islike FROM privateapts LEFT JOIN likes ON privateapts.pblancNo = likes.fk_pblancNo AND likes.fk_userKey="${userKey}" WHERE privateapts.sido LIKE '%${mysido}%' order by privateapts.recruitDate desc`
         )
     }
+    for(let i in statusDate){
+        // console.log('오늘날짜' +sDate);
+        // console.log(statusDate[i]['recruitDate'])
+        // console.log(statusDate[i]['pblancNo']);
+        const stDate=(statusDate[i]['receptStartDate']).replace(/-/g, '');
+        const enDate=(statusDate[i]['receptEndDate']).replace(/-/g, '');
+        if(Number(statusDate[i]['recruitDate'])===Number(stDate)){
+            sta = '공고중'
+        }
+        else if(Number(statusDate[i]['recruitDate'])< Number(sDate)&& Number(stDate)>  Number(sDate)){
+            sta ='공고중'
+        }
+        else if(Number(stDate) <=Number(sDate) && Number(enDate)>=Number(sDate)){
+            sta ='접수중'
+        }
+        else{
+            sta ='접수마감'
+        }
+        statusArr.push({'status':sta, 'pblancNo': statusDate[i]['pblancNo']});
+    }
     
-    // const privateSido = await PrivateApt.findAll({
-    //     where: {
-    //                 sido: {
-    //                     [like]: `%${mysido}%`
-    //                 }
-    //     },
-    //     include:[ {
-    //         model: PrivateImg,
-    //         attributes: ['url1']
-    //     }],
-    //     raw:true
-    // })
-    res.send(privateSido[0])
+    console.log(statusArr)
+    const privateSido1= privateSido[0]
+    
+    res.send({
+        privateSido1, statusArr
+    })
 }
 
 

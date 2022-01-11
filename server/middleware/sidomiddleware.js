@@ -5,12 +5,8 @@ module.exports = (req, res, next) => {
     const { authorization} = req.headers;
     const { userKey } = req.body;
     JSON.stringify(authorization);
-    JSON.stringify(userKey);
     const [tokenType, tokenValue] = authorization.split(' ');
    
-    console.log(tokenType);
-    console.log(authorization)
-    console.log("userKey :"+userKey);
     if (tokenType !== 'Bearer') {  
         next()
         return
@@ -19,7 +15,6 @@ module.exports = (req, res, next) => {
     try {
         User.findByPk(userKey).then((user) => {
             res.locals.user = user
-            console.log(res.locals.user)
             next()
         })
     } catch (error) {
