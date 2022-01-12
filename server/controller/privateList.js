@@ -25,7 +25,7 @@ const getPrivateNotice = async (req, res) => {
     let statusDate='';
     let statusArr =[];
     console.log(sDate);
-    statusDate = await PrivateApt.findAll({
+    statusDate = await Private.findAll({
         order: [['recruitDate', 'DESC']], //
         attributes :['recruitDate', 'receptStartDate','receptEndDate', 'pblancNo'],
         where :{sido:sido},
@@ -81,7 +81,8 @@ const getPrivateNotice = async (req, res) => {
         }
         
         console.log(statusArr)
-        res.send({ result: priNotice , statusArr : statusArr})
+        const privateApt= priNotice[0]
+        res.send({ result: privateApt , statusArr : statusArr})
     } catch (error) {
         res.send({ error })
     }
