@@ -28,7 +28,12 @@ const getPrivateNotice = async (req, res) => {
     statusDate = await Private.findAll({
         order: [['recruitDate', 'DESC']], //
         attributes :['recruitDate', 'receptStartDate','receptEndDate', 'pblancNo'],
-        where :{sido:sido},
+        where :{
+            sido:
+            {
+            [like]:"%"+sido+"%"
+            }
+        },
         raw:true
     });
     try {

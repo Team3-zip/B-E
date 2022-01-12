@@ -141,19 +141,7 @@ const getMyPublicSido = async (req,res,next) =>{
         )
     }
     
-    // const pubSido = await PubNotice.findAll({
-    //     where: {
-    //                 sidoName: {
-    //                     [like]: `%${mysido}%`
-    //                 }    
-    //     },
-    //     include:[ {
-    //         model: PublicImg,
-    //         attributes: ['url1']
-    //     }],
-    //     raw:true
-        
-    // }) ds
+  
     
     res.send(pubSido[0])
 }
