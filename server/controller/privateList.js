@@ -16,22 +16,28 @@ const getPrivateNotice = async (req, res) => {
     } catch (error) {
         userKey = ''
     }
+    let newDate = new Date();
+    let year = newDate.getFullYear();
+    let month =('0'+(newDate.getMonth()+1)).slice(-2);
+    let date = newDate.getDate();
+    const sDate = year+''+month+''+date;
+    let sta='';
+    let statusDate='';
+    let statusArr =[];
+    console.log(sDate);
+    statusDate = await PrivateApt.findAll({
+        order: [['recruitDate', 'DESC']], //
+        attributes :['recruitDate', 'receptStartDate','receptEndDate', 'pblancNo'],
+        where :{sido:sido},
+        raw:true
+    });
     try {
         if (spell2 === '상') {
             priNotice = await sequelize.query(`SELECT privateapts.*,(SELECT privateAptDetail1.applyAddress FROM privateAptDetail1 WHERE privateapts.pblancNo = privateAptDetail1.fk_pblancNo) as address,
             (SELECT concat(min(cast(privateAptDetail2.supplyAreaSize as decimal(10,4))),'~',max(cast(privateAptDetail2.supplyAreaSize as decimal(10,4)))) as size FROM zip_dev.privateAptDetail2 where privateapts.pblancNo = privateAptDetail2.fk_pblancNo group by fk_pblancNo) as size,
             (SELECT concat(format(min(cast(replace(privateAptDetail2.supplyAmount,",",'') as unsigned)),0),'~', format(max(cast(replace(privateAptDetail2.supplyAmount,",",'')as unsigned)),0)) as supplyAmount FROM zip_dev.privateAptDetail2 where privateapts.pblancNo = privateAptDetail2.fk_pblancNo group by fk_pblancNo) as supplyAmount,
             (SELECT privateimgs.url1 FROM privateimgs WHERE privateapts.pblancNo = privateimgs.fk_pblancNo) AS ImgUrl , CASE WHEN likes.fk_pblancNo IS NULL THEN 'false' ELSE 'true' END AS islike FROM privateapts LEFT JOIN likes ON privateapts.pblancNo = likes.fk_pblancNo AND likes.fk_userKey='${userKey}' WHERE privateapts.sido LIKE '%경북%' OR privateapts.sido Like '%경남%' ORDER BY privateapts.recruitDate DESC`)
-            //  priNotice = await Private.findAll({
-            //     order: [["recruitDate", "ASC"]],
-            //     where :{
-            //         [or]:[
-            //             {sido : '경남'},
-            //             {sido : '경북'}
-            //         ]
-            //     },
-            //     raw:true
-            //  })
+        
         }else if(spell2 === '기'){
             priNotice = await sequelize.query(`SELECT privateapts.*,(SELECT privateAptDetail1.applyAddress FROM privateAptDetail1 WHERE privateapts.pblancNo = privateAptDetail1.fk_pblancNo) as address,
             (SELECT concat(min(cast(privateAptDetail2.supplyAreaSize as decimal(10,4))),'~',max(cast(privateAptDetail2.supplyAreaSize as decimal(10,4)))) as size FROM zip_dev.privateAptDetail2 where privateapts.pblancNo = privateAptDetail2.fk_pblancNo group by fk_pblancNo) as size,
@@ -55,41 +61,33 @@ const getPrivateNotice = async (req, res) => {
             (SELECT concat(min(cast(privateAptDetail2.supplyAreaSize as decimal(10,4))),'~',max(cast(privateAptDetail2.supplyAreaSize as decimal(10,4)))) as size FROM zip_dev.privateAptDetail2 where privateapts.pblancNo = privateAptDetail2.fk_pblancNo group by fk_pblancNo) as size,
             (SELECT concat(format(min(cast(replace(privateAptDetail2.supplyAmount,",",'') as unsigned)),0),'~', format(max(cast(replace(privateAptDetail2.supplyAmount,",",'')as unsigned)),0)) as supplyAmount FROM zip_dev.privateAptDetail2 where privateapts.pblancNo = privateAptDetail2.fk_pblancNo group by fk_pblancNo) as supplyAmount,
             (SELECT privateimgs.url1 FROM privateimgs WHERE privateapts.pblancNo = privateimgs.fk_pblancNo) AS ImgUrl , CASE WHEN likes.fk_pblancNo IS NULL THEN 'false' ELSE 'true' END AS islike FROM privateapts LEFT JOIN likes ON privateapts.pblancNo = likes.fk_pblancNo AND likes.fk_userKey='${userKey}' WHERE privateapts.sido LIKE '%${spell1}%' ORDER BY privateapts.recruitDate DESC`)
-            // priNotice = await Private.findAll({
-            //     order: [["recruitDate", "ASC"]],
-            //     where: {
-            //         [or]: [
-            //             {
-            //                 sido: {
-            //                     [like]: `%${spell1}%`
-            //                 },
-            //                 // sido:{
-            //                 //     [like]:`%${spell2}%`
-            //                 // }
-            //             }
-            //         ]
-            //     },
-            //     raw:true
-            // })
         }
-        res.send({ result: priNotice })
+        for(let i in statusDate){
+            const stDate=(statusDate[i]['receptStartDate']).replace(/-/g, '');
+            const enDate=(statusDate[i]['receptEndDate']).replace(/-/g, '');
+            if(Number(statusDate[i]['recruitDate'])===Number(stDate)){
+                sta = '공고중'
+            }
+            else if(Number(statusDate[i]['recruitDate'])< Number(sDate)&& Number(stDate)>  Number(sDate)){
+                sta ='공고중'
+            }
+            else if(Number(stDate) <=Number(sDate) && Number(enDate)>=Number(sDate)){
+                sta ='접수중'
+            }
+            else{
+                sta ='접수마감'
+            }
+            statusArr.push({'status':sta, 'pblancNo': statusDate[i]['pblancNo']});
+        }
+        
+        console.log(statusArr)
+        res.send({ result: priNotice , statusArr : statusArr})
     } catch (error) {
         res.send({ error })
     }
 }
 
-// const getPrivateNotice2 = async (req, res) => {
-//     const { sido } = req.query
-//     const priNotice2 = await Private.findAll({
-//         order: [["recruitDate", "ASC"]],
-//         where: sido ? { sido } : undefined
-//     })
-
-
-//     res.send({ priNotice2 })
-// }
 
 module.exports = {
-    getPrivateNotice,
-    // getPrivateNotice2
+    getPrivateNotice
 }
