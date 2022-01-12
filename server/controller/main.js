@@ -66,7 +66,7 @@ const getprivateHot = async (req, res, next) => {
         
     }
     statusDate = await PrivateApt.findAll({
-        attributes :['recruitDate', 'receptStartDate','receptEndDate'],
+        attributes :['recruitDate', 'receptStartDate','receptEndDate','pblancNo'],
         where :{pblancNo:privateHotarr},
         raw:true
     });
@@ -86,16 +86,17 @@ const getprivateHot = async (req, res, next) => {
         if(Number(statusDate[i]['recruitDate'])===Number(stDate)){
             sta = '공고중'
         }
-        // else if(Number(statusDate[i]['recruitDate'])< Number(stDate)){
-        //     sta ='공고중'
-        // }
-        else if(Number(stDate) === Number(sDate) || Number(enDate)<=Number(sDate)){
+        else if(Number(statusDate[i]['recruitDate'])< Number(sDate)&& Number(stDate)>  Number(sDate)){
+            sta ='공고중'
+        }
+        else if(Number(stDate) <=Number(sDate) && Number(enDate)>=Number(sDate)){
             sta ='접수중'
         }
         else{
             sta ='접수마감'
         }
-        statusArr.push({'status':sta});
+        statusArr.push({'status':sta, 'pblancNo': statusDate[i]['pblancNo']});
+        
     }
     console.log(statusArr)
     
@@ -228,9 +229,6 @@ const getMyPrivateSido = async (req,res,next) =>{
         )
     }
     for(let i in statusDate){
-        // console.log('오늘날짜' +sDate);
-        // console.log(statusDate[i]['recruitDate'])
-        // console.log(statusDate[i]['pblancNo']);
         const stDate=(statusDate[i]['receptStartDate']).replace(/-/g, '');
         const enDate=(statusDate[i]['receptEndDate']).replace(/-/g, '');
         if(Number(statusDate[i]['recruitDate'])===Number(stDate)){
