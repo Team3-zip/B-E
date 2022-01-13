@@ -66,8 +66,7 @@ const dailyPrivateDataImg = () => {
         }
       })
     }
-    
-    console.log({success: "ooook"});
+    console.log('okkk');
     } catch (e) {
       console.error(e);
     }
