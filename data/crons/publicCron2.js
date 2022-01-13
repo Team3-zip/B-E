@@ -286,7 +286,7 @@ const dailyPublicData2 = () => {
                                     console.log(announceDate)
                                     console.log(announceDate.replaceAll('.', ''))
                                     console.log(existPanId)
-                                    if (existPanId) {
+                                    if (existPanId!== null) {
                                         // if (Number(announceDate.replaceAll('.', '')) < Number(announce)) {
                                         //     console.log(Number(announceDate.replaceAll('.', '')))
                                         //     console.log(Number(announce))

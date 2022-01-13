@@ -45,20 +45,26 @@ const dailyPrivateData = () => {
                         let info = JSON.parse(xmlToJson).response.body.items.item;
                         for (i in info) {
                             console.log(info[i])
-                            await PrivateApt.create({
-                                pblancNo: Number(info[i]['pblancNo']['_text']),
-                                executor: info[i]['bsnsMbyNm']['_text'],
-                                operation: info[i]['houseDtlSecdNm']['_text'],
-                                houseManageNo: Number(info[i]['houseManageNo']['_text']),
-                                houseName: info[i]['houseNm']['_text'],
-                                winDate: info[i]['przwnerPresnatnDe']['_text'],
-                                receptStartDate: info[i]['rceptBgnde']['_text'],
-                                receptEndDate: info[i]['rceptEndde']['_text'],
-                                recruitDate: info[i]['rcritPblancDe']['_text'],
-                                rentSection: info[i]['rentSecdNm']['_text'],
-                                sido: info[i]['sido']['_text']
-                            })
-                            console.log("await 탈출")
+                            const existPblancNo = await PrivateApt.findOne({where :{pblancNo : Number(info[i]['pblancNo']['_text'])},raw:true})
+                            if (existPblancNo === null){
+                                await PrivateApt.create({
+                                    pblancNo: Number(info[i]['pblancNo']['_text']),
+                                    executor: info[i]['bsnsMbyNm']['_text'],
+                                    operation: info[i]['houseDtlSecdNm']['_text'],
+                                    houseManageNo: Number(info[i]['houseManageNo']['_text']),
+                                    houseName: info[i]['houseNm']['_text'],
+                                    winDate: info[i]['przwnerPresnatnDe']['_text'],
+                                    receptStartDate: info[i]['rceptBgnde']['_text'],
+                                    receptEndDate: info[i]['rceptEndde']['_text'],
+                                    recruitDate: info[i]['rcritPblancDe']['_text'],
+                                    rentSection: info[i]['rentSecdNm']['_text'],
+                                    sido: info[i]['sido']['_text']
+                                })
+                                console.log("await 탈출")
+                            }else{
+                                console.log("existPblancNo is not null")
+                            }
+                            
                         }
                         console.log("for 탈출")
                     }
