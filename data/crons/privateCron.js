@@ -73,10 +73,54 @@ const dailyPrivateData = () => {
         } catch (error) {
             console.log(error)
         }
+        //계약만료일 기준 +10일에 데이터 삭제
+        try{
+            let newDate = new Date();
+            let year = newDate.getFullYear();
+            let month =('0'+(newDate.getMonth()+1)).slice(-2);
+            let date = newDate.getDate();
+            const sDate = year+''+month+''+date;
+            console.log(typeof sDate);
+            const endDate =[];
+            let deleteDate='';
+            const contractEnd = await PrivateAptDetail1.findAll({
+                attributes:['contractEndDate'],
+                raw:true
+            })
+            for(let i in contractEnd){
+                endDate.push(Number(contractEnd[i]['contractEndDate'].replace(/-/g, '')));
+            }
+            for(let i =0; i<endDate.length;i++){
+                if(endDate[i]+10<=Number(sDate)){
+                    let a = String(endDate[i]).slice(0,4);
+                    let b = String(endDate[i]).slice(4,6);
+                    let c = String(endDate[i]).slice(6,8);
+                    let date = a+'-'+b+'-'+c;
+                    deleteDate = await PrivateAptDetail1.findAll({
+                        attributes:['fk_pblancNo'],
+                        where :{contractEndDate : date},
+                        raw :true
+                    })
+                }
+            }
+            if(deleteDate.length){
+                for(i in deleteDate){
+                await PrivateApt.destroy({
+                    where : {'pblancNo': deleteDate['fk_pblancNo']}
+                })
+            }
+                console.log('삭제완료!!')    
+           
+            }else{
+                console.log('오늘은 지울게 없음!!')
+            }
         
-    })
+          }catch(err){
+              console.log(err);
+          }
+        });
+    }
 
-}
 module.exports = {
     dailyPrivateData
 };

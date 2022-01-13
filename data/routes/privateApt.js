@@ -1,8 +1,10 @@
 const express = require('express');
 const request = require('request');
 const convert = require('xml-js');
+const { PrivateAptDetail2 } = require('../../server/models');
 const PrivateApt = require('../models/PrivateApt');
-const { sequelize } = require('../models/PubNotice');
+const PrivateAptDetail1 = require('../models/PrivateAptDetail1');
+const { sequelize, findAll } = require('../models/PubNotice');
 const router = express.Router();
 
 //목록 받기
@@ -49,40 +51,51 @@ router.get('/', async (req, res, next) => {
     }
 });
 
-//접수마감 +14일에 삭제되는 로직
+//접수마감 +10일에 삭제되는 로직
 router.get('/status', async(req, res,next)=>{
-    // let newDate = new Date();
-    // let year = newDate.getFullYear();
-    // let month = newDate.getMonth()+1;
-    // let date = newDate.getDate();
-    // const sDate = year+''+month+''+date;
-    // let status ='';
-    // console.log(sDate);
-    // console.log(typeof sDate)
-
-    // try{
-    //     const Date = await PrivateApt.findAll({
-    //         attributes :['recruitDate', 'receptStartDate','receptEndDate'],
-    //         raw:true
-    //     });
-       
-
-    //     for(i in Date){
-    //         console.log(Date[i]['recruitDate'])
-    //         if(Date[i]['recruitDate']===sDate){
-    //             status = '공고중'
-    //         }else if(Number(Date[i]['recruitDate'])< Number(Date[i]['receptStartDate'])){
-    //             status ='공고중'
-    //         }else if(Date[i]['receptStartDate'] ===sDate && Number(Date[i]['receptEndDate'])<=Number(sDate)){
-    //             status ='접수중'
-    //         }else{
-    //             status ='접수마감'
-    //         }
-    //     }
-    //     res.send({status: status});
-    // }catch(err){
-    //     console.log(err);
+  try{
+    let newDate = new Date();
+    let year = newDate.getFullYear();
+    let month =('0'+(newDate.getMonth()+1)).slice(-2);
+    let date = newDate.getDate();
+    const sDate = year+''+month+''+date;
+    console.log(typeof sDate);
+    const endDate =[];
+    let deleteDate='';
+    const contractEnd = await PrivateAptDetail1.findAll({
+        attributes:['contractEndDate'],
+        raw:true
+    })
+    for(let i in contractEnd){
+        endDate.push(Number(contractEnd[i]['contractEndDate'].replace(/-/g, '')));
+    }
+    for(let i =0; i<endDate.length;i++){
+        if(endDate[i]+7<=Number(sDate)){
+            let a = String(endDate[i]).slice(0,4);
+            let b = String(endDate[i]).slice(4,6);
+            let c = String(endDate[i]).slice(6,8);
+            let date = a+'-'+b+'-'+c;
+            deleteDate = await PrivateAptDetail1.findAll({
+                attributes:['fk_pblancNo'],
+                where :{contractEndDate : date},
+                raw :true
+            })
+        }
+    }
+    if(deleteDate.length){
+    //     for(i in deleteDate){
+    //     await PrivateApt.destroy({
+    //         where : {'pblancNo': deleteDate['fk_pblancNo']}
+    //     })
     // }
+        res.send({success:'삭제완료!!!'})
+    }else{
+        res.send({success:'오늘은 지울게 없음!'})
+    }
+   
+  }catch(err){
+      console.log(err);
+  }
    
 });
 module.exports = router;
