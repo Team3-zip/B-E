@@ -1,4 +1,4 @@
-require('dotenv').config({path:'/home/ubuntu/.env'});
+require('dotenv').config();
 const env = process.env;
 
 const development = {
