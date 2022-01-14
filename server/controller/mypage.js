@@ -2,7 +2,7 @@ const Users = require('../models/User')
 const Likes = require('../models/Like')
 const Private = require('../models/PrivateApt')
 const Public = require('../models/PubNotice')
-const { sequelize } = require('../models')
+const { sequelize, User } = require('../models')
 
 const getMypage = async (req, res, next) => {
     try {
@@ -71,8 +71,31 @@ const putMypage = async (req, res, next) => {
     }
 }
 
+const putEmail = async(req, res, next)=>{
+    try{
+        const {userKey, email} = req.body;
+        const {userName} = req.params;
+        const existUser = await User.findOne({
+            where :{userKey , nickname:userName},
+            raw:true
+        });
+        console.log('here')
+        console.log(existUser);
+        if(existUser ===null){
+            res.status(403).send({});
+        }else{
+            await Users.update({email}, {where :{userKey}});
+            res.status(204).send({});
+        }
+        console.log('이메일 변경완료!');
+    }catch(error){
+        console.log('에러발생:'+error)
+    }
+}
+
 module.exports = {
     getMypage,
-    putMypage
+    putMypage,
+    putEmail
 }
 

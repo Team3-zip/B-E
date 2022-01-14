@@ -20,7 +20,12 @@ module.exports = class User extends Sequelize.Model {
                 },
                 profileImg: {
                     type: Sequelize.STRING(300),
-                }
+                },
+                email: {
+                    type:Sequelize.STRING(100),
+                    allowNull: true,
+                    defaultValue:null
+                },
             },
             {
                 sequelize,
