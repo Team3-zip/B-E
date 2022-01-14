@@ -3,14 +3,14 @@ const jwt = require('jsonwebtoken')
 //const { where } = require('sequelize/dist')
 
 const getUsers = async (req, res) => {
-    const { userKey, nickname, profileImg } = req.body
+    const { userKey, nickname, profileImg } = req.body;
 
     const existUsers = await Users.findOne({
         attributes: ['userKey', 'nickname', 'profileImg'],
         where: { userKey },
         raw: true
     })
-
+   
     // if (existUsers.length) {
     //     res.status(400).send({
     //         errorMessage: '잘못된 경로입니다.'
@@ -18,13 +18,15 @@ const getUsers = async (req, res) => {
     //     return
     // }
     // // 같은 유저인데 닉네임이 변경되어서 로그인 할 경우
-    if (nickname !== existUsers['nickname'] || profileImg !== existUsers['profileImg']) {
-        console.log("if")
-        await Users.update({ nickname: nickname, profileImg: profileImg }, { where: { userKey: userKey } })
-        res.status(200).send({ result: 'SUCCESS!' })
-    }else if(existUsers === null){
+    //console.log(existUsers['nickname']);
+    if(existUsers === null){
         console.log("create")
         await Users.create({ userKey: userKey, nickname: nickname, profileImg: profileImg })
+        res.status(200).send({ result: 'SUCCESS!' })
+    }
+    else if (nickname !== existUsers['nickname'] || profileImg !== existUsers['profileImg']) {
+        console.log("if")
+        await Users.update({ nickname: nickname, profileImg: profileImg }, { where: { userKey: userKey } })
         res.status(200).send({ result: 'SUCCESS!' })
     }
     res.send('ok')
