@@ -3,7 +3,12 @@ const Likes = require('../models/Like')
 const Private = require('../models/PrivateApt')
 const Public = require('../models/PubNotice')
 const { sequelize, User } = require('../models')
+const Joi = require('joi');
 
+const updateUsersSchema = Joi.object({
+    userKey : Joi.string().required(),
+    email : Joi.string().email().required()
+});
 const getMypage = async (req, res, next) => {
     try {
         const { userKey } = req.params
@@ -71,9 +76,10 @@ const putMypage = async (req, res, next) => {
     }
 }
 
-const putEmail = async(req, res, next)=>{
+const putEmail = async(req, res, next)=>{   
     try{
-        const {userKey, email} = req.body;
+      
+        const {userKey, email} = await updateUsersSchema.validateAsync(req.body);
         const {userName} = req.params;
         const existUser = await User.findOne({
             where :{userKey , nickname:userName},
