@@ -168,12 +168,93 @@ const getMyPrivateSido = async (req,res,next) =>{
         userKey = ''
         mysido = "경기도"
     }
-    statusDate = await PrivateApt.findAll({
-        order: [['recruitDate', 'DESC']], //
-        attributes :['recruitDate', 'receptStartDate','receptEndDate', 'pblancNo'],
-        where :{sido:mysido},
-        raw:true
-    });
+    console.log(mysido)
+    try{
+        if(mysido ==='충청도'){
+            statusDate = await PrivateApt.findAll({
+                order: [['recruitDate', 'DESC']], //
+                attributes :['recruitDate', 'receptStartDate','receptEndDate', 'pblancNo'],
+                where :{
+                        sido:{ [like]:'충%'},
+                    },
+                raw:true
+            });
+        }else if(mysido ==='경상도'){
+            statusDate = await PrivateApt.findAll({
+                order: [['recruitDate', 'DESC']], //
+                attributes :['recruitDate', 'receptStartDate','receptEndDate', 'pblancNo'],
+                where :{
+                    [or]:[
+                        {
+                            sido:{ [like]:'%경북%'},
+    
+                        },{
+                            sido :{[like] :'%경남%'}
+                        }
+                    ]
+                },
+                  
+                raw:true
+            });
+        }else if(mysido==='전라도'){
+            statusDate = await PrivateApt.findAll({
+                order: [['recruitDate', 'DESC']], //
+                attributes :['recruitDate', 'receptStartDate','receptEndDate', 'pblancNo'],
+                where :{
+                    [or]:[
+                        {
+                            sido:{ [like]:'%전남%'},
+    
+                        },{
+                            sido :{[like] :'%전북%'}
+                        }
+                    ]
+                },
+                  
+                raw:true
+            });
+        }else if(mysido ==='강원도'){
+            statusDate = await PrivateApt.findAll({
+                order: [['recruitDate', 'DESC']], //
+                attributes :['recruitDate', 'receptStartDate','receptEndDate', 'pblancNo'],
+                where :{
+                        sido:{ [like]:'%강원%'},
+                    },
+                raw:true
+            });
+        }else if(mysido==='제주도'){
+            statusDate = await PrivateApt.findAll({
+                order: [['recruitDate', 'DESC']], //
+                attributes :['recruitDate', 'receptStartDate','receptEndDate', 'pblancNo'],
+                where :{
+                        sido:{ [like]:'%제주%'},
+                    },
+                raw:true
+            });
+        }else if(mysido ==='경기도'){
+            statusDate = await PrivateApt.findAll({
+                order: [['recruitDate', 'DESC']], //
+                attributes :['recruitDate', 'receptStartDate','receptEndDate', 'pblancNo'],
+                where :{
+                        sido:{ [like]:'%경기%'},
+                    },
+                raw:true
+            });
+        }else {
+            statusDate = await PrivateApt.findAll({
+                order: [['recruitDate', 'DESC']], //
+                attributes :['recruitDate', 'receptStartDate','receptEndDate', 'pblancNo'],
+                where :{
+                        sido:{ [like]:`%${mysido}%`},
+                    },
+                raw:true
+            });
+        }
+    }catch(error){
+        console.log(error)
+        console.log('status값 못 가져옴')
+    }
+  
     if (mysido == "충청도"){
         var privateSido = await sequelize.query(
             `SELECT privateapts.*,
