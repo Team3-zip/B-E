@@ -14,7 +14,7 @@ const puppeteer = require('puppeteer');
 // 살행하지 마세요!!!!!!!!!!
 //목록 받기
 const dailyPrivateData = () => {
-    cron.scheduleJob('0 3 0 * * *', async function () {
+    cron.scheduleJob('0 20 0 * * *', async function () {
         let newDate = new Date();
         let year = newDate.getFullYear();
         let month = newDate.getMonth() + 1;
@@ -42,7 +42,8 @@ const dailyPrivateData = () => {
                     } else {
                         let result = body;
                         let xmlToJson = convert.xml2json(result, { compact: true, spaces: 4 });
-                        let info = JSON.parse(xmlToJson).response.body.items.item;
+                        try{
+                            let info = JSON.parse(xmlToJson).response.body.items.item;
                         for (i in info) {
                             console.log(info[i])
                             const existPblancNo = await PrivateApt.findOne({where :{pblancNo : Number(info[i]['pblancNo']['_text'])},raw:true})
@@ -66,6 +67,10 @@ const dailyPrivateData = () => {
                             }
                             
                         }
+                    }catch(error){
+                        console.log("민영 api 에러")
+                        console.log(error)
+                    }
                         console.log("for 탈출")
                     }
                     console.log("else 탈출")

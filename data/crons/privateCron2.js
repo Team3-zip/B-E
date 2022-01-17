@@ -14,7 +14,7 @@ const puppeteer = require('puppeteer');
 // 살행하지 마세요!!!!!!!!!!
 //목록 받기
 const dailyPrivateData2 = () => {
-    cron.scheduleJob(' 0 4 0 * * *', async function () {
+    cron.scheduleJob(' 0 21 0 * * *', async function () {
         
         // 상세정보 1
 

@@ -14,7 +14,7 @@ const puppeteer = require('puppeteer');
 // 살행하지 마세요!!!!!!!!!!
 //목록 받기
 const dailyPrivateDataImg = () => {
-    cron.scheduleJob('0 5 0 * * *', async function () {
+    cron.scheduleJob('0 22 0 * * *', async function () {
         let imglinkArr =[];
     let nameArr=[];
     let pblancNoArr =[];

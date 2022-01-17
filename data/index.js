@@ -18,7 +18,7 @@ const publicCron = require('./crons/publicCron')
 const publicCron2 = require('./crons/publicCron2')
 
 const youtubeCron = require('./crons/youtubeCron')
-const currentTime = require('./crons/currentCron')
+// const currentTime = require('./crons/currentCron')
 const mailPush = require('./crons/mailCron')
 //db 연결
 sequelize
@@ -54,7 +54,7 @@ privateCron2.dailyPrivateData2();
 privateImgCron.dailyPrivateDataImg();
 
 youtubeCron.monthlyYoutubeData();
-currentTime.currentTime();
+// currentTime.currentTime();
 mailPush.mailPush();
 app.listen(port, () => {
     console.log(`listening at http://localhost:${port}`);

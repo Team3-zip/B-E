@@ -13,7 +13,7 @@ Date.prototype.yyyymmdd = function () {
 }
 const today = new Date().yyyymmdd()
 const mailPush = () => {
-    cron.scheduleJob('*/30 * * * * *', async function () {
+    cron.scheduleJob('0 0 7 * * *', async function () {
         // 0 0 0 * * 1
         const users = await User.findAll({
             attributes: ['userKey', 'nickname','email'],
