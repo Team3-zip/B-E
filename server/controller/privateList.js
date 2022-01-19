@@ -136,7 +136,7 @@ const getPrivateNotice = async (req, res) => {
         
         console.log(statusArr)
         const privateApt= priNotice[0]
-        res.send({ result: privateApt , statusArr : statusArr})
+        res.status(200).send({ result: privateApt , statusArr : statusArr})
     } catch (error) {
         res.send({ error })
     }
