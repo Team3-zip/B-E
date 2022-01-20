@@ -10,7 +10,7 @@ module.exports = class User extends Sequelize.Model {
                     allowNull: true,
                 },
                 userKey: {
-                    type: Sequelize.STRING(30),
+                    type: Sequelize.STRING(50),
                     allowNull: true,
                     primaryKey: true
                 },
@@ -22,9 +22,9 @@ module.exports = class User extends Sequelize.Model {
                     type: Sequelize.STRING(300),
                 },
                 email: {
-                    type:Sequelize.STRING(100),
+                    type: Sequelize.STRING(100),
                     allowNull: true,
-                    defaultValue:null
+                    defaultValue: null
                 },
             },
             {
