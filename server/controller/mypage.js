@@ -12,14 +12,23 @@ const updateUsersSchema = Joi.object({
 const getMypage = async (req, res, next) => {
     try {
         const { userKey } = req.params
-        // const { userKey } = req.params;
-        //        // const { userKey, likeId, aptNo } = req.params;
         var publicList = []
         var privateList = []
         const existuser = await Users.findOne({ where: { userKey } })
         const existlike = await Likes.findAll({ where: { fk_userKey: userKey }, raw: true })
         console.log(existlike)
         console.log("for 시작")
+        let newDate = new Date();
+        let year = newDate.getFullYear();
+        let month =('0'+(newDate.getMonth()+1)).slice(-2);
+        let date = newDate.getDate();
+        const sDate = year+''+month+''+date;
+        let sta='';
+        let statusDate='';
+        let statusArr =[];
+        let pblanArr =[];
+        let tmpArr=[];
+        console.log(sDate);
         for (let i = 0; i < existlike.length; i++) {
             console.log(existlike.length)
             if (existlike[i]['fk_pblancNo'] !== null) {
@@ -44,10 +53,44 @@ const getMypage = async (req, res, next) => {
         (SELECT privateimgs.url1 FROM privateimgs WHERE privateapts.pblancNo = privateimgs.fk_pblancNo) AS ImgUrl, CASE WHEN likes.fk_pblancNo IS NULL THEN "false" ELSE "true" END AS islike FROM privateapts LEFT JOIN likes ON privateapts.pblancNo = likes.fk_pblancNo AND likes.fk_userKey="${userKey}" WHERE privateapts.pblancNo IN (SELECT likes.fk_pblancNo where likes.fk_userKey = ${userKey})`
         )
         console.log("testtest")
-        //console.log(pubList[0])
-        //console.log(priList[0])
-        // res.send({existuser,privateList,publicList})
-        res.send({ existuser, public: pubList[0], private: priList[0] })
+        for(let i in privateList){
+            //console.log(privateList[i].pblancNo);
+            pblanArr.push(privateList[i].pblancNo)
+        }
+        for(let i in pblanArr){
+            statusDate = await Private.findAll({
+                order: [['recruitDate', 'DESC']], //
+                attributes :['recruitDate', 'receptStartDate','receptEndDate', 'pblancNo'],
+                where :{
+                        pblancNo:pblanArr[i],
+                    },
+                raw:true
+            });
+            tmpArr.push(statusDate);
+        }
+       
+        for(let i in tmpArr){
+            console.log(tmpArr[i][0])
+            console.log(tmpArr[i][0]['receptStartDate'])
+            const stDate=(tmpArr[i][0]['receptStartDate']).replace(/-/g, '');
+            const enDate=(tmpArr[i][0]['receptEndDate']).replace(/-/g, '');
+            if(Number(tmpArr[i][0]['recruitDate'])===Number(stDate)){
+                sta = '공고중'
+            }
+            else if(Number(tmpArr[i][0]['recruitDate'])< Number(sDate)&& Number(stDate)>  Number(sDate)){
+                sta ='공고중'
+            }
+            else if(Number(stDate) <=Number(sDate) && Number(enDate)>=Number(sDate)){
+                sta ='접수중'
+            }
+            else{
+                sta ='접수마감'
+            }
+            statusArr.push({'status':sta, 'pblancNo': tmpArr[i][0]['pblancNo']});
+        }
+        
+        console.log(statusArr)
+        res.send({ existuser, public: pubList[0], private: priList[0] ,statusArr})
 
 
     } catch (error) {
