@@ -96,10 +96,10 @@ const getPublicDetail = async(req, res, next)=>{
     try{
         const {aptNo} = req.params;
         const detail_list1 = await PubNotice.findOne({
-            attributes :['panState','panUploadDate','sidoName','aisTypeName','startDate','closeDate','announceDate','submitStartDate','submitEndDate','contractStartDate','contractEndDate','houseCnt','size','moveYM','heatMethod','fileLink','address','detailUrl','panDate'],
+            attributes :['panState','panName','panUploadDate','sidoName','aisTypeName','startDate','closeDate','announceDate','submitStartDate','submitEndDate','contractStartDate','contractEndDate','houseCnt','size','moveYM','heatMethod','fileLink','address','detailUrl','panDate'],
             where :{panId: aptNo}
         });
-        const {panState,panUploadDate,sidoName,aisTypeName,startDate,closeDate,announceDate,submitStartDate,submitEndDate,contractStartDate,contractEndDate,houseCnt,size,moveYM,heatMethod,fileLink,address,detailUrl,panDate}= detail_list1;
+        const {panState,panName,panUploadDate,sidoName,aisTypeName,startDate,closeDate,announceDate,submitStartDate,submitEndDate,contractStartDate,contractEndDate,houseCnt,size,moveYM,heatMethod,fileLink,address,detailUrl,panDate}= detail_list1;
         if(userKey.length){
             const like = await Like.findOne({where : {panId : aptNo, fk_userKey:userKey}});
             if(like) {
@@ -108,6 +108,7 @@ const getPublicDetail = async(req, res, next)=>{
         }
         
         detail['panState']=panState;
+        detail['panName']=panName;
         detail['panUploadDate']=panUploadDate;
         detail['sidoName']=sidoName;
         detail['aisTypeName']=aisTypeName;
