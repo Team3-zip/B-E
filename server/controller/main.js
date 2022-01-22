@@ -66,6 +66,7 @@ const getprivateHot = async (req, res, next) => {
         
     }
     statusDate = await PrivateApt.findAll({
+        order: [['recruitDate', 'DESC']],
         attributes :['recruitDate', 'receptStartDate','receptEndDate','pblancNo'],
         where :{pblancNo:privateHotarr},
         raw:true
