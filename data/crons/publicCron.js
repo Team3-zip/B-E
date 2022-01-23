@@ -28,7 +28,7 @@ Date.prototype.yesterDay_yyyymmdd = function () {
 }
 //목록 받기
 const dailyPublicData = () => {
-    cron.scheduleJob('0 1 0 * * *', async function () {
+    cron.scheduleJob('0 20 0 * * *', async function () {
         // 메일 자정에 작동
         for (let tc in UATC_list) {
             const today = new Date().yyyymmdd()
@@ -115,15 +115,15 @@ const dailyPublicData = () => {
                     request(options2, async function (err, response, body) {
                       // console.log(options2.url)
                       // console.log(body)
-                        try {
-                            if (err) {
-                              // console.log(err)
-                              // console.log("에러가 나타낫다")
-                                throw new Error("에러가 나타낫다")
-                            }
-                        } catch (e) {
-                          // console.log(e)
-                        }
+                        // try {
+                        //     if (err) {
+                        //       // console.log(err)
+                        //       // console.log("에러가 나타낫다")
+                        //         throw new Error("에러가 나타낫다")
+                        //     }
+                        // } catch (e) {
+                        //   // console.log(e)
+                        // }
                         try {
                             let info_detail = JSON.parse(body)[1]
                             const noticeDetail = { ...info_detail }
@@ -138,17 +138,17 @@ const dailyPublicData = () => {
                             try {
                                 var Img_URL1 = dsSbdAhfl[0]['AHFL_URL']
                             } catch {
-                                Img_URL1 = "https://image.ajunews.com//content/image/2021/06/17/20210617221916152271.jpg"
+                                Img_URL1 = null
                             }
                             try {
                                 var Img_URL2 = dsSbdAhfl[1]['AHFL_URL']
                             } catch {
-                                Img_URL2 = "https://image.ajunews.com//content/image/2021/06/17/20210617221916152271.jpg"
+                                Img_URL2 = null
                             }
                             try {
                                 var Img_URL3 = dsSbdAhfl[2]['AHFL_URL']
                             } catch {
-                                Img_URL3 = "https://image.ajunews.com//content/image/2021/06/17/20210617221916152271.jpg"
+                                Img_URL3 = null
                             }
                             if (case1.includes(SPL_INF_TP_CD) && CCR_CNNT_SYS_DS_CD === "02") {
                                 // dsSplScdl = info_detail['dsSplScdl']
@@ -317,8 +317,8 @@ const dailyPublicData = () => {
                                 }
 
                             }
-                        } catch {
-                            { }
+                        } catch(err) {
+                            console.log(err)
                         }
                         // console.log(...info_detail)
                     })

@@ -14,8 +14,8 @@ const puppeteer = require('puppeteer');
 // 살행하지 마세요!!!!!!!!!!
 //목록 받기
 const dailyPrivateData2 = () => {
-    cron.scheduleJob(' 0 21 0 * * *', async function () {
-        
+    cron.scheduleJob(' 0 14 * * * *', async function () {
+        // 0 23 0 * * *
         // 상세정보 1
 
         try {
@@ -48,9 +48,11 @@ const dailyPrivateData2 = () => {
                 let { pblancNo } = arr[i];
                 requestUrl_Details1 = `http://openapi.reb.or.kr/OpenAPI_ToolInstallPackage/service/rest/ApplyhomeInfoSvc/getAPTLttotPblancDetail?houseManageNo=${houseManageNo}&pblancNo=${pblancNo}&serviceKey=${SERVICE_KEY_DETAIL1}`;
                 urlArr.push({ requestUrl_Details1 })
+                console.log("urlArr == "+urlArr)
             }
             for (let i = 0; i < urlArr.length; i++) {
                 let { requestUrl_Details1 } = urlArr[i];
+                console.log("여기요"+requestUrl_Details1)
                 request(requestUrl_Details1, async (err, re, body) => {
                     if (err) {
                         console.log(err);
@@ -193,8 +195,9 @@ const dailyPrivateData2 = () => {
                         let xmlToJson = convert.xml2json(result, { compact: true, spaces: 4 });
                         let info2 = JSON.parse(xmlToJson).response.body.items.item;
                         for (i in info2) {
-                            //console.log(info2[i])
-                            await PrivateAptDetail2.create({
+                            console.log(info2[i])
+                            try{
+                                await PrivateAptDetail2.create({
                                 fk_pblancNo: Number(info2[i]['pblancno']['_text']),
                                 houseManageNo: Number(info2[i]['housemanageno']['_text']),
                                 modelNo: info2[i]['modelno']['_text'],
@@ -204,6 +207,9 @@ const dailyPrivateData2 = () => {
                                 supplyAreaSize: info2[i]['suplyar']['_text'],
                                 supplyAmount: info2[i]['lttottopamount']['_text']
                             })
+                            }catch{
+                                {}
+                            }
                         }
                     }
                 })

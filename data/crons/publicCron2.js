@@ -45,7 +45,7 @@ const fourmonthago = new Date().fourmonthAgo_yyyymmdd()
 
 //목록 받기
 const dailyPublicData2 = () => {
-    cron.scheduleJob('0 2 0 * * *',
+    cron.scheduleJob('0 21 0 * * *',
         async function () {
             // 메일 자정에 작동
             const existAll = await PubNotice.findAll({ raw: true })

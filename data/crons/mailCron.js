@@ -24,7 +24,6 @@ const mailPush = () => {
             ),raw:true
         });
         console.log(users)
-        const emailarr = [ 'minsoohyeon1234@gmail.com']
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             port: 465,
@@ -54,7 +53,7 @@ const mailPush = () => {
 
                 if(Number(one.startDate.replaceAll('.','')) <= today && Number(one.closeDate.replaceAll('.','')) >= today){
                     console.log(Number(one.startDate.replaceAll('.','')))
-                    pubhtml += `<li key=${index} name=${one.panName} date=${one.startDate}> <a href="https://www.dotzip.today/public/${one.panId}">${one.panName}</a></li>`
+                    pubhtml += `<li key=${index} name=${one.panName} date=${one.startDate}> <a href="https://www.dotzip.today/public/${one.panId}">${one.panName} (${one.startDate} ~ ${one.closeDate})</a></li>`
 
                 }
             })
@@ -62,7 +61,7 @@ const mailPush = () => {
 
                 if(Number(one.receptStartDate.replaceAll('-','')) <= today && Number(one.receptEndDate.replaceAll('-','')) >= today){
                     console.log(Number(one.receptStartDate.replaceAll('-','')))
-                    prihtml += `<li key=${index} name=${one.houseName} date=${one.receptStartDate}> <a href="https://www.dotzip.today/private/${one.pblancNo}">${one.houseName}</a></li>`
+                    prihtml += `<li key=${index} name=${one.houseName} date=${one.receptStartDate}> <a href="https://www.dotzip.today/private/${one.pblancNo}">${one.houseName} (${one.receptStartDate.replace("-",'.').replace("-",'.')} ~ ${one.receptEndDate.replace("-",'.').replace("-",'.')})</a></li>`
 
                 }
             })
@@ -82,8 +81,8 @@ const mailPush = () => {
             const mailOptions = {
                 from: process.env.NODEMAILER_USER,    // 발송 메일 주소
                 to: `${item['email']}`,     // 수신 메일 주소
-                subject: `[${new Date().getMonth()+1}월${new Date().getDate()}일] ${item['nickname']}님이 찜하신 청약을 놓치지 마세요!`,   // 제목
-                html: `<div><div>${pubhtml}</div><div>${prihtml}</div></div>`
+                subject: `[닷집 오늘청약 알림] ⏰${item['nickname']}님이 찜하신 청약의 청약 기간이에요!⏰`,   // 제목
+                html: `<div><div><h2><${new Date().getMonth()+1}월${new Date().getDate()}일 오늘의 청약></div></h2><div>${pubhtml}</div><div>${prihtml}</div></div>`
                 
                 
             };

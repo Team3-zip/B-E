@@ -77,11 +77,11 @@ const getMypage = async (req, res, next) => {
             if(Number(tmpArr[i][0]['recruitDate'])===Number(stDate)){
                 sta = '공고중'
             }
-            else if(Number(tmpArr[i][0]['recruitDate'])< Number(sDate)&& Number(stDate)>  Number(sDate)){
-                sta ='공고중'
-            }
             else if(Number(stDate) <=Number(sDate) && Number(enDate)>=Number(sDate)){
                 sta ='접수중'
+            }
+            else if(Number(tmpArr[i][0]['recruitDate'])< Number(sDate)&& Number(stDate)>  Number(sDate)){
+                sta ='공고중'
             }
             else{
                 sta ='접수마감'

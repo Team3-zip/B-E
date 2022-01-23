@@ -13,7 +13,7 @@ const  YOUTUBE_SECRET_KEY  = process.env.YOUTUBE_SECRET_KEY;
 
 //목록 받기
 const monthlyYoutubeData = () => {
-    cron.scheduleJob('0 0 0 * * 1', async function(){
+    cron.scheduleJob('0 0 0 * * *', async function(){
         // 0 0 0 * * 1
     // 매주 월요일 스케쥴러 실생
     let word = '주택청약 가이드'; 
@@ -28,7 +28,8 @@ const monthlyYoutubeData = () => {
 
         console.log(JSON.stringify(result, null, 2)); // 받아온 전체 리스트 출력
 
-        let items = result["items"]; 
+        let items = result["items"];
+        await Youtube.destroy({where:{}});        
         for (let i in items) {
             let item = items[i];
             let title = item["snippet"]["title"];
