@@ -6,9 +6,23 @@ const { sequelize, User } = require('../models')
 const Joi = require('joi');
 
 const updateUsersSchema = Joi.object({
-    userKey : Joi.string().required(),
-    email : Joi.string().email().required()
+    userKey: Joi.string().required(),
+    email: Joi.string().email().required()
 });
+var sortJSON = function (data, key, type) {
+    if (type == undefined) {
+        type = "asc";
+    }
+    return data.sort(function (a, b) {
+        var x = a[key];
+        var y = b[key];
+        if (type == "desc") {
+            return x > y ? -1 : x < y ? 1 : 0;
+        } else if (type == "asc") {
+            return x < y ? -1 : x > y ? 1 : 0;
+        }
+    });
+};
 const getMypage = async (req, res, next) => {
     try {
         const { userKey } = req.params
@@ -20,14 +34,14 @@ const getMypage = async (req, res, next) => {
         console.log("for 시작")
         let newDate = new Date();
         let year = newDate.getFullYear();
-        let month =('0'+(newDate.getMonth()+1)).slice(-2);
+        let month = ('0' + (newDate.getMonth() + 1)).slice(-2);
         let date = newDate.getDate();
-        const sDate = year+''+month+''+date;
-        let sta='';
-        let statusDate='';
-        let statusArr =[];
-        let pblanArr =[];
-        let tmpArr=[];
+        const sDate = year + '' + month + '' + date;
+        let sta = '';
+        let statusDate = '';
+        let statusArr = [];
+        let pblanArr = [];
+        let tmpArr = [];
         console.log(sDate);
         for (let i = 0; i < existlike.length; i++) {
             console.log(existlike.length)
@@ -43,6 +57,9 @@ const getMypage = async (req, res, next) => {
                 // res.status(200).send({ existuser, existlike })
             }
         }
+        // console.log(`before sort : ${JSON.stringify(privateList)}`)
+        privateList = sortJSON(privateList, "recruitDate", "desc")
+        // console.log(`after sort : ${JSON.stringify(privateList)}`)
         const pubList = await sequelize.query(
             `SELECT Pubnotices.*,(SELECT PublicImg.url1 FROM PublicImg WHERE Pubnotices.panId = PublicImg.panId) AS ImgUrl, CASE WHEN likes.panId IS NULL THEN "false" ELSE "true" END AS islike FROM Pubnotices LEFT JOIN likes ON Pubnotices.panId = likes.panId AND likes.fk_userKey="${userKey}" WHERE Pubnotices.panId IN (SELECT likes.panId FROM likes where likes.fk_userKey = ${userKey})`
         )
@@ -50,47 +67,50 @@ const getMypage = async (req, res, next) => {
             `SELECT privateapts.*,
         (SELECT concat(min(cast(privateAptDetail2.supplyAreaSize as decimal(10,4))),'~',max(cast(privateAptDetail2.supplyAreaSize as decimal(10,4)))) as size FROM zip_dev.privateAptDetail2 where privateapts.pblancNo = privateAptDetail2.fk_pblancNo group by fk_pblancNo) as size,
         (SELECT concat(format(min(cast(replace(privateAptDetail2.supplyAmount,",",'') as unsigned)),0),'~', format(max(cast(replace(privateAptDetail2.supplyAmount,",",'')as unsigned)),0)) as supplyAmount FROM zip_dev.privateAptDetail2 where privateapts.pblancNo = privateAptDetail2.fk_pblancNo group by fk_pblancNo) as supplyAmount,
-        (SELECT privateimgs.url1 FROM privateimgs WHERE privateapts.pblancNo = privateimgs.fk_pblancNo) AS ImgUrl, CASE WHEN likes.fk_pblancNo IS NULL THEN "false" ELSE "true" END AS islike FROM privateapts LEFT JOIN likes ON privateapts.pblancNo = likes.fk_pblancNo AND likes.fk_userKey="${userKey}" WHERE privateapts.pblancNo IN (SELECT likes.fk_pblancNo where likes.fk_userKey = ${userKey})`
+        (SELECT privateimgs.url1 FROM privateimgs WHERE privateapts.pblancNo = privateimgs.fk_pblancNo) AS ImgUrl, CASE WHEN likes.fk_pblancNo IS NULL THEN "false" ELSE "true" END AS islike FROM privateapts LEFT JOIN likes ON privateapts.pblancNo = likes.fk_pblancNo AND likes.fk_userKey="${userKey}" WHERE privateapts.pblancNo IN (SELECT likes.fk_pblancNo where likes.fk_userKey = ${userKey}) ORDER BY privateapts.recruitDate DESC`
         )
         console.log("testtest")
-        for(let i in privateList){
+        for (let i in privateList) {
             //console.log(privateList[i].pblancNo);
             pblanArr.push(privateList[i].pblancNo)
         }
-        for(let i in pblanArr){
+        for (let i in pblanArr) {
             statusDate = await Private.findAll({
                 order: [['recruitDate', 'DESC']], //
-                attributes :['recruitDate', 'receptStartDate','receptEndDate', 'pblancNo'],
-                where :{
-                        pblancNo:pblanArr[i],
-                    },
-                raw:true
+                attributes: ['recruitDate', 'receptStartDate', 'receptEndDate', 'pblancNo'],
+                where: {
+                    pblancNo: pblanArr[i],
+                },
+                raw: true
             });
+            console.log(`statusDate :${JSON.stringify(statusDate)} end`)
             tmpArr.push(statusDate);
         }
-       
-        for(let i in tmpArr){
+
+        for (let i in tmpArr) {
             console.log(tmpArr[i][0])
             console.log(tmpArr[i][0]['receptStartDate'])
-            const stDate=(tmpArr[i][0]['receptStartDate']).replace(/-/g, '');
-            const enDate=(tmpArr[i][0]['receptEndDate']).replace(/-/g, '');
-            if(Number(tmpArr[i][0]['recruitDate'])===Number(stDate)){
+            const stDate = (tmpArr[i][0]['receptStartDate']).replace(/-/g, '');
+            const enDate = (tmpArr[i][0]['receptEndDate']).replace(/-/g, '');
+            console.log(`stDate :${stDate}`)
+            console.log(`edDate : ${enDate}`)
+            if (Number(tmpArr[i][0]['recruitDate']) === Number(stDate)) {
                 sta = '공고중'
             }
-            else if(Number(tmpArr[i][0]['recruitDate'])< Number(sDate)&& Number(stDate)>  Number(sDate)){
-                sta ='공고중'
+            else if (Number(tmpArr[i][0]['recruitDate']) < Number(sDate) && Number(stDate) > Number(sDate)) {
+                sta = '공고중'
             }
-            else if(Number(stDate) <=Number(sDate) && Number(enDate)>=Number(sDate)){
-                sta ='접수중'
+            else {
+                sta = '접수마감'
             }
-            else{
-                sta ='접수마감'
+            if (Number(stDate) <= Number(sDate) && Number(enDate) >= Number(sDate)) {
+                sta = '접수중'
             }
-            statusArr.push({'status':sta, 'pblancNo': tmpArr[i][0]['pblancNo']});
+            statusArr.push({ 'status': sta, 'pblancNo': tmpArr[i][0]['pblancNo'] });
         }
-        
+
         console.log(statusArr)
-        res.send({ existuser, public: pubList[0], private: priList[0] ,statusArr})
+        res.send({ existuser, public: pubList[0], private: priList[0], statusArr })
 
 
     } catch (error) {
@@ -119,26 +139,26 @@ const putMypage = async (req, res, next) => {
     }
 }
 
-const putEmail = async(req, res, next)=>{   
-    try{
-      
-        const {userKey, email} = await updateUsersSchema.validateAsync(req.body);
-        const {userName} = req.params;
+const putEmail = async (req, res, next) => {
+    try {
+
+        const { userKey, email } = await updateUsersSchema.validateAsync(req.body);
+        const { userName } = req.params;
         const existUser = await User.findOne({
-            where :{userKey , nickname:userName},
-            raw:true
+            where: { userKey, nickname: userName },
+            raw: true
         });
         console.log('here')
         console.log(existUser);
-        if(existUser ===null){
+        if (existUser === null) {
             res.status(403).send({});
-        }else{
-            await Users.update({email}, {where :{userKey}});
+        } else {
+            await Users.update({ email }, { where: { userKey } });
             res.status(204).send({});
         }
         console.log('이메일 변경완료!');
-    }catch(error){
-        console.log('에러발생:'+error)
+    } catch (error) {
+        console.log('에러발생:' + error)
     }
 }
 
