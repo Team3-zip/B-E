@@ -4,7 +4,7 @@
 
 ## 🙋‍♀️ 안녕하세요. [dot.zip](https://www.kkuljohab.com/) 백엔드 입니다.
 
-<img width="1488" alt="집" src="https://user-images.githubusercontent.com/80023108/150957726-9ec42838-e4f1-4e58-b960-8dbc805bd586.png">
+<img width="673" alt="스크린샷 2022-01-25 오후 8 00 06" src="https://user-images.githubusercontent.com/80023108/150964817-baf6912d-46f3-4f66-a4c2-b596945846cc.png">
 
 ---
 
@@ -29,7 +29,7 @@ https://www.notion.so/kongom2/Team-zip-9e4ad0e0184448fc868950b076008e93
   - 김형래
   - 신항민
 - 백엔드
-  - 정하나
+  - 정하나 (https://github.com/hana-j)
   - 곽태민 (https://github.com/kwak9898)
   - 민수현 (https://github.com/SuHyeon-Eleven)
 - 디자이너
@@ -78,5 +78,5 @@ MYSQL
 Swagger  
 EC2  
 S3
-Github Action
+GithubActions
 Codedeploy
