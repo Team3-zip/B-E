@@ -59,7 +59,8 @@ https://www.notion.so/kongom2/Team-zip-9e4ad0e0184448fc868950b076008e93
 | 라이브러리    | 설명                       | 버전   |
 | ------------- | -------------------------- | ------ |
 | Express       | Node.js                    | 4.17.1 |
-| MYSQL         | 변동성 많은 DB. NoSQL 적용 | 5.13.3 |
+| MYSQL         | 변동성 많은 DB. MySQL 적용 | 5.13.3 |
+|sequelize      |                        |7.0.0 |
 | CORS          | Request resouRce 제한      | 2.8.5  |
 | Swagger       | API 문서화                 | 4.1.6  |
 | Joi           | 유효성 검사                | 17.5.0 |
