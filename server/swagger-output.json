@@ -23,7 +23,7 @@
       }
     },
     "/api/main/publicHot": {
-      "get": {
+      "post": {
         "tags": [],
         "description": "",
         "parameters": [
@@ -31,6 +31,18 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userKey": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
         "responses": {
@@ -41,7 +53,7 @@
       }
     },
     "/api/main/privateHot": {
-      "get": {
+      "post": {
         "tags": [],
         "description": "",
         "parameters": [
@@ -49,6 +61,18 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userKey": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
         "responses": {
@@ -59,7 +83,7 @@
       }
     },
     "/api/main/publicSido": {
-      "get": {
+      "post": {
         "tags": [],
         "description": "",
         "parameters": [
@@ -67,6 +91,18 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userKey": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
         "responses": {
@@ -77,7 +113,7 @@
       }
     },
     "/api/main/privateSido": {
-      "get": {
+      "post": {
         "tags": [],
         "description": "",
         "parameters": [
@@ -85,6 +121,18 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userKey": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
         "responses": {
@@ -103,98 +151,16 @@
       }
     },
     "/api/private/{aptNo}": {
-      "get": {
-        "tags": [],
-        "description": "",
-        "parameters": [
-          {
-            "name": "aptNo",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          }
-        }
-      }
-    },
-    "/api/public/{aptNo}": {
-      "get": {
-        "tags": [],
-        "description": "",
-        "parameters": [
-          {
-            "name": "aptNo",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          }
-        }
-      }
-    },
-    "/api/private/{aptNo}/img": {
-      "get": {
-        "tags": [],
-        "description": "",
-        "parameters": [
-          {
-            "name": "aptNo",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          }
-        }
-      }
-    },
-    "/api/public/{aptNo}/img": {
-      "get": {
-        "tags": [],
-        "description": "",
-        "parameters": [
-          {
-            "name": "aptNo",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          }
-        }
-      }
-    },
-    "/api/users/login": {
       "post": {
         "tags": [],
         "description": "",
         "parameters": [
+          {
+            "name": "aptNo",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
           {
             "name": "authorization",
             "in": "header",
@@ -207,9 +173,6 @@
               "type": "object",
               "properties": {
                 "userKey": {
-                  "example": "any"
-                },
-                "nickname": {
                   "example": "any"
                 }
               }
@@ -229,8 +192,8 @@
         }
       }
     },
-    "/api/comments/{aptNo}": {
-      "get": {
+    "/api/public/{aptNo}": {
+      "post": {
         "tags": [],
         "description": "",
         "parameters": [
@@ -244,6 +207,18 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userKey": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
         "responses": {
@@ -255,6 +230,143 @@
           },
           "401": {
             "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/private/{aptNo}/img": {
+      "post": {
+        "tags": [],
+        "description": "",
+        "parameters": [
+          {
+            "name": "aptNo",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userKey": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/public/{aptNo}/img": {
+      "post": {
+        "tags": [],
+        "description": "",
+        "parameters": [
+          {
+            "name": "aptNo",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userKey": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/users/login": {
+      "post": {
+        "tags": [],
+        "description": "",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userKey": {
+                  "example": "any"
+                },
+                "nickname": {
+                  "example": "any"
+                },
+                "profileImg": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/comments/{aptNo}": {
+      "get": {
+        "tags": [],
+        "description": "",
+        "parameters": [
+          {
+            "name": "aptNo",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           }
         }
       },
@@ -400,7 +512,7 @@
       }
     },
     "/api/private": {
-      "get": {
+      "post": {
         "tags": [],
         "description": "",
         "parameters": [
@@ -413,6 +525,18 @@
             "name": "sido",
             "in": "query",
             "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userKey": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
         "responses": {
@@ -426,7 +550,7 @@
       }
     },
     "/api/public": {
-      "get": {
+      "post": {
         "tags": [],
         "description": "",
         "parameters": [
@@ -439,6 +563,18 @@
             "name": "sidoName",
             "in": "query",
             "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userKey": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
         "responses": {
@@ -493,11 +629,17 @@
         }
       }
     },
-    "/api/users/": {
+    "/api/users/{userKey}": {
       "get": {
         "tags": [],
         "description": "",
         "parameters": [
+          {
+            "name": "userKey",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
           {
             "name": "authorization",
             "in": "header",
@@ -517,13 +659,13 @@
         }
       }
     },
-    "/api/users/{nickname}": {
+    "/api/users/{userName}": {
       "put": {
         "tags": [],
         "description": "",
         "parameters": [
           {
-            "name": "nickname",
+            "name": "userName",
             "in": "path",
             "required": true,
             "type": "string"
@@ -558,6 +700,48 @@
           },
           "401": {
             "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/users/{userName}/email": {
+      "put": {
+        "tags": [],
+        "description": "",
+        "parameters": [
+          {
+            "name": "userName",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userKey": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           }
         }
       }
