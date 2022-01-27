@@ -11,7 +11,7 @@ const router = express.Router();
 router.get('/', async (req, res, next) => {
     let newDate = new Date();
     let year = newDate.getFullYear();
-    let month = newDate.getMonth() +1;
+    let month =('0'+(newDate.getMonth()+1)).slice(-2);
     let date = newDate.getDate();
     try {
         const SERVICE_KEY = 'Pifa2dNF%2F%2BDOgnjpswa7G%2B8t%2B1B28ekfKa%2FmZtTwwmLTZtbw05Xn8DeUw0BHRG2mEg4M1BCH1WfcQJdblk3TmQ%3D%3D';
@@ -19,13 +19,13 @@ router.get('/', async (req, res, next) => {
             const requestUrl = `https://openapi.reb.or.kr/OpenAPI_ToolInstallPackage/service/rest/ApplyhomeInfoSvc/getLttotPblancList?serviceKey=${SERVICE_KEY}&startmonth=${year}${month}&endmonth=${year}${month}${date}&houseSecd=01&pageNo=${num}`;
             request(requestUrl, async (err, re, body) => {
                 if (err) {
-                    console.log(err);
+                    console.log('error:'+err);
                 } else {
                     let result = body;
                     let xmlToJson = convert.xml2json(result, { compact: true, spaces: 4 });
                     let info = JSON.parse(xmlToJson).response.body.items.item;
                     for (i in info) {
-                        console.log(info[i])
+                        console.log('here')
                         await PrivateApt.create({
                             pblancNo: Number(info[i]['pblancNo']['_text']),
                             executor: info[i]['bsnsMbyNm']['_text'],
@@ -42,8 +42,6 @@ router.get('/', async (req, res, next) => {
                     }
                 }
             })
-            console.log(requestUrl);
-    
         res.send({ success: 'ok' })
       }
    }catch (error) {
