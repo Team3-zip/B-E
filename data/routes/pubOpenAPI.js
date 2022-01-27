@@ -337,7 +337,7 @@ router.get('/public/:theday', async (req, res, next) => {
             console.log("for탈출ㄹ")
             
         }
-        res.send({})
+        res.send("OK")
 })
 
     
