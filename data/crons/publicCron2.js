@@ -40,11 +40,11 @@ Date.prototype.announce_compare_yyyymmdd = function () {
     return yyyy + (mm[1] ? mm : '0' + mm[0]) + (dd[1] ? dd : '0' + dd[0]);
 }
 Date.prototype.today_yyyymmdd = function () {
-    var announce_compare = new Date(new Date().setDate(new Date().getDate()));
+    var todayDate = new Date(new Date().setDate(new Date().getDate()));
 
-    var yyyy = announce_compare.getFullYear().toString();
-    var mm = (announce_compare.getMonth() + 1).toString();
-    var dd = announce_compare.getDate().toString();
+    var yyyy = todayDate.getFullYear().toString();
+    var mm = (todayDate.getMonth() + 1).toString();
+    var dd = todayDate.getDate().toString();
 
     return yyyy + (mm[1] ? mm : '0' + mm[0]) + (dd[1] ? dd : '0' + dd[0]);
 }
