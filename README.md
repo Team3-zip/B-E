@@ -25,9 +25,9 @@ https://www.notion.so/kongom2/Team-zip-9e4ad0e0184448fc868950b076008e93
 - 팀장
   - 공성훈
 - 프론트엔드
-  - 공성훈
-  - 김형래
-  - 신항민
+  - 공성훈 (https://github.com/kongom2)
+  - 김형래 (https://github.com/O-h-y-o)
+  - 신항민 (https://github.com/ssinking91)
 - 백엔드
   - 정하나 (https://github.com/hana-j)
   - 곽태민 (https://github.com/kwak9898)
