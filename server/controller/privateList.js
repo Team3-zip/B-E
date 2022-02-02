@@ -128,7 +128,7 @@ const getPrivateNotice = async (req, res) => {
             else if(Number(stDate) <=Number(sDate) && Number(enDate)>=Number(sDate)){
                 sta ='접수중'
             }
-            else{
+            else if(Number(sDate) > Number(enDate)){
                 sta ='접수마감'
             }
             statusArr.push({'status':sta, 'pblancNo': statusDate[i]['pblancNo']});
