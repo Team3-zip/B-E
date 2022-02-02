@@ -2,7 +2,7 @@
 
 # 🏠[집을 모아놓다.zip](https://www.dotzip.today) [backend]
 
-## 🙋‍♀️ 안녕하세요. [dot.zip](https://www.kkuljohab.com/) 백엔드 입니다.
+## 🙋‍♀️ 안녕하세요. [dot.zip](https://github.com/Team3-zip/B-E) 백엔드 입니다.
 
 <img width="673" alt="스크린샷 2022-01-25 오후 8 00 06" src="https://user-images.githubusercontent.com/80023108/150964817-baf6912d-46f3-4f66-a4c2-b596945846cc.png">
 
