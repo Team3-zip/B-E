@@ -11,13 +11,16 @@ const router = express.Router();
 router.get('/', async (req, res, next) => {
     let newDate = new Date();
     let year = newDate.getFullYear();
-    let month =('0'+(newDate.getMonth()+1)).slice(-2);
-    let date = newDate.getDate();
+    let month =('0'+(newDate.getMonth())).slice(-2);
+    let nextMonth = ('0'+(newDate.getMonth()+1)).slice(-2);
+    let date = ('0'+(newDate.getDate())).slice(-2);
+    
     try {
-        const SERVICE_KEY = 'Pifa2dNF%2F%2BDOgnjpswa7G%2B8t%2B1B28ekfKa%2FmZtTwwmLTZtbw05Xn8DeUw0BHRG2mEg4M1BCH1WfcQJdblk3TmQ%3D%3D';
+        const KEY = 'V8XKM0aXiYL%2BsbW7DE%2F0uN2LNZAifUC01NBtlZfCbhAMa5I6pj6Mqp6G1kbbBX5lsu8WxLIqd5ssSTCPKiJTnQ%3D%3D';
         for (let num = 1; num <= 10; num++) {
-            const requestUrl = `https://openapi.reb.or.kr/OpenAPI_ToolInstallPackage/service/rest/ApplyhomeInfoSvc/getLttotPblancList?serviceKey=${SERVICE_KEY}&startmonth=${year}${month}&endmonth=${year}${month}${date}&houseSecd=01&pageNo=${num}`;
+            const requestUrl = `https://openapi.reb.or.kr/OpenAPI_ToolInstallPackage/service/rest/ApplyhomeInfoSvc/getLttotPblancList?startmonth=${year}${month}&endmonth=${year}${nextMonth}&houseSecd=01&rentSecd=0&serviceKey=${KEY}`
             request(requestUrl, async (err, re, body) => {
+                console.log(requestUrl);
                 if (err) {
                     console.log('error:'+err);
                 } else {
@@ -25,7 +28,7 @@ router.get('/', async (req, res, next) => {
                     let xmlToJson = convert.xml2json(result, { compact: true, spaces: 4 });
                     let info = JSON.parse(xmlToJson).response.body.items.item;
                     for (i in info) {
-                        console.log('here')
+                        console.log(requestUrl);
                         await PrivateApt.create({
                             pblancNo: Number(info[i]['pblancNo']['_text']),
                             executor: info[i]['bsnsMbyNm']['_text'],
@@ -55,11 +58,17 @@ router.get('/status', async(req, res,next)=>{
     let newDate = new Date();
     let year = newDate.getFullYear();
     let month =('0'+(newDate.getMonth()+1)).slice(-2);
-    let date = newDate.getDate();
+    let date = ('0'+newDate.getDate()).slice(-2);
     const sDate = year+''+month+''+date;
-    console.log(typeof sDate);
+    console.log(typeof sDate, sDate);
     const endDate =[];
     let deleteDate='';
+    let delarr =[];
+    const winDate = await PrivateApt.findAll({
+        attributes:['winDate'],
+        raw:true
+    })
+    
     const contractEnd = await PrivateAptDetail1.findAll({
         attributes:['contractEndDate'],
         raw:true
@@ -80,12 +89,16 @@ router.get('/status', async(req, res,next)=>{
             })
         }
     }
+    console.log('여기임')
+    console.log(deleteDate)
     if(deleteDate.length){
-    //     for(i in deleteDate){
-    //     await PrivateApt.destroy({
-    //         where : {'pblancNo': deleteDate['fk_pblancNo']}
-    //     })
-    // }
+        for(i in deleteDate){
+
+        await PrivateApt.destroy({
+            where : {'pblancNo': deleteDate[i]['fk_pblancNo']}
+        })
+
+    }
         res.send({success:'삭제완료!!!'})
     }else{
         res.send({success:'오늘은 지울게 없음!'})

@@ -15,6 +15,51 @@ const puppeteer = require('puppeteer');
 //목록 받기
 const dailyPrivateData = () => {
     cron.scheduleJob('0 5 * * * *', async function () {
+         //계약만료일 기준 +10일에 데이터 삭제
+         try{
+            let newDate = new Date();
+            let year = newDate.getFullYear();
+            let month =('0'+(newDate.getMonth()+1)).slice(-2);
+            let date = newDate.getDate();
+            const sDate = year+''+month+''+date;
+            console.log(typeof sDate);
+            const endDate =[];
+            let deleteDate='';
+            const contractEnd = await PrivateAptDetail1.findAll({
+                attributes:['contractEndDate'],
+                raw:true
+            })
+            for(let i in contractEnd){
+                endDate.push(Number(contractEnd[i]['contractEndDate'].replace(/-/g, '')));
+            }
+            for(let i =0; i<endDate.length;i++){
+                if(endDate[i]+10<=Number(sDate)){
+                    let a = String(endDate[i]).slice(0,4);
+                    let b = String(endDate[i]).slice(4,6);
+                    let c = String(endDate[i]).slice(6,8);
+                    let date = a+'-'+b+'-'+c;
+                    deleteDate = await PrivateAptDetail1.findAll({
+                        attributes:['fk_pblancNo'],
+                        where :{contractEndDate : date},
+                        raw :true
+                    })
+                }
+            }
+            if(deleteDate.length){
+                for(i in deleteDate){
+                await PrivateApt.destroy({
+                    where : {'pblancNo': deleteDate['fk_pblancNo']}
+                })
+            }
+                console.log('삭제완료!!')    
+           
+            }else{
+                console.log('오늘은 지울게 없음!!')
+            }
+        
+          }catch(err){
+              console.log(err);
+          }
         let newDate = new Date();
         let year = newDate.getFullYear();
         let month = newDate.getMonth() + 1;
@@ -33,9 +78,9 @@ const dailyPrivateData = () => {
             return yyyy + (mm[1] ? mm : '0' + mm[0]);
         }
         try {
-            const SERVICE_KEY = 'Pifa2dNF%2F%2BDOgnjpswa7G%2B8t%2B1B28ekfKa%2FmZtTwwmLTZtbw05Xn8DeUw0BHRG2mEg4M1BCH1WfcQJdblk3TmQ%3D%3D';
+            const SERVICE_KEY = 'V8XKM0aXiYL%2BsbW7DE%2F0uN2LNZAifUC01NBtlZfCbhAMa5I6pj6Mqp6G1kbbBX5lsu8WxLIqd5ssSTCPKiJTnQ%3D%3D';
             for (let num = 1; num <= 10; num++) {
-                const requestUrl = `https://openapi.reb.or.kr/OpenAPI_ToolInstallPackage/service/rest/ApplyhomeInfoSvc/getLttotPblancList?serviceKey=${SERVICE_KEY}&startmonth=${new Date().yyyymm()}&endmonth=${new Date().yyyymmdd()}&houseSecd=01&pageNo=${num}`;
+                const requestUrl = `https://openapi.reb.or.kr/OpenAPI_ToolInstallPackage/service/rest/ApplyhomeInfoSvc/getLttotPblancList?startmonth=${new Date().yyyymm()}&endmonth=${new Date().yyyymmdd()}&houseSecd=01&rentSecd=0&serviceKey=${KEY}&pageNo=${num}`;
                 request(requestUrl, async (err, re, body) => {
                     if (err) {
                         console.log(err);
@@ -84,51 +129,7 @@ const dailyPrivateData = () => {
         } catch (error) {
             console.log(error)
         }
-        //계약만료일 기준 +10일에 데이터 삭제
-        try{
-            let newDate = new Date();
-            let year = newDate.getFullYear();
-            let month =('0'+(newDate.getMonth()+1)).slice(-2);
-            let date = newDate.getDate();
-            const sDate = year+''+month+''+date;
-            console.log(typeof sDate);
-            const endDate =[];
-            let deleteDate='';
-            const contractEnd = await PrivateAptDetail1.findAll({
-                attributes:['contractEndDate'],
-                raw:true
-            })
-            for(let i in contractEnd){
-                endDate.push(Number(contractEnd[i]['contractEndDate'].replace(/-/g, '')));
-            }
-            for(let i =0; i<endDate.length;i++){
-                if(endDate[i]+10<=Number(sDate)){
-                    let a = String(endDate[i]).slice(0,4);
-                    let b = String(endDate[i]).slice(4,6);
-                    let c = String(endDate[i]).slice(6,8);
-                    let date = a+'-'+b+'-'+c;
-                    deleteDate = await PrivateAptDetail1.findAll({
-                        attributes:['fk_pblancNo'],
-                        where :{contractEndDate : date},
-                        raw :true
-                    })
-                }
-            }
-            if(deleteDate.length){
-                for(i in deleteDate){
-                await PrivateApt.destroy({
-                    where : {'pblancNo': deleteDate['fk_pblancNo']}
-                })
-            }
-                console.log('삭제완료!!')    
-           
-            }else{
-                console.log('오늘은 지울게 없음!!')
-            }
-        
-          }catch(err){
-              console.log(err);
-          }
+       
         });
     }
 
