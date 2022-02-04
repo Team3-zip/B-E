@@ -19,7 +19,7 @@ const getPrivateNotice = async (req, res) => {
     let newDate = new Date();
     let year = newDate.getFullYear();
     let month =('0'+(newDate.getMonth()+1)).slice(-2);
-    let date = newDate.getDate();
+    let date = ('0'+newDate.getDate()).slice(-2);
     const sDate = year+''+month+''+date;
     let sta='';
     let statusDate='';
@@ -128,7 +128,7 @@ const getPrivateNotice = async (req, res) => {
             else if(Number(stDate) <=Number(sDate) && Number(enDate)>=Number(sDate)){
                 sta ='접수중'
             }
-            else{
+            else if(Number(sDate) > Number(enDate)){
                 sta ='접수마감'
             }
             statusArr.push({'status':sta, 'pblancNo': statusDate[i]['pblancNo']});
