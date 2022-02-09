@@ -44,12 +44,11 @@ router.get('/', async (req, res) => {
           pblancNoArr.push(no);
           houseMgNoArr.push(houseManageNo);
       }
-     // console.log(nameArr)
     
       for(let i =0 ;i<nameArr.length;i++){
         let googleKey ='AIzaSyA1HlXx0GEPMbgDIwZUAWBADYYuiLAib6Y';
         let reqUrl1 = `https://www.googleapis.com/customsearch/v1?key=AIzaSyD55QHJp9dOWHJ1j83H3mtn90KNtc41IXQ&cx=14a1ce6efcaf391ea&q=${encodeURI(nameArr[i])}&imgSize=XLARGE&searchType=image&num=10`
-        console.log(reqUrl)
+      
         request(reqUrl1, async (err, response, body)=>{
           if(err){
             console.log(nameArr[i])

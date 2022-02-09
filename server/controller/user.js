@@ -11,14 +11,7 @@ const getUsers = async (req, res) => {
         raw: true
     })
    
-    // if (existUsers.length) {
-    //     res.status(400).send({
-    //         errorMessage: '잘못된 경로입니다.'
-    //     })
-    //     return
-    // }
-    // // 같은 유저인데 닉네임이 변경되어서 로그인 할 경우
-    //console.log(existUsers['nickname']);
+   
     if(existUsers === null){
         console.log("create")
         await Users.create({ userKey: userKey, nickname: nickname, profileImg: profileImg })
