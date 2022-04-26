@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "cross-env NODE_ENV=development USER_NAME=root USER_PASSWORD=root MYSQL_DATABASE='zip_local' MYSQL_HOST='127.0.0.1' node app.js",
+    "init:db": "cross-env NODE_NEV=development USER_NAME=root USER_PASSWORD=root MYSQL_DATABASE='zip_local' MYSQL_HOST='127.0.0.1' npx sequelize db:create",
     "test": "./node_modules/.bin/jest --verbose ./tests",
     "lint": "./node_modules/.bin/eslint ."
   },
@@ -18,12 +20,12 @@
     "multer": "^1.4.4",
     "mysql2": "^2.3.3",
     "sequelize": "^7.0.0-alpha.2",
-    "sequelize-cli": "^6.3.0",
     "swagger-autogen": "^2.18.0"
   },
   "devDependencies": {
     "eslint-plugin": "^1.0.1",
     "nodemon": "^2.0.15",
+    "sequelize-cli": "^6.4.1",
     "swagger-ui-express": "^4.3.0"
   }
 }
